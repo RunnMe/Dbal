@@ -1,0 +1,25 @@
+{
+  "name": "pr-of-it/running-dbal",
+  "description": "Running.FM DBAL Library",
+  "keywords": ["running", "running.fm", "framework", "db", "dbal", "database", "connection", "pdo"],
+  "type": "library",
+  "license": "LGPL v.3",
+  "authors": [
+    {
+      "name": "Albert Stepantsev"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Running\\": "src/"
+    }
+  }
+}
