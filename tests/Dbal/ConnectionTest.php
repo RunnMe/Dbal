@@ -124,7 +124,10 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPdoOptions()
     {
-        // @todo test connect options
+        $pdo = $this->methodGetPdoByConfig()(new Config(['driver' => 'sqlite', 'file' => ':memory:', 'options' => [\PDO::ATTR_CASE => \PDO::CASE_UPPER]]));
+
+        $this->assertInstanceOf(\PDO::class, $pdo);
+        $this->assertEquals(\PDO::CASE_UPPER, $pdo->getAttribute(\PDO::ATTR_CASE));
     }
 
 }
