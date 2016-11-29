@@ -22,6 +22,18 @@ class Connection
      */
     protected $pdo;
 
+    const DSN_REQUIRED = [
+        'sqlite' => ['file'],
+        'mysql'  => ['host', 'dbname'],
+        'pgsql'  => ['host', 'dbname'],
+    ];
+
+    const DSN_OPTIONAL = [
+        'sqlite' => ['dbname'],
+        'mysql'  => ['port', 'charset'],
+        'pgsql'  => ['port'],
+    ];
+
     /**
      * @param \Running\Core\Config $config
      * @throws \Running\Dbal\Exception
@@ -48,20 +60,41 @@ class Connection
         $errors = new MultiException();
         if (empty($config->driver)) {
             $errors[] = new Exception('Empty driver in config');
+            throw $errors;
         }
-        if (empty($config->host)) {
-            $errors[] = new Exception('Empty host in config');
-        }
-        if (empty($config->dbname)) {
-            $errors[] = new Exception('Empty dbname in config');
+
+        if ( !empty(static::DSN_REQUIRED[$config->driver]) ) {
+            foreach (static::DSN_REQUIRED[$config->driver] as $required) {
+                if (empty($config->$required)) {
+                    $errors[] = new Exception('Empty ' . $required . ' in config');
+                }
+            }
         }
         if (!$errors->isEmpty()) {
             throw $errors;
         }
-        $dsn = $config->driver . ':host=' . $config->host . ';dbname=' . $config->dbname;
-        if (!empty($config->port)) {
-            $dsn .= ';port=' . $config->port;
+
+        $parts = [];
+
+        if ( !empty(static::DSN_REQUIRED[$config->driver]) ) {
+            foreach (static::DSN_REQUIRED[$config->driver] as $required) {
+                if ('sqlite' == $config->driver && 'file' == $required) {
+                    $parts[] = $config->$required;
+                } else {
+                    $parts[] = $required . '=' . $config->$required;
+                }
+            }
         }
+
+        if ( !empty(static::DSN_OPTIONAL[$config->driver]) ) {
+            foreach (static::DSN_OPTIONAL[$config->driver] as $required) {
+                if (isset($config->$required)) {
+                    $parts[] = $required . '=' . $config->$required;
+                }
+            }
+        }
+
+        $dsn = $config->driver . ':' . implode(';', $parts);
         return $dsn;
     }
 
@@ -69,28 +102,26 @@ class Connection
      * @param \Running\Core\Config $config
      * @return \PDO
      * @throws \Running\Dbal\Exception
+     * @throws \Running\Core\MultiException
      */
-    /*
     protected function getPdoByConfig(Config $config): \PDO
     {
-        $dsn = $config->driver . ':host=' . $config->host . ';dbname=' . $config->dbname;
-        if (!empty($config->port)) {
-            $dsn .= ';port=' . $config->port;
-        }
+        $dsn = $this->getDsnByConfig($config);
+
         $options = [];
         if (!empty($config->options)) {
-            $options = $config->options->toArray();
+            $options = $config->options->toArrayRecursive();
         }
+
         try {
-            $pdo = new \PDO($dsn, $config->user, $config->password, $options);
+            $pdo = new \PDO($dsn, $config->user ?? null, $config->password ?? null, $options);
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, $config->errmode ?? \PDO::ERRMODE_EXCEPTION);
-            $pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, $config->statement ? [$config->statement] : [Statement::class]);
+            $pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, isset($config->statement) ? [$config->statement] : [Statement::class]);
             return $pdo;
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
     }
-    */
 
     /**
      * @return string
