@@ -24,7 +24,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Argument 1 passed to Running\Dbal\Connection::getDsnByConfig() must be an instance of Running\Core\Config, none given
      */
     public function testDsnByConfigEmptyArgument()
     {
@@ -77,7 +76,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Argument 1 passed to Running\Dbal\Connection::getPdoByConfig() must be an instance of Running\Core\Config, none given
      */
     public function testPdoByConfigEmptyArgument()
     {
