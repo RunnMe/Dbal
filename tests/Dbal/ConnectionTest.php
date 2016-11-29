@@ -112,4 +112,19 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([testStatement::class], $pdo->getAttribute(\PDO::ATTR_STATEMENT_CLASS));
     }
 
+    public function testPdoException()
+    {
+        try {
+            $pdo = $this->methodGetPdoByConfig()(new Config(['driver' => 'mysql', 'host' => 'localhost', 'dbname' => 'invalid', 'user' => 'invalid', 'password' => 'invalid']));
+            $this->fail();
+        } catch (Exception $e) {
+            $this->assertInstanceOf(\PDOException::class, $e->getPrevious());
+        }
+    }
+
+    public function testPdoOptions()
+    {
+        // @todo test connect options
+    }
+
 }
