@@ -1,11 +1,14 @@
 <?php
 
-namespace Running\tests\Dbal\Statement;
+namespace Running\tests\Dbal\Connection;
 
 use Running\Core\Config;
 use Running\Core\MultiException;
 use Running\Dbal\Connection;
 use Running\Dbal\Exception;
+use Running\Dbal\Statement;
+
+class testStatement extends \PDOStatement {}
 
 class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -97,6 +100,16 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function testPdoByConfig()
     {
         $pdo = $this->methodGetPdoByConfig()(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+
+        $this->assertInstanceOf(\PDO::class, $pdo);
+        $this->assertEquals(\PDO::ERRMODE_EXCEPTION, $pdo->getAttribute(\PDO::ATTR_ERRMODE));
+        $this->assertEquals([Statement::class], $pdo->getAttribute(\PDO::ATTR_STATEMENT_CLASS));
+
+        $pdo = $this->methodGetPdoByConfig()(new Config(['driver' => 'sqlite', 'file' => ':memory:', 'errmode' => \PDO::ERRMODE_SILENT, 'statement' => testStatement::class]));
+
+        $this->assertInstanceOf(\PDO::class, $pdo);
+        $this->assertEquals(\PDO::ERRMODE_SILENT, $pdo->getAttribute(\PDO::ATTR_ERRMODE));
+        $this->assertEquals([testStatement::class], $pdo->getAttribute(\PDO::ATTR_STATEMENT_CLASS));
     }
 
 }
