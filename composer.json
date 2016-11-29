@@ -12,10 +12,15 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "pr-of-it/running-core": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.*"
+    "ext-pdo_sqlite": "*",
+    "ext-pdo_mysql": "*",
+    "ext-pdo_pgsql": "*",
+    "phpunit/phpunit": "5.*",
+    "phpunit/dbunit": "*"
   },
   "autoload": {
     "psr-4": {
