@@ -5,7 +5,9 @@ namespace Running\tests\Dbal\Connection;
 use Running\Core\Config;
 use Running\Core\MultiException;
 use Running\Dbal\Connection;
+use Running\Dbal\Drivers\Sqlite;
 use Running\Dbal\Exception;
+use Running\Dbal\IDriver;
 use Running\Dbal\Statement;
 
 class testStatement extends \PDOStatement {}
@@ -153,6 +155,15 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\'"foo"\'', $conn->quote('"foo"'));
         $this->assertEquals('\'42\'', $conn->quote(42));
         $this->assertEquals('\'42\'', $conn->quote(42, \PDO::PARAM_INT));
+    }
+
+    public function testGetDriver()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+
+        $this->assertInstanceOf(IDriver::class, $conn->getDriver());
+        $this->assertInstanceOf(Sqlite::class, $conn->getDriver());
     }
 
 }
