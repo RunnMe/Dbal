@@ -15,7 +15,7 @@ trait SqliteTQuery
 {
 
     // @todo: look for any function!
-    protected $selectNoQouteTemplate = '~count|avg|group_concat|min|max|sum~i';
+    protected $selectNoQouteTemplate = '~select|count|avg|group_concat|min|max|sum~i';
 
     public function quoteName($name)
     {
@@ -71,7 +71,14 @@ trait SqliteTQuery
             throw new Exception('SELECT statement must have both \'columns\' and \'tables\' parts');
         }
 
-        $sql  = 'SELECT ';
+        $sql = '';
+
+        if (!empty($query->with)) {
+            $sql .= 'WITH ' . implode(', ', $query->with);
+            $sql .= "\n";
+        }
+
+        $sql .= 'SELECT ';
         if ($query->columns == ['*']) {
             $sql .= '*';
         } else {

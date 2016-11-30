@@ -59,6 +59,11 @@ class SqliteTQueryTest extends \PHPUnit_Framework_TestCase
             ->join('bar', 'j2.id<t2.id', 'left')
             ->join('baz', 'j3.id>:baz', 'cross', 'bzz');
         $this->assertEquals("SELECT t1.`a1`, j1.`a2`\nFROM `test1` AS t1, `test2` AS t2\nINNER JOIN `foo` AS j1 ON j1.id=t1.id\nLEFT JOIN `bar` AS j2 ON j2.id<t2.id\nCROSS JOIN `baz` AS `bzz` ON j3.id>:baz", $driver->makeQueryString($query));
+
+        $driver = new Sqlite();
+        $query = new Query();
+        $query = $query->with('one AS ( SELECT 1 )')->select()->from('one');
+        $this->assertEquals("WITH one AS ( SELECT 1 )\nSELECT *\nFROM `one` AS t1", $driver->makeQueryString($query));
     }
 
     public function testMysqlMakeInsertQuery()
