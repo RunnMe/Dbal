@@ -22,6 +22,11 @@ class Connection
      */
     protected $pdo;
 
+    /**
+     * @var \Running\Dbal\IDriver
+     */
+    protected $driver;
+
     const DSN_REQUIRED = [
         'sqlite' => ['file'],
         'mysql'  => ['host', 'dbname'],
@@ -42,6 +47,7 @@ class Connection
     {
         $this->config = $config;
         $this->pdo = $this->getPdoByConfig($this->config);
+        $this->driver = Drivers::instance($this->config->driver);
     }
 
     /**
@@ -115,6 +121,14 @@ class Connection
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @return \Running\Dbal\IDriver
+     */
+    public function getDriver(): IDriver
+    {
+        return $this->driver;
     }
 
     /**
