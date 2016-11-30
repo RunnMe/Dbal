@@ -16,7 +16,7 @@ class Drivers
      * @return IDriver
      * @throws Exception
      */
-    public static function instance($driver): IDriver
+    public static function instance(string $driver): IDriver
     {
         static $drivers = [];
         if (!isset($drivers[$driver])) {

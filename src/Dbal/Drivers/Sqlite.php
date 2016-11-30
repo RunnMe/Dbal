@@ -5,16 +5,17 @@ namespace Running\Dbal\Drivers;
 use Running\Dbal\Connection;
 use Running\Dbal\IDriver;
 
+/**
+ * DBAL sqlite driver
+ *
+ * Class Sqlite
+ * @package Running\Dbal\Drivers
+ */
 class Sqlite
     implements IDriver
 {
 
     use SqliteTQuery;
-
-    public function quoteName($name)
-    {
-        // TODO: Implement quoteName() method.
-    }
 
     public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = [])
     {
