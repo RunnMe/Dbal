@@ -15,6 +15,7 @@ use Running\Core\Std;
  *
  * @property array $columns
  * @property array $tables
+ * @property array $with
  * @property array $joins
  *
  * @property string $where
@@ -157,6 +158,18 @@ class Query
     public function from($table = [])
     {
         $this->tables(...func_get_args());
+        return $this;
+    }
+
+    /**
+     * Set all query's tables
+     * @param array $tables
+     * @return $this
+     */
+    public function with($tables = [])
+    {
+        $tables = $this->prepareNames(func_get_args());
+        $this->with = $tables;
         return $this;
     }
 
