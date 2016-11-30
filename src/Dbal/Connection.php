@@ -29,7 +29,7 @@ class Connection
     ];
 
     const DSN_OPTIONAL = [
-        'sqlite' => ['dbname'],
+        'sqlite' => [],
         'mysql'  => ['port', 'charset'],
         'pgsql'  => ['port'],
     ];
@@ -38,17 +38,11 @@ class Connection
      * @param \Running\Core\Config $config
      * @throws \Running\Dbal\Exception
      */
-    /*
     public function __construct(Config $config)
     {
         $this->config = $config;
-        try {
-            $this->pdo = $this->getPdoByConfig($this->config);
-        } catch (\PDOException $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
-        }
+        $this->pdo = $this->getPdoByConfig($this->config);
     }
-    */
 
     /**
      * @param \Running\Core\Config $config

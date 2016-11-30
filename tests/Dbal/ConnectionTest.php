@@ -130,4 +130,19 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(\PDO::CASE_UPPER, $pdo->getAttribute(\PDO::ATTR_CASE));
     }
 
+    public function testConstruct()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+
+        $reflectConfig = new \ReflectionProperty($conn, 'config');
+        $reflectConfig->setAccessible(true);
+
+        $reflectPdo = new \ReflectionProperty($conn, 'pdo');
+        $reflectPdo->setAccessible(true);
+
+        $this->assertEquals($config, $reflectConfig->getValue($conn));
+        $this->assertEquals(new \PDO('sqlite::memory:'), $reflectPdo->getValue($conn));
+    }
+
 }
