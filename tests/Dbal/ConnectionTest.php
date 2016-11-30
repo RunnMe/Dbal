@@ -145,4 +145,14 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new \PDO('sqlite::memory:'), $reflectPdo->getValue($conn));
     }
 
+    public function testQuote()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+
+        $this->assertEquals('\'"foo"\'', $conn->quote('"foo"'));
+        $this->assertEquals('\'42\'', $conn->quote(42));
+        $this->assertEquals('\'42\'', $conn->quote(42, \PDO::PARAM_INT));
+    }
+
 }

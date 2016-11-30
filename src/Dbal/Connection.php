@@ -118,6 +118,16 @@ class Connection
     }
 
     /**
+     * @param string $string
+     * @param int $parameter_type
+     * @return string
+     */
+    public function quote(string $string, $parameter_type = \PDO::PARAM_STR)
+    {
+        return $this->pdo->quote($string, $parameter_type);
+    }
+
+    /**
      * @return string
      */
     /*
@@ -134,18 +144,6 @@ class Connection
     public function getDriver()
     {
         return DriverFactory::getDriver($this->getDriverName());
-    }
-    */
-
-    /**
-     * @param string $string
-     * @param int $parameter_type
-     * @return string
-     */
-    /*
-    public function quote(string $string, $parameter_type = \PDO::PARAM_STR)
-    {
-        return $this->pdo->quote($string, $parameter_type);
     }
     */
 
