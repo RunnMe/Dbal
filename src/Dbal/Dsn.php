@@ -45,6 +45,11 @@ abstract class Dsn
         }
     }
 
+    /**
+     * @param \Running\Core\Config $config
+     * @return \Running\Dbal\Dsn
+     * @throws Exception
+     */
     public static function instance(Config $config)
     {
         if (empty($config->driver)) {
@@ -60,7 +65,6 @@ abstract class Dsn
 
     /**
      * @return string
-     * @throws \Running\Core\MultiException
      */
     public function __toString()
     {
