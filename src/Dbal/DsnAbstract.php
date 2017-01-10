@@ -35,7 +35,7 @@ abstract class DsnAbstract
         }
         $this->config = $config;
 
-        foreach (static::REQUIRED as $required) {
+        foreach ((array)static::REQUIRED as $required) {
             if (!isset($this->config->$required)) {
                 $errors[] = new Exception('"' . $required . '" is not set in config');
             }
@@ -53,11 +53,11 @@ abstract class DsnAbstract
     {
         $parts = [];
 
-        foreach (static::REQUIRED as $required) {
+        foreach ((array)static::REQUIRED as $required) {
                 $parts[] = $required . '=' . $this->config->$required;
         }
 
-        foreach (static::OPTIONAL as $optional) {
+        foreach ((array)static::OPTIONAL as $optional) {
             if (isset($this->config->$optional)) {
                 $parts[] = $optional . '=' . $this->config->$optional;
             }
