@@ -1,17 +1,17 @@
 <?php
 
-namespace Running\tests\Dbal\DsnAbstract;
+namespace Running\tests\Dbal\Dsn;
 
 use Running\Core\Config;
 use Running\Core\MultiException;
-use Running\Dbal\DsnAbstract;
+use Running\Dbal\Dsn;
 
-class testDsn extends DsnAbstract {
+class testDsn extends Dsn {
     const REQUIRED = ['foo', 'bar'];
     const OPTIONAL = ['baz'];
 }
 
-class DsnAbstractTest extends \PHPUnit_Framework_TestCase
+class DsnATest extends \PHPUnit_Framework_TestCase
 {
 
     public function testConstructValid()
@@ -19,7 +19,7 @@ class DsnAbstractTest extends \PHPUnit_Framework_TestCase
         $config = new Config(['driver' => 'sqlite', 'foo' => 'test', 'bar' => 'bla']);
         $dsn = new testDsn($config);
 
-        $this->assertInstanceOf(DsnAbstract::class, $dsn);
+        $this->assertInstanceOf(Dsn::class, $dsn);
 
         $reflector = new \ReflectionObject($dsn);
         $property = $reflector->getProperty('config');
@@ -68,6 +68,31 @@ class DsnAbstractTest extends \PHPUnit_Framework_TestCase
         $config = new Config(['driver' => 'sqlite', 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
         $dsn = new testDsn($config);
         $this->assertEquals('sqlite:foo=test;bar=bla;baz=42', (string)$dsn);
+    }
+
+    public function testInstance()
+    {
+        $dsn = Dsn::instance(new Config(['driver' => 'sqlite']));
+        $this->assertInstanceOf(Dsn::class, $dsn);
+        $this->assertInstanceOf(\Running\Dbal\Drivers\Sqlite\Dsn::class, $dsn);
+    }
+
+    /**
+     * @expectedException \Running\Dbal\Exception
+     * @expectedExceptionMessage Driver is empty in config
+     */
+    public function testInstanceInvalid1()
+    {
+        $dsn = Dsn::instance(new Config(['nodriver' => 'invalid']));
+    }
+
+    /**
+     * @expectedException \Running\Dbal\Exception
+     * @expectedExceptionMessage Driver is invalid
+     */
+    public function testInstanceInvalid2()
+    {
+        $dsn = Dsn::instance(new Config(['driver' => 'invalid']));
     }
 
 }

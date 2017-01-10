@@ -10,7 +10,7 @@ use Running\Core\MultiException;
  * DSN maker
  * @package Running\Dbal
  */
-abstract class DsnAbstract
+abstract class Dsn
 {
 
     /*protected */const REQUIRED = ['host', 'dbname'];
@@ -42,6 +42,19 @@ abstract class DsnAbstract
         }
         if (!$errors->isEmpty()) {
             throw $errors;
+        }
+    }
+
+    public static function instance(Config $config)
+    {
+        if (empty($config->driver)) {
+            throw new Exception('Driver is empty in config');
+        }
+        try {
+            $className = $config->class ?? '\Running\Dbal\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
+            return new $className($config);
+        } catch (\Error $e) {
+            throw new Exception('Driver is invalid', 0, $e);
         }
     }
 
