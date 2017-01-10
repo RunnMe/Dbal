@@ -56,7 +56,7 @@ abstract class Dsn
             throw new Exception('Driver is empty in config');
         }
         try {
-            $className = $config->class ?? '\Running\Dbal\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
+            $className = $config->class ?? __NAMESPACE__ . '\\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
             return new $className($config);
         } catch (\Error $e) {
             throw new Exception('Driver is invalid', 0, $e);
