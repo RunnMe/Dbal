@@ -23,23 +23,17 @@ abstract class DsnAbstract
 
     /**
      * @param \Running\Core\Config $config
-     * @throws \Running\Dbal\Exception
+     * @throws \Running\Core\MultiException
      */
     public function __construct(Config $config)
     {
+        $errors = new MultiException();
+
         if (empty($config->driver)) {
-            throw new Exception('Driver is empty in config');
+            $errors[] = new Exception('Driver is empty in config');
+            throw $errors;
         }
         $this->config = $config;
-    }
-
-    /**
-     * @return string
-     * @throws \Running\Core\MultiException
-     */
-    public function __toString()
-    {
-        $errors = new MultiException();
 
         foreach (static::REQUIRED as $required) {
             if (!isset($this->config->$required)) {
@@ -49,7 +43,14 @@ abstract class DsnAbstract
         if (!$errors->isEmpty()) {
             throw $errors;
         }
+    }
 
+    /**
+     * @return string
+     * @throws \Running\Core\MultiException
+     */
+    public function __toString()
+    {
         $parts = [];
 
         foreach (static::REQUIRED as $required) {
