@@ -84,6 +84,19 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Dbh::CASE_UPPER, $dbh->getAttribute(Dbh::ATTR_CASE));
     }
 
+    public function testDbhException()
+    {
+        try {
+            $method = $this->methodGetDbhByConfig();
+            $dbh = $method(new Config(['driver' => 'mysql', 'host' => 'localhost', 'dbname' => 'invalid']));
+            $this->fail();
+        } catch (Exception $e) {
+            $this->assertInstanceOf(\PDOException::class, $e->getPrevious());
+            return;
+        }
+        $this->fail();
+    }
+
     /*
 
     public function testPdoException()
