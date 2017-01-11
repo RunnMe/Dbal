@@ -5,6 +5,7 @@ namespace Running\tests\Dbal\Dsn;
 use Running\Core\Config;
 use Running\Core\MultiException;
 use Running\Dbal\Dsn;
+use Running\Dbal\Exception;
 
 class testDsn extends Dsn {
     const REQUIRED = ['foo', 'bar'];
@@ -38,6 +39,7 @@ class DsnATest extends \PHPUnit_Framework_TestCase
             );
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
+            $this->assertInstanceOf(Exception::class, $errors[0]);
             $this->assertEquals('Driver is empty in config', $errors[0]->getMessage());
             return;
         }
@@ -52,7 +54,9 @@ class DsnATest extends \PHPUnit_Framework_TestCase
             );
         } catch (MultiException $errors) {
             $this->assertCount(2, $errors);
+            $this->assertInstanceOf(Exception::class, $errors[0]);
             $this->assertEquals('"foo" is not set in config', $errors[0]->getMessage());
+            $this->assertInstanceOf(Exception::class, $errors[1]);
             $this->assertEquals('"bar" is not set in config', $errors[1]->getMessage());
             return;
         }
@@ -77,22 +81,30 @@ class DsnATest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Running\Dbal\Drivers\Sqlite\Dsn::class, $dsn);
     }
 
-    /**
-     * @expectedException \Running\Dbal\Exception
-     * @expectedExceptionMessage Driver is empty in config
-     */
     public function testInstanceInvalid1()
     {
-        $dsn = Dsn::instance(new Config(['nodriver' => 'invalid']));
+        try {
+            $dsn = Dsn::instance(new Config(['nodriver' => 'invalid']));
+        } catch (MultiException $errors) {
+            $this->assertCount(1, $errors);
+            $this->assertInstanceOf(Exception::class, $errors[0]);
+            $this->assertEquals('Driver is empty in config', $errors[0]->getMessage());
+            return;
+        }
+        $this->fail();
     }
 
-    /**
-     * @expectedException \Running\Dbal\Exception
-     * @expectedExceptionMessage Driver is invalid
-     */
     public function testInstanceInvalid2()
     {
-        $dsn = Dsn::instance(new Config(['driver' => 'invalid']));
+        try {
+            $dsn = Dsn::instance(new Config(['driver' => 'invalid']));
+        } catch (MultiException $errors) {
+            $this->assertCount(1, $errors);
+            $this->assertInstanceOf(Exception::class, $errors[0]);
+            $this->assertEquals('Driver is invalid', $errors[0]->getMessage());
+            return;
+        }
+        $this->fail();
     }
 
 }

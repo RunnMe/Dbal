@@ -48,18 +48,18 @@ abstract class Dsn
     /**
      * @param \Running\Core\Config $config
      * @return \Running\Dbal\Dsn
-     * @throws Exception
+     * @throws \Running\Core\MultiException
      */
     public static function instance(Config $config)
     {
         if (empty($config->driver)) {
-            throw new Exception('Driver is empty in config');
+            throw (new MultiException())->add(new Exception('Driver is empty in config'));
         }
         try {
             $className = $config->class ?? __NAMESPACE__ . '\\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
             return new $className($config);
         } catch (\Error $e) {
-            throw new Exception('Driver is invalid', 0, $e);
+            throw (new MultiException())->add(new Exception('Driver is invalid', 0, $e));
         }
     }
 
