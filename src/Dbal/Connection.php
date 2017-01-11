@@ -30,12 +30,13 @@ class Connection
     /**
      * @param \Running\Core\Config $config
      * @throws \Running\Dbal\Exception
+     * @throws \Running\Core\MultiException
      */
     public function __construct(Config $config)
     {
-        $this->config = $config;
-        $this->dbh = $this->getDbhByConfig($this->config);
-        $this->driver = Drivers::instance($this->config->driver);
+        $this->config   = $config;
+        $this->dbh      = $this->getDbhByConfig($this->config);
+        $this->driver   = Drivers::instance($this->config->driver);
     }
 
     /**
@@ -55,12 +56,28 @@ class Connection
 
         try {
             $dbh = new Dbh((string)$dsn, $config->user ?? null, $config->password ?? null, $options);
-            $dbh->setAttribute(\PDO::ATTR_ERRMODE, $config->errmode ?? \PDO::ERRMODE_EXCEPTION);
-            $dbh->setAttribute(\PDO::ATTR_STATEMENT_CLASS, isset($config->statement) ? [$config->statement] : [Statement::class]);
+            $dbh->setAttribute(Dbh::ATTR_ERRMODE, $config->errmode ?? Dbh::ERRMODE_EXCEPTION);
+            $dbh->setAttribute(Dbh::ATTR_STATEMENT_CLASS, isset($config->statement) ? [$config->statement] : [Statement::class]);
             return $dbh;
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @return \Running\Core\Config
+     */
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return \Running\Dbal\Dbh
+     */
+    public function getDbh(): Dbh
+    {
+        return $this->dbh;
     }
 
     /**
@@ -76,7 +93,7 @@ class Connection
      * @param int $parameter_type
      * @return string
      */
-    public function quote(string $string, $parameter_type = \PDO::PARAM_STR)
+    public function quote(string $string, $parameter_type = Dbh::PARAM_STR)
     {
         return $this->dbh->quote($string, $parameter_type);
     }

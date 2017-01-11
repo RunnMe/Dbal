@@ -8,6 +8,7 @@ use Running\Dbal\Connection;
 use Running\Dbal\Dbh;
 use Running\Dbal\Drivers;
 use Running\Dbal\Exception;
+use Running\Dbal\IDriver;
 use Running\Dbal\Statement;
 
 class testStatement extends Statement {}
@@ -117,6 +118,33 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new Drivers\Sqlite(), $reflectDriver->getValue($conn));
     }
 
+    public function testGetConfig()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+
+        $this->assertInstanceOf(Config::class, $conn->getConfig());
+        $this->assertEquals($config, $conn->getConfig());
+    }
+
+    public function testGetDbh()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+
+        $this->assertInstanceOf(Dbh::class, $conn->getDbh());
+        $this->assertEquals(new Dbh('sqlite::memory:'), $conn->getDbh());
+    }
+
+    public function testGetDriver()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+
+        $this->assertInstanceOf(IDriver::class, $conn->getDriver());
+        $this->assertInstanceOf(Drivers\Sqlite::class, $conn->getDriver());
+    }
+
     /*
     public function testQuote()
     {
@@ -126,15 +154,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\'"foo"\'', $conn->quote('"foo"'));
         $this->assertEquals('\'42\'', $conn->quote(42));
         $this->assertEquals('\'42\'', $conn->quote(42, \PDO::PARAM_INT));
-    }
-
-    public function testGetDriver()
-    {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
-        $conn = new Connection($config);
-
-        $this->assertInstanceOf(IDriver::class, $conn->getDriver());
-        $this->assertInstanceOf(Sqlite::class, $conn->getDriver());
     }
 */
 }
