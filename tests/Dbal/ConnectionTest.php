@@ -6,6 +6,7 @@ use Running\Core\Config;
 use Running\Core\MultiException;
 use Running\Dbal\Connection;
 use Running\Dbal\Dbh;
+use Running\Dbal\Drivers;
 use Running\Dbal\Exception;
 use Running\Dbal\Statement;
 
@@ -97,18 +98,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->fail();
     }
 
-    /*
-
-    public function testPdoException()
-    {
-        try {
-            $pdo = $this->methodGetPdoByConfig()(new Config(['driver' => 'mysql', 'host' => 'localhost', 'dbname' => 'invalid', 'user' => 'invalid', 'password' => 'invalid']));
-            $this->fail();
-        } catch (Exception $e) {
-            $this->assertInstanceOf(\PDOException::class, $e->getPrevious());
-        }
-    }
-
     public function testConstruct()
     {
         $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
@@ -117,13 +106,18 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $reflectConfig = new \ReflectionProperty($conn, 'config');
         $reflectConfig->setAccessible(true);
 
-        $reflectPdo = new \ReflectionProperty($conn, 'pdo');
-        $reflectPdo->setAccessible(true);
+        $reflectDbh = new \ReflectionProperty($conn, 'dbh');
+        $reflectDbh->setAccessible(true);
+
+        $reflectDriver = new \ReflectionProperty($conn, 'driver');
+        $reflectDriver->setAccessible(true);
 
         $this->assertEquals($config, $reflectConfig->getValue($conn));
-        $this->assertEquals(new \PDO('sqlite::memory:'), $reflectPdo->getValue($conn));
+        $this->assertEquals(new Dbh('sqlite::memory:'), $reflectDbh->getValue($conn));
+        $this->assertEquals(new Drivers\Sqlite(), $reflectDriver->getValue($conn));
     }
 
+    /*
     public function testQuote()
     {
         $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);

@@ -18,7 +18,7 @@ class Connection
     protected $config;
 
     /**
-     * @var \PDO
+     * @var \Running\Dbal\Dbh
      */
     protected $dbh;
 
@@ -35,7 +35,7 @@ class Connection
     {
         $this->config = $config;
         $this->dbh = $this->getDbhByConfig($this->config);
-        //$this->driver = Drivers::instance($this->config->driver);
+        $this->driver = Drivers::instance($this->config->driver);
     }
 
     /**
