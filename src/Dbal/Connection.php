@@ -3,7 +3,6 @@
 namespace Running\Dbal;
 
 use Running\Core\Config;
-use Running\Core\MultiException;
 
 /**
  * Class Connection
@@ -20,24 +19,12 @@ class Connection
     /**
      * @var \PDO
      */
-    protected $pdo;
+    protected $dbh;
 
     /**
      * @var \Running\Dbal\IDriver
      */
     protected $driver;
-
-    const DSN_REQUIRED = [
-        'sqlite' => ['file'],
-        'mysql'  => ['host', 'dbname'],
-        'pgsql'  => ['host', 'dbname'],
-    ];
-
-    const DSN_OPTIONAL = [
-        'sqlite' => [],
-        'mysql'  => ['port', 'charset'],
-        'pgsql'  => ['port'],
-    ];
 
     /**
      * @param \Running\Core\Config $config
@@ -46,67 +33,19 @@ class Connection
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->pdo = $this->getPdoByConfig($this->config);
-        $this->driver = Drivers::instance($this->config->driver);
+        $this->dbh = $this->getDbhByConfig($this->config);
+        //$this->driver = Drivers::instance($this->config->driver);
     }
 
     /**
      * @param \Running\Core\Config $config
-     * @return string
-     * @throws \Running\Core\MultiException
-     */
-    protected function getDsnByConfig(Config $config): string
-    {
-        $errors = new MultiException();
-        if (empty($config->driver)) {
-            $errors[] = new Exception('Empty driver in config');
-            throw $errors;
-        }
-
-        if ( !empty(static::DSN_REQUIRED[$config->driver]) ) {
-            foreach (static::DSN_REQUIRED[$config->driver] as $required) {
-                if (empty($config->$required)) {
-                    $errors[] = new Exception('Empty ' . $required . ' in config');
-                }
-            }
-        }
-        if (!$errors->isEmpty()) {
-            throw $errors;
-        }
-
-        $parts = [];
-
-        if ( !empty(static::DSN_REQUIRED[$config->driver]) ) {
-            foreach (static::DSN_REQUIRED[$config->driver] as $required) {
-                if ('sqlite' == $config->driver && 'file' == $required) {
-                    $parts[] = $config->$required;
-                } else {
-                    $parts[] = $required . '=' . $config->$required;
-                }
-            }
-        }
-
-        if ( !empty(static::DSN_OPTIONAL[$config->driver]) ) {
-            foreach (static::DSN_OPTIONAL[$config->driver] as $required) {
-                if (isset($config->$required)) {
-                    $parts[] = $required . '=' . $config->$required;
-                }
-            }
-        }
-
-        $dsn = $config->driver . ':' . implode(';', $parts);
-        return $dsn;
-    }
-
-    /**
-     * @param \Running\Core\Config $config
-     * @return \PDO
+     * @return \Running\Dbal\Dbh
      * @throws \Running\Dbal\Exception
      * @throws \Running\Core\MultiException
      */
-    protected function getPdoByConfig(Config $config): \PDO
+    protected function getDbhByConfig(Config $config): Dbh
     {
-        $dsn = $this->getDsnByConfig($config);
+        $dsn = Dsn::instance($config);
 
         $options = [];
         if (!empty($config->options)) {
@@ -114,10 +53,10 @@ class Connection
         }
 
         try {
-            $pdo = new \PDO($dsn, $config->user ?? null, $config->password ?? null, $options);
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, $config->errmode ?? \PDO::ERRMODE_EXCEPTION);
-            $pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, isset($config->statement) ? [$config->statement] : [Statement::class]);
-            return $pdo;
+            $dbh = new Dbh((string)$dsn, $config->user ?? null, $config->password ?? null, $options);
+            $dbh->setAttribute(\PDO::ATTR_ERRMODE, $config->errmode ?? \PDO::ERRMODE_EXCEPTION);
+            $dbh->setAttribute(\PDO::ATTR_STATEMENT_CLASS, isset($config->statement) ? [$config->statement] : [Statement::class]);
+            return $dbh;
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
@@ -138,7 +77,7 @@ class Connection
      */
     public function quote(string $string, $parameter_type = \PDO::PARAM_STR)
     {
-        return $this->pdo->quote($string, $parameter_type);
+        return $this->dbh->quote($string, $parameter_type);
     }
 
     /**
