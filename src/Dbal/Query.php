@@ -2,7 +2,7 @@
 
 namespace Running\Dbal;
 
-use Running\Core\IArrayable;
+use Running\Core\ArrayableInterface;
 use Running\Core\Std;
 
 /**
@@ -43,7 +43,7 @@ class Query
             return;
         }
 
-        if ($data instanceof IArrayable) {
+        if ($data instanceof ArrayableInterface) {
             $data = $data->toArrayRecursive();
         }
         

@@ -3,7 +3,7 @@
 namespace Running\Dbal;
 
 use Running\Core\Config;
-use Running\Core\IArrayable;
+use Running\Core\ArrayableInterface;
 
 /**
  * Class Connection
@@ -50,7 +50,7 @@ class Connection
         $dsn = Dsn::instance($config);
 
         $options = [];
-        if (!empty($config->options) && $config->options instanceof IArrayable) {
+        if (!empty($config->options) && $config->options instanceof ArrayableInterface) {
             $options = $config->options->toArrayRecursive();
         }
 

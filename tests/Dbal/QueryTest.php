@@ -514,7 +514,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('val1', $query->attr1);
     }
 
-    public function testFromIArrayAble()
+    public function testFromArrayable()
     {
         $options = new Std([
             'action' => 'select',
