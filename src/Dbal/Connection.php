@@ -89,34 +89,14 @@ class Connection
     }
 
     /**
-     * @param string $string
+     * @param string|null $string
      * @param int $parameter_type
      * @return string
      */
-    public function quote(string $string, $parameter_type = Dbh::PARAM_STR)
+    public function quote(string $string = null, $parameter_type = Dbh::PARAM_STR)
     {
         return $this->dbh->quote($string, $parameter_type);
     }
-
-    /**
-     * @return string
-     */
-    /*
-    public function getDriverName()
-    {
-        return (string)$this->config->driver;
-    }
-    */
-
-    /**
-     * @return \Running\Dbal\IDriver
-     */
-    /*
-    public function getDriver()
-    {
-        return DriverFactory::getDriver($this->getDriverName());
-    }
-    */
 
     /**
      * @param \Running\Dbal\Query $query

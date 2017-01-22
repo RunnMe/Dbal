@@ -145,15 +145,15 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Drivers\Sqlite::class, $conn->getDriver());
     }
 
-    /*
     public function testQuote()
     {
         $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
         $conn = new Connection($config);
 
         $this->assertEquals('\'"foo"\'', $conn->quote('"foo"'));
-        $this->assertEquals('\'42\'', $conn->quote(42));
-        $this->assertEquals('\'42\'', $conn->quote(42, \PDO::PARAM_INT));
+        $this->assertEquals('\'42\'',    $conn->quote(42));
+        $this->assertEquals('\'42\'',    $conn->quote(42, Dbh::PARAM_INT));
+        $this->assertEquals('\'\'',      $conn->quote(null, Dbh::PARAM_NULL));
     }
-*/
+
 }
