@@ -24,7 +24,7 @@ class QueryBuilder
             if ('*' == $part) {
                 continue;
             }
-            if (false !== strpos($part, ')') || false !== strpos($part, '(')) {
+            if (false !== strpos($part, '(') || false !== strpos($part, ')')) {
                 continue;
             }
             if (

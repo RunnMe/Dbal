@@ -8,6 +8,28 @@ use Running\Dbal\Query;
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testQuoteNameSimple()
+    {
+        $driver = new Driver();
+
+        $this->assertEquals('*', $driver->getQueryBuilder()->quoteName('*'));
+        $this->assertEquals('func()', $driver->getQueryBuilder()->quoteName('func()'));
+        $this->assertEquals('select some from table', $driver->getQueryBuilder()->quoteName('select some from table'));
+        $this->assertEquals('`t1`', $driver->getQueryBuilder()->quoteName('t1'));
+        $this->assertEquals('`j1`', $driver->getQueryBuilder()->quoteName('j1'));
+        $this->assertEquals('`foo`', $driver->getQueryBuilder()->quoteName('foo'));
+    }
+
+    public function testQuoteNameComplex()
+    {
+        $driver = new Driver();
+
+        $this->assertEquals('`foo`.*', $driver->getQueryBuilder()->quoteName('foo.*'));
+        $this->assertEquals('t1.`foo`', $driver->getQueryBuilder()->quoteName('t1.foo'));
+        $this->assertEquals('j1.`foo`', $driver->getQueryBuilder()->quoteName('j1.foo'));
+        $this->assertEquals('`foo`.`bar`', $driver->getQueryBuilder()->quoteName('foo.bar'));
+    }
+
     public function testMysqlMakeStringQuery()
     {
         $driver = new Driver();
