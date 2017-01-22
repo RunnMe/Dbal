@@ -3,12 +3,12 @@
 namespace Running\Dbal;
 
 /**
- * Interface IDriverQuery
+ * Interface DriverQueryBuilderInterface
  * @package Running\Dbal
  *
  * @codeCoverageIgnore
  */
-interface IDriverQuery
+interface DriverQueryBuilderInterface
 {
 
     public function quoteName($name);

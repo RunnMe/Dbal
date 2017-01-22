@@ -1,9 +1,10 @@
 <?php
 
-namespace Running\Dbal\Drivers;
+namespace Running\Dbal\Drivers\Sqlite;
 
 use Running\Dbal\Connection;
-use Running\Dbal\IDriver;
+use Running\Dbal\DriverInterface;
+use Running\Dbal\DriverQueryBuilderInterface;
 
 /**
  * DBAL sqlite driver
@@ -11,11 +12,14 @@ use Running\Dbal\IDriver;
  * Class Sqlite
  * @package Running\Dbal\Drivers
  */
-class Sqlite
-    implements IDriver
+class Driver
+    implements DriverInterface
 {
 
-    use SqliteTQuery;
+    public function getQueryBuilder(): DriverQueryBuilderInterface
+    {
+        return new QueryBuilder;
+    }
 
     public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = [])
     {

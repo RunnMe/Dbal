@@ -1,17 +1,16 @@
 <?php
 
-namespace Running\Dbal\Drivers;
+namespace Running\Dbal\Drivers\Sqlite;
 
+use Running\Dbal\DriverQueryBuilderInterface;
 use Running\Dbal\Query;
 
 /**
- * DBAL sqlite driver
- *
- * Class SqliteTQuery
- * @package Running\Dbal\Drivers
+ * Class QueryBuilder
+ * @package Running\Dbal\Drivers\Sqlite\Sqlite
  */
-trait SqliteTQuery
-    // implements IDriverQuery
+class QueryBuilder
+    implements DriverQueryBuilderInterface
 {
 
     // @todo: look for any function!

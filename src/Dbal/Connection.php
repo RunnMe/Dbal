@@ -23,7 +23,7 @@ class Connection
     protected $dbh;
 
     /**
-     * @var \Running\Dbal\IDriver
+     * @var \Running\Dbal\DriverInterface
      */
     protected $driver;
 
@@ -81,9 +81,9 @@ class Connection
     }
 
     /**
-     * @return \Running\Dbal\IDriver
+     * @return \Running\Dbal\DriverInterface
      */
-    public function getDriver(): IDriver
+    public function getDriver(): DriverInterface
     {
         return $this->driver;
     }

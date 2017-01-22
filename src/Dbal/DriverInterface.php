@@ -3,14 +3,15 @@
 namespace Running\Dbal;
 
 /**
- * Interface IDriver
+ * Interface DriverInterface
  * @package Running\Dbal
  *
  * @codeCoverageIgnore
  */
-interface IDriver
-    extends IDriverQuery
+interface DriverInterface
 {
+
+    public function getQueryBuilder(): DriverQueryBuilderInterface;
 
     public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = []);
 

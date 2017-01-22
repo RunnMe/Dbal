@@ -2,15 +2,16 @@
 
 namespace Running\tests\Dbal\Drivers;
 
+use Running\Dbal\DriverInterface;
 use Running\Dbal\Drivers;
-use Running\Dbal\IDriver;
+use Running\Dbal\DriverBuilderInterface;
 
 class DriversTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      * @expectedException \Running\Dbal\Exception
-     * @expectedExceptionMessage Class Running\Dbal\Drivers\Invalid does not exist
+     * @expectedExceptionMessage Class Running\Dbal\Drivers\Invalid\Driver does not exist
      */
     public function testInvalidDriver()
     {
@@ -22,8 +23,8 @@ class DriversTest extends \PHPUnit_Framework_TestCase
     {
         $driver = Drivers::instance('sqlite');
 
-        $this->assertInstanceOf(IDriver::class, $driver);
-        $this->assertInstanceOf(Drivers\Sqlite::class, $driver);
+        $this->assertInstanceOf(DriverInterface::class, $driver);
+        $this->assertInstanceOf(Drivers\Sqlite\Driver::class, $driver);
     }
 
 }

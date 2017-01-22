@@ -13,14 +13,14 @@ class Drivers
 
     /**
      * @param string $driver
-     * @return IDriver
+     * @return DriverInterface
      * @throws Exception
      */
-    public static function instance(string $driver): IDriver
+    public static function instance(string $driver): DriverInterface
     {
         static $drivers = [];
         if (!isset($drivers[$driver])) {
-            $driverClassName = __NAMESPACE__ . '\\Drivers\\' . ucfirst($driver);
+            $driverClassName = __NAMESPACE__ . '\\Drivers\\' . ucfirst($driver) . '\\Driver';
             if (!class_exists($driverClassName)) {
                 throw new Exception('Class ' . $driverClassName . ' does not exists');
             }

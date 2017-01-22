@@ -6,9 +6,10 @@ use Running\Core\Config;
 use Running\Core\MultiException;
 use Running\Dbal\Connection;
 use Running\Dbal\Dbh;
+use Running\Dbal\DriverInterface;
 use Running\Dbal\Drivers;
 use Running\Dbal\Exception;
-use Running\Dbal\IDriver;
+use Running\Dbal\DriverBuilderInterface;
 use Running\Dbal\Statement;
 
 class testStatement extends Statement {}
@@ -115,7 +116,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($config, $reflectConfig->getValue($conn));
         $this->assertEquals(new Dbh('sqlite::memory:'), $reflectDbh->getValue($conn));
-        $this->assertEquals(new Drivers\Sqlite(), $reflectDriver->getValue($conn));
+        $this->assertEquals(new Drivers\Sqlite\Driver(), $reflectDriver->getValue($conn));
     }
 
     public function testGetConfig()
@@ -141,8 +142,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
         $conn = new Connection($config);
 
-        $this->assertInstanceOf(IDriver::class, $conn->getDriver());
-        $this->assertInstanceOf(Drivers\Sqlite::class, $conn->getDriver());
+        $this->assertInstanceOf(DriverInterface::class, $conn->getDriver());
+        $this->assertInstanceOf(Drivers\Sqlite\Driver::class, $conn->getDriver());
     }
 
     public function testQuote()
