@@ -6,7 +6,6 @@ class Dsn
     extends \Running\Dbal\Dsn
 {
 
-    /*protected */const REQUIRED = ['dbname'];
-    /*protected */const OPTIONAL = ['host', 'port', 'user', 'password'];
-
+    /*protected */const REQUIRED = ['host', 'dbname'];
+    /*protected */const OPTIONAL = ['port'];
 }
