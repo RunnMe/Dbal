@@ -10,7 +10,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $config = new Config(['driver' => 'sqlite', 'file' => '/test', 'foo' => 'baz']);
-        $dsn = new Dsn($config);
+        $dsn = Dsn::instance($config);
         $this->assertEquals('sqlite:/test', (string)$dsn);
     }
 }

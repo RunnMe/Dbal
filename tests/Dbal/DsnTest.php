@@ -1,110 +1,99 @@
 <?php
 
-namespace Running\tests\Dbal\Dsn;
+namespace Running\Dbal\Drivers\Test {
 
-use Running\Core\Config;
-use Running\Core\MultiException;
-use Running\Dbal\Dsn;
-use Running\Dbal\Exception;
+    class Dsn extends \Running\Dbal\Dsn {
+        const REQUIRED = ['foo', 'bar'];
+        const OPTIONAL = ['baz'];
+    }
 
-class testDsn extends Dsn {
-    const REQUIRED = ['foo', 'bar'];
-    const OPTIONAL = ['baz'];
 }
 
-class DsnATest extends \PHPUnit_Framework_TestCase
-{
+namespace Running\tests\Dbal\Dsn {
 
-    public function testConstructValid()
+    use Running\Core\Config;
+    use Running\Core\MultiException;
+    use Running\Dbal\Dsn;
+    use Running\Dbal\Exception;
+
+    class DsnTest extends \PHPUnit_Framework_TestCase
     {
-        $config = new Config(['driver' => 'sqlite', 'foo' => 'test', 'bar' => 'bla']);
-        $dsn = new testDsn($config);
 
-        $this->assertInstanceOf(Dsn::class, $dsn);
+        public function testInstanceValid()
+        {
+            $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla']);
+            $dsn = Dsn::instance($config);
 
-        $reflector = new \ReflectionObject($dsn);
-        $property = $reflector->getProperty('config');
-        $property->setAccessible(true);
-        $this->assertEquals(
-            $property->getValue($dsn),
-            $config
-        );
-    }
+            $this->assertInstanceOf(\Running\Dbal\Drivers\Test\Dsn::class, $dsn);
+            $this->assertInstanceOf(Dsn::class, $dsn);
 
-    public function testConstructWithNoDriver()
-    {
-        try {
-            $dsn = new testDsn(
-                new Config(['nodriver' => 'invalid'])
+            $reflector = new \ReflectionObject($dsn);
+            $property = $reflector->getProperty('config');
+            $property->setAccessible(true);
+            $this->assertEquals(
+                $property->getValue($dsn),
+                $config
             );
-        } catch (MultiException $errors) {
-            $this->assertCount(1, $errors);
-            $this->assertInstanceOf(Exception::class, $errors[0]);
-            $this->assertEquals('Driver is empty in config', $errors[0]->getMessage());
-            return;
         }
-        $this->fail();
-    }
 
-    public function testConstructWithNoRequired()
-    {
-        try {
-            $dsn = new testDsn(
-                new Config(['driver' => 'sqlite'])
-            );
-        } catch (MultiException $errors) {
-            $this->assertCount(2, $errors);
-            $this->assertInstanceOf(Exception::class, $errors[0]);
-            $this->assertEquals('"foo" is not set in config', $errors[0]->getMessage());
-            $this->assertInstanceOf(Exception::class, $errors[1]);
-            $this->assertEquals('"bar" is not set in config', $errors[1]->getMessage());
-            return;
+        public function testInstanceWithNoDriver()
+        {
+            try {
+                $dsn = Dsn::instance(
+                    new Config(['nodriver' => 'invalid'])
+                );
+            } catch (MultiException $errors) {
+                $this->assertCount(1, $errors);
+                $this->assertInstanceOf(Exception::class, $errors[0]);
+                $this->assertEquals('Driver is empty in config', $errors[0]->getMessage());
+                return;
+            }
+            $this->fail();
         }
-        $this->fail();
-    }
 
-    public function testToString()
-    {
-        $config = new Config(['driver' => 'sqlite', 'foo' => 'test', 'bar' => 'bla']);
-        $dsn = new testDsn($config);
-        $this->assertEquals('sqlite:foo=test;bar=bla', (string)$dsn);
-
-        $config = new Config(['driver' => 'sqlite', 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
-        $dsn = new testDsn($config);
-        $this->assertEquals('sqlite:foo=test;bar=bla;baz=42', (string)$dsn);
-    }
-
-    public function testInstance()
-    {
-        $dsn = Dsn::instance(new Config(['driver' => 'sqlite', 'file' => 'foo']));
-        $this->assertInstanceOf(Dsn::class, $dsn);
-        $this->assertInstanceOf(\Running\Dbal\Drivers\Sqlite\Dsn::class, $dsn);
-    }
-
-    public function testInstanceInvalid1()
-    {
-        try {
-            $dsn = Dsn::instance(new Config(['nodriver' => 'invalid']));
-        } catch (MultiException $errors) {
-            $this->assertCount(1, $errors);
-            $this->assertInstanceOf(Exception::class, $errors[0]);
-            $this->assertEquals('Driver is empty in config', $errors[0]->getMessage());
-            return;
+        public function testInstanceWithInvalidDriver()
+        {
+            try {
+                $dsn = Dsn::instance(
+                    new Config(['driver' => 'invalid'])
+                );
+            } catch (MultiException $errors) {
+                $this->assertCount(1, $errors);
+                $this->assertInstanceOf(Exception::class, $errors[0]);
+                $this->assertEquals('Driver is invalid', $errors[0]->getMessage());
+                return;
+            }
+            $this->fail();
         }
-        $this->fail();
-    }
 
-    public function testInstanceInvalid2()
-    {
-        try {
-            $dsn = Dsn::instance(new Config(['driver' => 'invalid']));
-        } catch (MultiException $errors) {
-            $this->assertCount(1, $errors);
-            $this->assertInstanceOf(Exception::class, $errors[0]);
-            $this->assertEquals('Driver is invalid', $errors[0]->getMessage());
-            return;
+        public function testInstanceWithNoRequired()
+        {
+            try {
+                $dsn = Dsn::instance(
+                    new Config(['driver' => 'test'])
+                );
+            } catch (MultiException $errors) {
+                $this->assertCount(2, $errors);
+                $this->assertInstanceOf(Exception::class, $errors[0]);
+                $this->assertEquals('"foo" is not set in config', $errors[0]->getMessage());
+                $this->assertInstanceOf(Exception::class, $errors[1]);
+                $this->assertEquals('"bar" is not set in config', $errors[1]->getMessage());
+                return;
+            }
+            $this->fail();
         }
-        $this->fail();
+
+        public function testToString()
+        {
+            $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla']);
+            $dsn = Dsn::instance($config);
+            $this->assertEquals('test:foo=test;bar=bla', (string)$dsn);
+
+            $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
+            $dsn = Dsn::instance($config);
+            $this->assertEquals('test:foo=test;bar=bla;baz=42', (string)$dsn);
+        }
+
     }
 
 }

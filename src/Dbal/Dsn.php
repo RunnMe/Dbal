@@ -25,21 +25,18 @@ abstract class Dsn
      * @param \Running\Core\Config $config
      * @throws \Running\Core\MultiException
      */
-    public function __construct(Config $config)
+    protected function __construct(Config $config)
     {
-        $errors = new MultiException();
-
-        if (empty($config->driver)) {
-            $errors[] = new Exception('Driver is empty in config');
-            throw $errors;
-        }
         $this->config = $config;
+
+        $errors = new MultiException();
 
         foreach ((array)static::REQUIRED as $required) {
             if (!isset($this->config->$required)) {
                 $errors[] = new Exception('"' . $required . '" is not set in config');
             }
         }
+
         if (!$errors->isEmpty()) {
             throw $errors;
         }

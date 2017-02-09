@@ -12,7 +12,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
         $config = new Config([
             'driver' => 'mysql', 'host' => 'foo', 'dbname' => 'baz', 'port' => 1123, 'charset' => 'utf8', 'foo' => 'baz'
         ]);
-        $dsn = new Dsn($config);
+        $dsn = Dsn::instance($config);
         $this->assertEquals('mysql:host=foo;dbname=baz;port=1123;charset=utf8', (string)$dsn);
     }
 }
