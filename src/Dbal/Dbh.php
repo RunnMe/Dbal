@@ -36,6 +36,7 @@ class Dbh
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function transactionBegin()
@@ -44,6 +45,7 @@ class Dbh
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function transactionCommit()
@@ -52,6 +54,7 @@ class Dbh
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function transactionRollback()
