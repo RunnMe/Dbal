@@ -162,7 +162,7 @@ class Query
     }
 
     /**
-     * Set all query's tables
+     * Set all query's WITH tables
      * @param array $tables
      * @return $this
      */
@@ -216,7 +216,7 @@ class Query
     }
 
     /**
-     * Add one table to query
+     * Add one or more table to query
      * @param mixed $table
      * @return $this
      */
@@ -308,15 +308,7 @@ class Query
     {
         $this->joins = [];
         foreach ($joins as $join) {
-            $j = [
-                'table' => $this->trimName($join['table']),
-                'on' => $join['on'],
-                'type' => $join['type'],
-            ];
-            if (!empty($join['alias'])) {
-                $j['alias'] = $this->trimName($join['alias']);
-            }
-            $this->joins = array_merge($this->joins, [$join]);
+            $this->join($join['table'], $join['on'], $join['type'] ?? 'full', $join['alias'] ?? '');
         }
         return $this;
     }
