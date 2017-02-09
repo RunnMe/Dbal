@@ -76,7 +76,7 @@ class DsnATest extends \PHPUnit_Framework_TestCase
 
     public function testInstance()
     {
-        $dsn = Dsn::instance(new Config(['driver' => 'sqlite']));
+        $dsn = Dsn::instance(new Config(['driver' => 'sqlite', 'file' => 'foo']));
         $this->assertInstanceOf(Dsn::class, $dsn);
         $this->assertInstanceOf(\Running\Dbal\Drivers\Sqlite\Dsn::class, $dsn);
     }
