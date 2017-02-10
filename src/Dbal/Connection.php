@@ -127,26 +127,17 @@ class Connection
     }
 
     /**
-     * @param string|\Running\Dbal\QueryBuilder|\Running\Dbal\Query $query
+     * @param \Running\Dbal\Query $query
      * @param array $params
      * @return \Running\Dbal\Statement
      */
-    /*
     public function query($query, array $params = [])
     {
-        if ($query instanceof QueryBuilder) {
-            $params = array_merge($params, $query->getParams());
-            $query = $query->getQuery($this->getDriver());
-        }
-        if ($query instanceof Query) {
-            $params = array_merge($params, $query->params);
-            $query = $this->getDriver()->makeQueryString($query);
-        }
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->prepare($query);
+        $params = array_merge($query->getParams(), $params);
         $statement->execute($params);
         return $statement;
     }
-    */
 
     /**
      * @param string $name [optional] Name of the sequence object from which the ID should be returned.
