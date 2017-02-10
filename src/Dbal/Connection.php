@@ -100,16 +100,19 @@ class Connection
 
     /**
      * @param \Running\Dbal\Query $query
-     * @return \Running\Dbal\Statement
+     * @return Statement
+     * @throws \Running\Dbal\Exception
      */
-    /*
     public function prepare(Query $query)
     {
-        $sql = $this->getDriver()->makeQueryString($query);
-        $statement = $this->pdo->prepare($sql);
-        return $statement;
+        $sql = $this->getDriver()->getQueryBuilder()->makeQueryString($query);
+        try {
+            $statement = $this->dbh->prepare($sql);
+            return $statement;
+        } catch (\Throwable $e) {
+            throw new Exception($e->getMessage(), 0, $e);
+        }
     }
-    */
 
     /**
      * @param string|\Running\Dbal\QueryBuilder|\Running\Dbal\Query $query

@@ -10,6 +10,7 @@ use Running\Dbal\DriverInterface;
 use Running\Dbal\Drivers;
 use Running\Dbal\Exception;
 use Running\Dbal\DriverBuilderInterface;
+use Running\Dbal\Query;
 use Running\Dbal\Statement;
 
 class testStatement extends Statement {}
@@ -155,6 +156,36 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\'42\'',    $conn->quote(42));
         $this->assertEquals('\'42\'',    $conn->quote(42, Dbh::PARAM_INT));
         $this->assertEquals('\'\'',      $conn->quote(null, Dbh::PARAM_NULL));
+    }
+
+    /**
+     * @expectedException \Running\Dbal\Exception
+     */
+    public function testPrepareInvalidQuery()
+    {
+        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $conn = new Connection($config);
+        $query = new Query('INVALIDQUERY');
+
+        $sth = $conn->prepare($query);
+    }
+
+    public function testPrepare()
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'SqliteTest');
+        $dbh = new \PDO('sqlite:' . $filename);
+        $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
+
+        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $conn = new Connection($config);
+        $query = (new Query)->select('*')->from('testtable1');
+
+        $sth = $conn->prepare($query);
+
+        $this->assertInstanceOf(Statement::class, $sth);
+        $this->assertEquals("SELECT *\nFROM `testtable1` AS t1", $sth->queryString);
+
+        unlink($filename);
     }
 
 }
