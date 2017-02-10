@@ -3,6 +3,7 @@
 namespace Running\Dbal\Drivers\Sqlite;
 
 use Running\Dbal\DriverQueryBuilderInterface;
+use Running\Dbal\Exception;
 use Running\Dbal\Query;
 
 /**
@@ -41,7 +42,7 @@ class QueryBuilder
         return implode('.', $parts);
     }
 
-    protected function getTableNameAlias($name, $type='main', $counter)
+    protected function getTableNameAlias($name, $type, $counter)
     {
         $typeAliases = ['main' => 't', 'join' => 'j'];
         return $this->quoteName($name) . ' AS ' . $typeAliases[$type] . $counter;
@@ -62,12 +63,13 @@ class QueryBuilder
             case 'delete':
                 return $this->makeQueryStringDelete($query);
         }
+        throw new Exception('Invalid query action');
     }
 
     protected function makeQueryStringSelect(Query $query)
     {
         if (empty($query->columns) || empty($query->tables)) {
-            throw new Exception('SELECT statement must have both \'columns\' and \'tables\' parts');
+            throw new Exception("SELECT statement must have both 'columns' and 'tables' parts");
         }
 
         $sql = '';
@@ -106,11 +108,11 @@ class QueryBuilder
             $j = [];
             foreach ($joins as $join) {
                 switch ($join['type']) {
-                    case 'left':
-                        $ret = 'LEFT JOIN';
-                        break;
                     case 'inner':
                         $ret = 'INNER JOIN';
+                        break;
+                    case 'left':
+                        $ret = 'LEFT JOIN';
                         break;
                     case 'cross':
                         $ret = 'CROSS JOIN';
@@ -160,7 +162,7 @@ class QueryBuilder
     protected function makeQueryStringInsert(Query $query)
     {
         if (empty($query->tables) || empty($query->values)) {
-            throw new Exception('INSERT statement must have both \'tables\' and \'values\' parts');
+            throw new Exception("INSERT statement must have both 'tables' and 'values' parts");
         }
 
         $sql  = 'INSERT INTO ';
@@ -179,16 +181,14 @@ class QueryBuilder
         $sql .= 'VALUES (';
         $sql .= implode(', ', $query->values);
         $sql .= ')';
-        $sql .= "\n";
 
-        $sql = preg_replace('~\n$~', '', $sql);
         return $sql;
     }
 
     protected function makeQueryStringUpdate(Query $query)
     {
         if (empty($query->tables) || empty($query->values)) {
-            throw new Exception('UPDATE statement must have both \'tables\' and \'values\' parts');
+            throw new Exception("UPDATE statement must have both 'tables' and 'values' parts");
         }
 
         $sql  = 'UPDATE ';
@@ -233,10 +233,17 @@ class QueryBuilder
     protected function makeQueryStringDelete(Query $query)
     {
         if (empty($query->tables)) {
-            throw new Exception('DELETE statement must have \'tables\' part');
+            throw new Exception("DELETE statement must have 'tables' part");
         }
 
-        $sql  = 'DELETE FROM ';
+        $sql = '';
+
+        if (!empty($query->with)) {
+            $sql .= 'WITH ' . implode(', ', $query->with);
+            $sql .= "\n";
+        }
+
+        $sql .= 'DELETE FROM ';
         $driver = $this;
         $tables = array_map(function ($x) use ($driver) {
             return $driver->quoteName($x);
