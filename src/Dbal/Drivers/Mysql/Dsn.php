@@ -2,6 +2,11 @@
 
 namespace Running\Dbal\Drivers\Mysql;
 
+/**
+ * MySQL DSN object
+ * Class Dsn
+ * @package Running\Dbal\Drivers\Mysql
+ */
 class Dsn
     extends \Running\Dbal\Dsn
 {

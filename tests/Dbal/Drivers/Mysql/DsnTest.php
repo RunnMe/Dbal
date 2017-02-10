@@ -1,6 +1,6 @@
 <?php
 
-namespace Running\Dbal\Drivers\Mysql\Dsn;
+namespace Running\tests\Dbal\Drivers\Mysql\Dsn;
 
 use Running\Core\Config;
 use Running\Core\MultiException;
