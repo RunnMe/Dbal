@@ -143,24 +143,19 @@ class Connection
      * @param string $name [optional] Name of the sequence object from which the ID should be returned.
      * @return string
      */
-    /*
     public function lastInsertId($name = null)
     {
-        return $this->pdo->lastInsertId($name);
+        return $this->dbh->lastInsertId($name);
     }
-    */
 
     /**
      * @return array
      */
-    /*
     public function getErrorInfo()
     {
-        return $this->pdo->errorInfo();
+        return $this->dbh->errorInfo();
     }
-    */
 
-    /*
     public function __sleep()
     {
         return ['config'];
@@ -168,23 +163,32 @@ class Connection
 
     public function __wakeup()
     {
-        $this->pdo = $this->makePdoByConfig($this->config);
+        $this->dbh      = $this->getDbhByConfig($this->config);
+        $this->driver   = Drivers::instance($this->config->driver);
     }
 
-    public function beginTransaction()
+    /**
+     * @return bool
+     */
+    public function transactionBegin()
     {
-        return $this->pdo->beginTransaction();
+        return $this->dbh->transactionBegin();
     }
 
-    public function rollbackTransaction()
+    /**
+     * @return bool
+     */
+    public function transactionRollback()
     {
-        return $this->pdo->rollBack();
+        return $this->dbh->transactionRollback();
     }
 
-    public function commitTransaction()
+    /**
+     * @return bool
+     */
+    public function transactionCommit()
     {
-        return $this->pdo->commit();
+        return $this->dbh->transactionCommit();
     }
-    */
 
 }
