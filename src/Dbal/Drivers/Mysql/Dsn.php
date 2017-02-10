@@ -13,4 +13,5 @@ class Dsn
 
     /*protected */const REQUIRED = ['host'];
     /*protected */const OPTIONAL = ['port', 'dbname', 'charset'];
+
 }
