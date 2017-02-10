@@ -100,7 +100,7 @@ class Connection
 
     /**
      * @param \Running\Dbal\Query $query
-     * @return Statement
+     * @return \Running\Dbal\Statement
      * @throws \Running\Dbal\Exception
      */
     public function prepare(Query $query)
@@ -115,25 +115,16 @@ class Connection
     }
 
     /**
-     * @param string|\Running\Dbal\QueryBuilder|\Running\Dbal\Query $query
+     * @param \Running\Dbal\Query $query
      * @param array $params
      * @return bool
      */
-    /*
-    public function execute($query, array $params = [])
+    public function execute(Query $query, array $params = [])
     {
-        if ($query instanceof QueryBuilder) {
-            $params = array_merge($params, $query->getParams());
-            $query = $query->getQuery($this->getDriver());
-        }
-        if ($query instanceof Query) {
-            $params = array_merge($params, $query->params);
-            $query = $this->getDriver()->makeQueryString($query);
-        }
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->prepare($query);
+        $params = array_merge($query->getParams(), $params);
         return $statement->execute($params);
     }
-    */
 
     /**
      * @param string|\Running\Dbal\QueryBuilder|\Running\Dbal\Query $query

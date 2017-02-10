@@ -188,4 +188,73 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         unlink($filename);
     }
 
+    public function testExecuteParamsInQuery()
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'SqliteTest');
+        $dbh = new \PDO('sqlite:' . $filename);
+        $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
+
+        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $conn = new Connection($config);
+
+        $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
+        $conn->execute($query);
+
+        $sth = $dbh->query('SELECT * FROM testtable1');
+        $sth->execute();
+        $data = $sth->fetchAll();
+
+        $this->assertCount(1, $data);
+        $this->assertEquals(42, $data[0]['foo']);
+        $this->assertEquals('test', $data[0]['bar']);
+
+        unlink($filename);
+    }
+
+    public function testExecuteParamsOutQuery()
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'SqliteTest');
+        $dbh = new \PDO('sqlite:' . $filename);
+        $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
+
+        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $conn = new Connection($config);
+
+        $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar']);
+        $conn->execute($query, [':foo' => 42, ':bar' => 'test']);
+
+        $sth = $dbh->query('SELECT * FROM testtable1');
+        $sth->execute();
+        $data = $sth->fetchAll();
+
+        $this->assertCount(1, $data);
+        $this->assertEquals(42, $data[0]['foo']);
+        $this->assertEquals('test', $data[0]['bar']);
+
+        unlink($filename);
+    }
+
+    public function testExecuteParamsMerge()
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'SqliteTest');
+        $dbh = new \PDO('sqlite:' . $filename);
+        $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
+
+        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $conn = new Connection($config);
+
+        $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
+        $conn->execute($query, [':foo' => 13]);
+
+        $sth = $dbh->query('SELECT * FROM testtable1');
+        $sth->execute();
+        $data = $sth->fetchAll();
+
+        $this->assertCount(1, $data);
+        $this->assertEquals(13, $data[0]['foo']);
+        $this->assertEquals('test', $data[0]['bar']);
+
+        unlink($filename);
+    }
+
 }
