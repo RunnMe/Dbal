@@ -37,13 +37,19 @@ class Driver
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
+            case \App\Dbal\Columns\FloatNum::class:
+                $ddl = 'REAL';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
+                break;
             default:
                 $ddl = $column->getColumnDdlByDriver($this);
                 break;
         }
+
         if (isset($default)) {
             $ddl .= ' DEFAULT ' . $default;
         }
+
         return $ddl;
     }
 
