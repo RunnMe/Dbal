@@ -13,9 +13,9 @@ interface DriverInterface
 
     public function getQueryBuilder(): DriverQueryBuilderInterface;
 
-    public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = []);
-
     public function existsTable(Connection $connection, $tableName);
+
+    public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = []);
 
     public function renameTable(Connection $connection, $tableName, $tableNewName);
 

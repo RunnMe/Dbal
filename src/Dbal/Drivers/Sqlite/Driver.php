@@ -5,6 +5,7 @@ namespace Running\Dbal\Drivers\Sqlite;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
+use Running\Dbal\Query;
 
 /**
  * DBAL sqlite driver
@@ -21,14 +22,18 @@ class Driver
         return new QueryBuilder;
     }
 
+    public function existsTable(Connection $connection, $tableName)
+    {
+        $query = (new Query())->select('count(*)')->from('sqlite_master')->where('type=:type AND name=:name')->params([
+            ':type'=>'table',
+            ':name'=>$tableName,
+        ]);
+        return 0 != $connection->query($query)->fetchScalar();
+    }
+
     public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = [])
     {
         // TODO: Implement createTable() method.
-    }
-
-    public function existsTable(Connection $connection, $tableName)
-    {
-        // TODO: Implement existsTable() method.
     }
 
     public function renameTable(Connection $connection, $tableName, $tableNewName)
@@ -43,7 +48,8 @@ class Driver
 
     public function dropTable(Connection $connection, $tableName)
     {
-        // TODO: Implement dropTable() method.
+        $query = new Query('DROP TABLE' . $this->getQueryBuilder()->quoteName($tableName));
+        return $connection->execute($query);
     }
 
     public function addColumn(Connection $connection, $tableName, array $columns)
