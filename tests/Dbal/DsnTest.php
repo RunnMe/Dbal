@@ -86,6 +86,22 @@ namespace Running\tests\Dbal\Dsn {
             $this->fail();
         }
 
+        public function testInstanceWithValidDriverWithoutDsn()
+        {
+            require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
+            try {
+                $dsn = Dsn::instance(
+                    new Config(['driver' => \Running\tests\Dbal\Drivers\WithoutDsn\Driver::class])
+                );
+            } catch (MultiException $errors) {
+                $this->assertCount(1, $errors);
+                $this->assertInstanceOf(Exception::class, $errors[0]);
+                $this->assertEquals('This driver has not DSN class', $errors[0]->getMessage());
+                return;
+            }
+            $this->fail();
+        }
+
         public function testInstanceWithNoRequired()
         {
             try {

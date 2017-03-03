@@ -49,21 +49,18 @@ abstract class Dsn
      */
     public static function instance(Config $config)
     {
-        try {
-
-            if (!empty($config->class) && is_subclass_of($config->class, self::class)) {
-                $className = $config->class;
-            } elseif (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
-                $className = '\\' . implode('\\', array_slice(explode('\\', $config->driver), 0, -1)) . '\\Dsn';
-            } else {
-                throw (new MultiException())->add(new Exception('Can not suggest DSN class name'));
+        if (!empty($config->class) && is_subclass_of($config->class, self::class)) {
+            $className = $config->class;
+        } elseif (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
+            $className = '\\' . implode('\\', array_slice(explode('\\', $config->driver), 0, -1)) . '\\Dsn';
+            if (!class_exists($className) || !is_subclass_of($className, self::class)) {
+                throw (new MultiException())->add(new Exception('This driver has not DSN class'));
             }
-
-            return new $className($config);
-
-        } catch (\Error $e) {
-            throw (new MultiException())->add(new Exception('Driver is invalid', 0, $e));
+        } else {
+            throw (new MultiException())->add(new Exception('Can not suggest DSN class name'));
         }
+
+        return new $className($config);
     }
 
     abstract public function getDriverDsnName(): string;
