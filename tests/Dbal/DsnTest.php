@@ -5,6 +5,9 @@ namespace Running\Dbal\Drivers\Test {
     class Dsn extends \Running\Dbal\Dsn {
         const REQUIRED = ['foo', 'bar'];
         const OPTIONAL = ['baz'];
+        public function getDriverDsnName(): string {
+            return 'test';
+        }
     }
 
 }
@@ -19,7 +22,24 @@ namespace Running\tests\Dbal\Dsn {
     class DsnTest extends \PHPUnit_Framework_TestCase
     {
 
-        public function testInstanceValid()
+        public function testInstanceValidDsnClass()
+        {
+            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
+            $dsn = Dsn::instance($config);
+
+            $this->assertInstanceOf(\Running\Dbal\Drivers\Test\Dsn::class, $dsn);
+            $this->assertInstanceOf(Dsn::class, $dsn);
+
+            $reflector = new \ReflectionObject($dsn);
+            $property = $reflector->getProperty('config');
+            $property->setAccessible(true);
+            $this->assertEquals(
+                $property->getValue($dsn),
+                $config
+            );
+        }
+
+        public function testInstanceValidDriver()
         {
             $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
@@ -45,7 +65,7 @@ namespace Running\tests\Dbal\Dsn {
             } catch (MultiException $errors) {
                 $this->assertCount(1, $errors);
                 $this->assertInstanceOf(Exception::class, $errors[0]);
-                $this->assertEquals('Driver is empty in config', $errors[0]->getMessage());
+                $this->assertEquals('Can not suggest DSN class name',  $errors[0]->getMessage());
                 return;
             }
             $this->fail();

@@ -14,4 +14,9 @@ class Dsn
     /*protected */const REQUIRED = ['host'];
     /*protected */const OPTIONAL = ['port', 'dbname', 'user', 'password'];
 
+    public function getDriverDsnName(): string
+    {
+        return 'pgsql';
+    }
+
 }

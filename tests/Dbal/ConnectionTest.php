@@ -41,8 +41,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $this->fail();
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
-            $this->assertInstanceOf(Exception::class,           $errors[0]);
-            $this->assertEquals('Driver is empty in config',    $errors[0]->getMessage());
+            $this->assertInstanceOf(Exception::class,               $errors[0]);
+            $this->assertEquals('Can not suggest DSN class name',   $errors[0]->getMessage());
         }
     }
 
@@ -54,8 +54,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $this->fail();
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
-            $this->assertInstanceOf(Exception::class,           $errors[0]);
-            $this->assertEquals('Driver is invalid',            $errors[0]->getMessage());
+            $this->assertInstanceOf(Exception::class,               $errors[0]);
+            $this->assertEquals('Driver is invalid',                $errors[0]->getMessage());
         }
     }
 

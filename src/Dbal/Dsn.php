@@ -49,16 +49,24 @@ abstract class Dsn
      */
     public static function instance(Config $config)
     {
-        if (empty($config->driver)) {
-            throw (new MultiException())->add(new Exception('Driver is empty in config'));
-        }
         try {
-            $className = $config->class ?? __NAMESPACE__ . '\\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
+
+            if (!empty($config->class) && is_subclass_of($config->class, self::class)) {
+                $className = $config->class;
+            } elseif (!empty($config->driver)) {
+                $className = __NAMESPACE__ . '\\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
+            } else {
+                throw (new MultiException())->add(new Exception('Can not suggest DSN class name'));
+            }
+
             return new $className($config);
+
         } catch (\Error $e) {
             throw (new MultiException())->add(new Exception('Driver is invalid', 0, $e));
         }
     }
+
+    abstract public function getDriverDsnName(): string;
 
     /**
      * @return string
@@ -77,7 +85,7 @@ abstract class Dsn
             }
         }
 
-        $dsn = $this->config->driver . ':' . implode(';', $parts);
+        $dsn = $this->getDriverDsnName() . ':' . implode(';', $parts);
         return $dsn;
     }
 
