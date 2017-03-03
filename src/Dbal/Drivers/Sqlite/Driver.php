@@ -43,6 +43,9 @@ class Driver
                 break;
             case \Running\Dbal\Columns\Char::class:
             case \Running\Dbal\Columns\Varchar::class:
+            case \Running\Dbal\Columns\Time::class:
+            case \Running\Dbal\Columns\Date::class:
+            case \Running\Dbal\Columns\DateTime::class:
                 $ddl = 'TEXT';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : "'" . $column->default . "'") : null;
                 break;
