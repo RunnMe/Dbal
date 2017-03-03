@@ -33,6 +33,10 @@ class Driver
             case \Running\Dbal\Columns\Link::class:
                 $ddl = 'INTEGER DEFAULT NULL';
                 break;
+            case \Running\Dbal\Columns\Boolean::class:
+                $ddl = 'INTEGER';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : (int)(bool)$column->default) : null;
+                break;
             case \Running\Dbal\Columns\IntNum::class:
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;

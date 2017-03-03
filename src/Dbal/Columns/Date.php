@@ -10,7 +10,6 @@ use Running\Dbal\Column;
  * Class Date
  * @package App\Dbal\Columns
  *
- * @property int $length
  */
 class Date
     extends Column

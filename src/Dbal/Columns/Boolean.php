@@ -5,13 +5,13 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * Time value (without date) abstract type
+ * Boolean number abstract type
  *
- * Class Time
+ * Class Boolean
  * @package App\Dbal\Columns
  *
  */
-class Time
+class Boolean
     extends Column
 {
 
