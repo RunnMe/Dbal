@@ -13,6 +13,8 @@ interface DriverInterface
 
     public function getQueryBuilder(): DriverQueryBuilderInterface;
 
+    public function getColumnDDL(Column $column): string;
+
     public function existsTable(Connection $connection, $tableName);
 
     public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = []);

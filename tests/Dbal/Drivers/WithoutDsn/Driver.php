@@ -2,6 +2,7 @@
 
 namespace Running\tests\Dbal\Drivers\WithoutDsn;
 
+use Running\Dbal\Column;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
@@ -9,6 +10,10 @@ use Running\Dbal\DriverQueryBuilderInterface;
 class Driver
     implements DriverInterface
 {
+
+    public function getColumnDDL(Column $column): string
+    {
+    }
 
     public function getQueryBuilder(): DriverQueryBuilderInterface
     {

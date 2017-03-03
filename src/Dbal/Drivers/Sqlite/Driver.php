@@ -2,6 +2,7 @@
 
 namespace Running\Dbal\Drivers\Sqlite;
 
+use Running\Dbal\Column;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
@@ -20,6 +21,16 @@ class Driver
     public function getQueryBuilder(): DriverQueryBuilderInterface
     {
         return new QueryBuilder;
+    }
+
+    public function getColumnDDL(Column $column): string
+    {
+        switch (get_class($column)) {
+            case \App\Dbal\Columns\Serial::class:
+                return 'INTEGER PRIMARY KEY AUTOINCREMENT';
+            default:
+                return $column->getColumnDdlByDriver($this);
+        }
     }
 
     public function existsTable(Connection $connection, $tableName)
