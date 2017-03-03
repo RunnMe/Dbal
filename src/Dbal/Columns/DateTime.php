@@ -5,12 +5,13 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * "Serial" abstract type
+ * Date with time value abstract type
  *
- * Class Serial
+ * Class DateTime
  * @package App\Dbal\Columns
+ *
  */
-class Serial
+class DateTime
     extends Column
 {
 

@@ -5,12 +5,13 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * "Serial" abstract type
+ * Float number abstract type
  *
- * Class Serial
+ * Class FloatNum
  * @package App\Dbal\Columns
+ *
  */
-class Serial
+class FloatNum
     extends Column
 {
 

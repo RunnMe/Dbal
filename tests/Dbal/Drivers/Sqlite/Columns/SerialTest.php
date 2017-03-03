@@ -2,7 +2,7 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use App\Dbal\Columns\Serial;
+use Running\Dbal\Columns\Serial;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
 class SerialTest extends \PHPUnit_Framework_TestCase

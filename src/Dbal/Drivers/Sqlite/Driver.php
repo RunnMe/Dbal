@@ -26,14 +26,43 @@ class Driver
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
-            case \App\Dbal\Columns\Serial::class:
-            case \App\Dbal\Columns\Pk::class:
-                return 'INTEGER PRIMARY KEY AUTOINCREMENT';
-            case \App\Dbal\Columns\Link::class:
-                return 'INTEGER';
+            case \Running\Dbal\Columns\Serial::class:
+            case \Running\Dbal\Columns\Pk::class:
+                $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
+                break;
+            case \Running\Dbal\Columns\Link::class:
+                $ddl = 'INTEGER DEFAULT NULL';
+                break;
+            case \Running\Dbal\Columns\Boolean::class:
+                $ddl = 'INTEGER';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : (int)(bool)$column->default) : null;
+                break;
+            case \Running\Dbal\Columns\IntNum::class:
+                $ddl = 'INTEGER';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
+                break;
+            case \Running\Dbal\Columns\FloatNum::class:
+                $ddl = 'REAL';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
+                break;
+            case \Running\Dbal\Columns\Char::class:
+            case \Running\Dbal\Columns\Varchar::class:
+            case \Running\Dbal\Columns\Time::class:
+            case \Running\Dbal\Columns\Date::class:
+            case \Running\Dbal\Columns\DateTime::class:
+                $ddl = 'TEXT';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : "'" . $column->default . "'") : null;
+                break;
             default:
-                return $column->getColumnDdlByDriver($this);
+                $ddl = $column->getColumnDdlByDriver($this);
+                break;
         }
+
+        if (isset($default)) {
+            $ddl .= ' DEFAULT ' . $default;
+        }
+
+        return $ddl;
     }
 
     public function existsTable(Connection $connection, $tableName)

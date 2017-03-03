@@ -5,12 +5,13 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * "Serial" abstract type
+ * Boolean number abstract type
  *
- * Class Serial
+ * Class Boolean
  * @package App\Dbal\Columns
+ *
  */
-class Serial
+class Boolean
     extends Column
 {
 

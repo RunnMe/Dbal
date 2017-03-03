@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Dbal\Columns;
+namespace Running\Dbal\Columns;
 
 use Running\Dbal\Column;
 
 /**
  * "Surrogate primary key" abstract type
  *
- * Class Serial
+ * Class Pk
  * @package App\Dbal\Columns
  */
 class Pk

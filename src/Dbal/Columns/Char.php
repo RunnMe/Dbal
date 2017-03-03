@@ -5,12 +5,14 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * "Serial" abstract type
+ * String value (fixed length) abstract type
  *
- * Class Serial
+ * Class Char
  * @package App\Dbal\Columns
+ *
+ * @property int $length
  */
-class Serial
+class Char
     extends Column
 {
 

@@ -9,6 +9,8 @@ use Running\Core\Std;
  *
  * Class Column
  * @package Running\Dbal
+ *
+ * @property mixed $default
  */
 abstract class Column
     extends Std

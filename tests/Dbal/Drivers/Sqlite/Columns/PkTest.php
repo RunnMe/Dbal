@@ -2,7 +2,7 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use App\Dbal\Columns\Pk;
+use Running\Dbal\Columns\Pk;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
 class PkTest extends \PHPUnit_Framework_TestCase
