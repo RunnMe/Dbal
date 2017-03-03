@@ -190,7 +190,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetErrorInfo()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         try {
             $conn->prepare(new Query('INVALIDQUERY'));
         } catch (Exception $e) {
@@ -200,13 +202,17 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSleep()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         $this->assertEquals(['config'], $conn->__sleep());
     }
 
     public function testWakeUp()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         $connReflection = new \ReflectionClass($conn);
         $property = $connReflection->getProperty('dbh');
         $property->setAccessible(true);
@@ -221,7 +227,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testLastInsertId()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         $conn->execute(new Query('CREATE TABLE testtable1 (foo INT, bar TEXT)'));
         $query = (new Query)->insert('testtable1')->values(['foo' => 1, 'bar' => '1']);
         $conn->prepare($query)->execute();
@@ -230,7 +238,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTransactionBegin()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         $this->assertTrue($conn->transactionBegin());
         try {
             $conn->transactionBegin();
@@ -242,7 +252,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTransactionCommit()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         $conn->execute(new Query('CREATE TABLE testtable1 (foo INT, bar TEXT)'));
         $query = (new Query)->select('COUNT(*)')->from('testtable1');
         $sth = $conn->prepare($query);
@@ -266,7 +278,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTransactionRollback()
     {
-        $conn = new Connection(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $conn = new Connection(
+            new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:'])
+        );
         $conn->execute(new Query('CREATE TABLE testtable1 (foo INT, bar TEXT)'));
         $query = (new Query)->select('COUNT(*)')->from('testtable1');
         $sth = $conn->prepare($query);
