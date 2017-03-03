@@ -41,6 +41,11 @@ class Driver
                 $ddl = 'REAL';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
+            case \Running\Dbal\Columns\Char::class:
+            case \Running\Dbal\Columns\Varchar::class:
+                $ddl = 'TEXT';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : "'" . $column->default . "'") : null;
+                break;
             default:
                 $ddl = $column->getColumnDdlByDriver($this);
                 break;
