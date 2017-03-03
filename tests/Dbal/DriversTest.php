@@ -11,7 +11,7 @@ class DriversTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Running\Dbal\Exception
-     * @expectedExceptionMessage Class Running\Dbal\Drivers\Invalid\Driver does not exist
+     * @expectedExceptionMessage Driver class "invalid" does not exist
      */
     public function testInvalidDriver()
     {
@@ -21,7 +21,7 @@ class DriversTest extends \PHPUnit_Framework_TestCase
 
     public function testVaildDriver()
     {
-        $driver = Drivers::instance('sqlite');
+        $driver = Drivers::instance(\Running\Dbal\Drivers\Sqlite\Driver::class);
 
         $this->assertInstanceOf(DriverInterface::class, $driver);
         $this->assertInstanceOf(Drivers\Sqlite\Driver::class, $driver);

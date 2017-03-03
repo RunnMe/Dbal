@@ -53,8 +53,8 @@ abstract class Dsn
 
             if (!empty($config->class) && is_subclass_of($config->class, self::class)) {
                 $className = $config->class;
-            } elseif (!empty($config->driver)) {
-                $className = __NAMESPACE__ . '\\Drivers\\' . ucfirst($config->driver) . '\\Dsn';
+            } elseif (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
+                $className = '\\' . implode('\\', array_slice(explode('\\', $config->driver), 0, -1)) . '\\Dsn';
             } else {
                 throw (new MultiException())->add(new Exception('Can not suggest DSN class name'));
             }

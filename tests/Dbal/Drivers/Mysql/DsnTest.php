@@ -14,7 +14,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $dsn = Dsn::instance(
-                new Config(['driver' => 'mysql', 'foo' => 'bar', 'baz' => 42])
+                new Config(['class' => \Running\Dbal\Drivers\Mysql\Dsn::class, 'foo' => 'bar', 'baz' => 42])
             );
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
@@ -28,7 +28,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $config = new Config([
-            'driver' => 'mysql', 'host' => 'foo', 'dbname' => 'baz', 'port' => 1234, 'charset' => 'utf8', 'foo' => 'baz'
+            'class' => \Running\Dbal\Drivers\Mysql\Dsn::class, 'host' => 'foo', 'dbname' => 'baz', 'port' => 1234, 'charset' => 'utf8', 'foo' => 'baz'
         ]);
         $dsn = Dsn::instance($config);
         $this->assertEquals('mysql:host=foo;port=1234;dbname=baz;charset=utf8', (string)$dsn);

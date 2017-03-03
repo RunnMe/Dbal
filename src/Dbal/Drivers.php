@@ -12,21 +12,23 @@ class Drivers
 {
 
     /**
-     * @param string $driver
+     * @param string $class
      * @return DriverInterface
      * @throws Exception
      */
-    public static function instance(string $driver): DriverInterface
+    public static function instance(string $class): DriverInterface
     {
         static $drivers = [];
-        if (!isset($drivers[$driver])) {
-            $driverClassName = __NAMESPACE__ . '\\Drivers\\' . ucfirst($driver) . '\\Driver';
-            if (!class_exists($driverClassName)) {
-                throw new Exception('Class ' . $driverClassName . ' does not exists');
+        if (!isset($drivers[$class])) {
+            if (!class_exists($class)) {
+                throw new Exception('Driver class "' . $class . '" does not exists');
             }
-            $drivers[$driver] = new $driverClassName;
+            if (!is_subclass_of($class, DriverInterface::class)) {
+                throw new Exception('Class "' . $class . '" is not a DBAL driver');
+            }
+            $drivers[$class] = new $class;
         }
-        return $drivers[$driver];
+        return $drivers[$class];
     }
 
 }

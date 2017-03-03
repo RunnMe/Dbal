@@ -14,7 +14,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $dsn = Dsn::instance(
-                new Config(['driver' => 'pgsql', 'foo' => 'bar', 'baz' => 42])
+                new Config(['class' => \Running\Dbal\Drivers\Pgsql\Dsn::class, 'foo' => 'bar', 'baz' => 42])
             );
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
@@ -28,13 +28,13 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $config = new Config([
-            'driver' => 'pgsql', 'host' => 'foo', 'dbname' => 'bar', 'port' => 1234
+            'class' => \Running\Dbal\Drivers\Pgsql\Dsn::class, 'host' => 'foo', 'dbname' => 'bar', 'port' => 1234
         ]);
         $dsn = Dsn::instance($config);
         $this->assertEquals('pgsql:host=foo;port=1234;dbname=bar', (string)$dsn);
 
         $config = new Config([
-            'driver' => 'pgsql', 'host' => 'foo', 'dbname' => 'baz', 'user' => 'postgres', 'password' => 'somepass'
+            'class' => \Running\Dbal\Drivers\Pgsql\Dsn::class, 'host' => 'foo', 'dbname' => 'baz', 'user' => 'postgres', 'password' => 'somepass'
         ]);
         $dsn = Dsn::instance($config);
         $this->assertEquals('pgsql:host=foo;dbname=baz;user=postgres;password=somepass', (string)$dsn);

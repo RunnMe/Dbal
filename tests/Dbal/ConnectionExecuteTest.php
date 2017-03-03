@@ -15,7 +15,7 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
         $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
@@ -38,7 +38,7 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
         $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar']);
@@ -61,7 +61,7 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
         $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
