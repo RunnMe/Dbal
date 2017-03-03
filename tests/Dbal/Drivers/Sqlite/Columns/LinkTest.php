@@ -2,16 +2,16 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use App\Dbal\Columns\Serial;
+use App\Dbal\Columns\Link;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
-class SerialTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testColumnDDL()
     {
         $driver = new Driver();
-        $this->assertSame('INTEGER PRIMARY KEY AUTOINCREMENT', $driver->getColumnDDL(new Serial()));
+        $this->assertSame('INTEGER', $driver->getColumnDDL(new Link()));
     }
 
 }

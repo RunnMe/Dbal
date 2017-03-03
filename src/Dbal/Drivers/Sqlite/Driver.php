@@ -27,7 +27,10 @@ class Driver
     {
         switch (get_class($column)) {
             case \App\Dbal\Columns\Serial::class:
+            case \App\Dbal\Columns\Pk::class:
                 return 'INTEGER PRIMARY KEY AUTOINCREMENT';
+            case \App\Dbal\Columns\Link::class:
+                return 'INTEGER';
             default:
                 return $column->getColumnDdlByDriver($this);
         }

@@ -20,4 +20,5 @@ class CustomTest extends \PHPUnit_Framework_TestCase
         };
         $this->assertSame('CUSTOM_COLUMN', $driver->getColumnDDL($column));
     }
+
 }
