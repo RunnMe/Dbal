@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dbal\Columns;
+namespace Running\Dbal\Columns;
 
 use Running\Dbal\Column;
 

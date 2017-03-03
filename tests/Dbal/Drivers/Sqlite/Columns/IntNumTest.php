@@ -2,7 +2,7 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use App\Dbal\Columns\IntNum;
+use Running\Dbal\Columns\IntNum;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
 class IntNumTest extends \PHPUnit_Framework_TestCase

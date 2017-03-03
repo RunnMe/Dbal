@@ -2,7 +2,7 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use App\Dbal\Columns\FloatNum;
+use Running\Dbal\Columns\FloatNum;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
 class FloatNumTest extends \PHPUnit_Framework_TestCase

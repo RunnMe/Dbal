@@ -26,18 +26,18 @@ class Driver
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
-            case \App\Dbal\Columns\Serial::class:
-            case \App\Dbal\Columns\Pk::class:
+            case \Running\Dbal\Columns\Serial::class:
+            case \Running\Dbal\Columns\Pk::class:
                 $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
                 break;
-            case \App\Dbal\Columns\Link::class:
+            case \Running\Dbal\Columns\Link::class:
                 $ddl = 'INTEGER DEFAULT NULL';
                 break;
-            case \App\Dbal\Columns\IntNum::class:
+            case \Running\Dbal\Columns\IntNum::class:
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
-            case \App\Dbal\Columns\FloatNum::class:
+            case \Running\Dbal\Columns\FloatNum::class:
                 $ddl = 'REAL';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
