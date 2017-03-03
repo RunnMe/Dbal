@@ -7,7 +7,7 @@ use Running\Dbal\Column;
 /**
  * "Link to relation column" abstract type
  *
- * Class Serial
+ * Class Link
  * @package App\Dbal\Columns
  */
 class Link

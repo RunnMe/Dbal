@@ -5,12 +5,14 @@ namespace App\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * "Surrogate primary key" abstract type
+ * Integer number abstract type
  *
- * Class Pk
+ * Class IntNum
  * @package App\Dbal\Columns
+ *
+ * @property int $bytes
  */
-class Pk
+class IntNum
     extends Column
 {
 

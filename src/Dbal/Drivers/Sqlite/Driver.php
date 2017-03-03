@@ -28,12 +28,23 @@ class Driver
         switch (get_class($column)) {
             case \App\Dbal\Columns\Serial::class:
             case \App\Dbal\Columns\Pk::class:
-                return 'INTEGER PRIMARY KEY AUTOINCREMENT';
+                $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
+                break;
             case \App\Dbal\Columns\Link::class:
-                return 'INTEGER';
+                $ddl = 'INTEGER DEFAULT NULL';
+                break;
+            case \App\Dbal\Columns\IntNum::class:
+                $ddl = 'INTEGER';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
+                break;
             default:
-                return $column->getColumnDdlByDriver($this);
+                $ddl = $column->getColumnDdlByDriver($this);
+                break;
         }
+        if (isset($default)) {
+            $ddl .= ' DEFAULT ' . $default;
+        }
+        return $ddl;
     }
 
     public function existsTable(Connection $connection, $tableName)
