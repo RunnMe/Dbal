@@ -14,7 +14,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $dsn = Dsn::instance(
-                new Config(['driver' => 'sqlite', 'foo' => 'bar', 'baz' => 42])
+                new Config(['class' => \Running\Dbal\Drivers\Sqlite\Dsn::class, 'foo' => 'bar', 'baz' => 42])
             );
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
@@ -27,11 +27,11 @@ class DsnTest extends \PHPUnit_Framework_TestCase
 
     public function testToString()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => '/tmp/test.sqlite', 'foo' => 'baz']);
+        $config = new Config(['class' => \Running\Dbal\Drivers\Sqlite\Dsn::class, 'file' => '/tmp/test.sqlite', 'foo' => 'baz']);
         $dsn = Dsn::instance($config);
         $this->assertEquals('sqlite:/tmp/test.sqlite', (string)$dsn);
 
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:', 'foo' => 'baz']);
+        $config = new Config(['class' => \Running\Dbal\Drivers\Sqlite\Dsn::class, 'file' => ':memory:', 'foo' => 'baz']);
         $dsn = Dsn::instance($config);
         $this->assertEquals('sqlite::memory:', (string)$dsn);
     }

@@ -23,7 +23,7 @@ class Dsn
 
     public function __toString()
     {
-        $dsn = $this->config->driver . ':' . $this->config->file;
+        $dsn = $this->getDriverDsnName() . ':' . $this->config->file;
         return $dsn;
     }
 

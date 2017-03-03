@@ -41,7 +41,7 @@ namespace Running\tests\Dbal\Dsn {
 
         public function testInstanceValidDriver()
         {
-            $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla']);
+            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
 
             $this->assertInstanceOf(\Running\Dbal\Drivers\Test\Dsn::class, $dsn);
@@ -80,7 +80,23 @@ namespace Running\tests\Dbal\Dsn {
             } catch (MultiException $errors) {
                 $this->assertCount(1, $errors);
                 $this->assertInstanceOf(Exception::class, $errors[0]);
-                $this->assertEquals('Driver is invalid', $errors[0]->getMessage());
+                $this->assertEquals('Can not suggest DSN class name', $errors[0]->getMessage());
+                return;
+            }
+            $this->fail();
+        }
+
+        public function testInstanceWithValidDriverWithoutDsn()
+        {
+            require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
+            try {
+                $dsn = Dsn::instance(
+                    new Config(['driver' => \Running\tests\Dbal\Drivers\WithoutDsn\Driver::class])
+                );
+            } catch (MultiException $errors) {
+                $this->assertCount(1, $errors);
+                $this->assertInstanceOf(Exception::class, $errors[0]);
+                $this->assertEquals('This driver has not DSN class', $errors[0]->getMessage());
                 return;
             }
             $this->fail();
@@ -90,7 +106,7 @@ namespace Running\tests\Dbal\Dsn {
         {
             try {
                 $dsn = Dsn::instance(
-                    new Config(['driver' => 'test'])
+                    new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class])
                 );
             } catch (MultiException $errors) {
                 $this->assertCount(2, $errors);
@@ -105,11 +121,11 @@ namespace Running\tests\Dbal\Dsn {
 
         public function testToString()
         {
-            $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla']);
+            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
             $this->assertEquals('test:foo=test;bar=bla', (string)$dsn);
 
-            $config = new Config(['driver' => 'test', 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
+            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
             $dsn = Dsn::instance($config);
             $this->assertEquals('test:foo=test;bar=bla;baz=42', (string)$dsn);
         }

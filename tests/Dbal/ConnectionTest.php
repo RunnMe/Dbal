@@ -55,7 +55,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         } catch (MultiException $errors) {
             $this->assertCount(1, $errors);
             $this->assertInstanceOf(Exception::class,               $errors[0]);
-            $this->assertEquals('Driver is invalid',                $errors[0]->getMessage());
+            $this->assertEquals('Can not suggest DSN class name',   $errors[0]->getMessage());
         }
     }
 
@@ -63,14 +63,14 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->methodGetDbhByConfig();
 
-        $dbh = $method(new Config(['driver' => 'sqlite', 'file' => ':memory:']));
+        $dbh = $method(new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']));
 
         $this->assertInstanceOf(Dbh::class, $dbh);
         $this->assertEquals(Dbh::ERRMODE_EXCEPTION, $dbh->getAttribute(Dbh::ATTR_ERRMODE));
         $this->assertEquals([Statement::class], $dbh->getAttribute(Dbh::ATTR_STATEMENT_CLASS));
 
         $dbh = $method(new Config([
-            'driver' => 'sqlite',
+            'driver' => \Running\Dbal\Drivers\Sqlite\Driver::class,
             'file' => ':memory:',
             'errmode' => Dbh::ERRMODE_SILENT,
             'statement' => testStatement::class
@@ -84,7 +84,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function testDbhOptions()
     {
         $method = $this->methodGetDbhByConfig();
-        $dbh = $method(new Config(['driver' => 'sqlite', 'file' => ':memory:', 'options' => [Dbh::ATTR_CASE => Dbh::CASE_UPPER]]));
+        $dbh = $method(new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:', 'options' => [Dbh::ATTR_CASE => Dbh::CASE_UPPER]]));
         $this->assertEquals(Dbh::CASE_UPPER, $dbh->getAttribute(Dbh::ATTR_CASE));
     }
 
@@ -92,7 +92,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $method = $this->methodGetDbhByConfig();
-            $dbh = $method(new Config(['driver' => 'mysql', 'host' => 'localhost', 'dbname' => 'invalid']));
+            $dbh = $method(new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => '/Invalid/File/Name']));
             $this->fail();
         } catch (Exception $e) {
             $this->assertInstanceOf(\PDOException::class, $e->getPrevious());
@@ -103,7 +103,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
 
         $reflectConfig = new \ReflectionProperty($conn, 'config');
@@ -122,7 +122,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
 
         $this->assertInstanceOf(Config::class, $conn->getConfig());
@@ -131,7 +131,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDbh()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
 
         $this->assertInstanceOf(Dbh::class, $conn->getDbh());
@@ -140,7 +140,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDriver()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
 
         $this->assertInstanceOf(DriverInterface::class, $conn->getDriver());
@@ -149,7 +149,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testQuote()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
 
         $this->assertEquals('\'"foo"\'', $conn->quote('"foo"'));
@@ -159,11 +159,11 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Running\Dbal\Exception
+     * @expectedException \Running\Core\Exception
      */
     public function testPrepareInvalidQuery()
     {
-        $config = new Config(['driver' => 'sqlite', 'file' => ':memory:']);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
         $query = new Query('INVALIDQUERY');
 
@@ -176,7 +176,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => 'sqlite', 'file' => $filename]);
+        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
         $query = (new Query)->select('*')->from('testtable1');
 
