@@ -7,12 +7,12 @@ use Running\Dbal\Column;
 /**
  * String value abstract type
  *
- * Class Varchar
+ * Class StringColumn
  * @package App\Dbal\Columns
  *
  * @property int $length
  */
-class Varchar
+class StringColumn
     extends Column
 {
 

@@ -7,11 +7,11 @@ use Running\Dbal\Column;
 /**
  * Date value (without time) abstract type
  *
- * Class Date
+ * Class DateColumn
  * @package App\Dbal\Columns
  *
  */
-class Date
+class DateColumn
     extends Column
 {
 

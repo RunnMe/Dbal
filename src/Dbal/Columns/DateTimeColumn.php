@@ -5,12 +5,13 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * "Link to relation column" abstract type
+ * Date with time value abstract type
  *
- * Class Link
+ * Class DateTimeColumn
  * @package App\Dbal\Columns
+ *
  */
-class Link
+class DateTimeColumn
     extends Column
 {
 

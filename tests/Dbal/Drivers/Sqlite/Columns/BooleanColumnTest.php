@@ -2,24 +2,24 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\IntNum;
+use Running\Dbal\Columns\BooleanColumn;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
-class IntNumTest extends \PHPUnit_Framework_TestCase
+class BooleanColumnTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testColumnDDL()
     {
         $driver = new Driver();
 
-        $column = new IntNum();
+        $column = new BooleanColumn();
         $this->assertSame('INTEGER', $driver->getColumnDDL($column));
 
-        $column = new IntNum(['default' => null]);
+        $column = new BooleanColumn(['default' => null]);
         $this->assertSame('INTEGER DEFAULT NULL', $driver->getColumnDDL($column));
 
-        $column = new IntNum(['default' => 42]);
-        $this->assertSame('INTEGER DEFAULT 42', $driver->getColumnDDL($column));
+        $column = new BooleanColumn(['default' => true]);
+        $this->assertSame('INTEGER DEFAULT 1', $driver->getColumnDDL($column));
     }
 
 }

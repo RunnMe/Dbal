@@ -7,12 +7,12 @@ use Running\Dbal\Column;
 /**
  * String value (fixed length) abstract type
  *
- * Class Char
+ * Class CharColumn
  * @package App\Dbal\Columns
  *
  * @property int $length
  */
-class Char
+class CharColumn
     extends Column
 {
 

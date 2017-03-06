@@ -2,23 +2,23 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\Char;
+use Running\Dbal\Columns\CharColumn;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
-class CharTest extends \PHPUnit_Framework_TestCase
+class CharColumnTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testColumnDDL()
     {
         $driver = new Driver();
 
-        $column = new Char();
+        $column = new CharColumn();
         $this->assertSame('TEXT', $driver->getColumnDDL($column));
 
-        $column = new Char(['default' => null]);
+        $column = new CharColumn(['default' => null]);
         $this->assertSame('TEXT DEFAULT NULL', $driver->getColumnDDL($column));
 
-        $column = new Char(['default' => 'foo']);
+        $column = new CharColumn(['default' => 'foo']);
         $this->assertSame('TEXT DEFAULT \'foo\'', $driver->getColumnDDL($column));
     }
 

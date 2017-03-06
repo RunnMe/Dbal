@@ -5,13 +5,13 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * Boolean number abstract type
+ * Float number abstract type
  *
- * Class Boolean
+ * Class FloatColumn
  * @package App\Dbal\Columns
  *
  */
-class Boolean
+class FloatColumn
     extends Column
 {
 

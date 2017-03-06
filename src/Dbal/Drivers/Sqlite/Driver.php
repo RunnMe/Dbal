@@ -26,30 +26,30 @@ class Driver
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
-            case \Running\Dbal\Columns\Serial::class:
-            case \Running\Dbal\Columns\Pk::class:
+            case \Running\Dbal\Columns\SerialColumn::class:
+            case \Running\Dbal\Columns\PkColumn::class:
                 $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
                 break;
-            case \Running\Dbal\Columns\Link::class:
+            case \Running\Dbal\Columns\LinkColumn::class:
                 $ddl = 'INTEGER DEFAULT NULL';
                 break;
-            case \Running\Dbal\Columns\Boolean::class:
+            case \Running\Dbal\Columns\BooleanColumn::class:
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : (int)(bool)$column->default) : null;
                 break;
-            case \Running\Dbal\Columns\IntNum::class:
+            case \Running\Dbal\Columns\IntColumn::class:
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
-            case \Running\Dbal\Columns\FloatNum::class:
+            case \Running\Dbal\Columns\FloatColumn::class:
                 $ddl = 'REAL';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
-            case \Running\Dbal\Columns\Char::class:
-            case \Running\Dbal\Columns\Varchar::class:
-            case \Running\Dbal\Columns\Time::class:
-            case \Running\Dbal\Columns\Date::class:
-            case \Running\Dbal\Columns\DateTime::class:
+            case \Running\Dbal\Columns\CharColumn::class:
+            case \Running\Dbal\Columns\StringColumn::class:
+            case \Running\Dbal\Columns\TimeColumn::class:
+            case \Running\Dbal\Columns\DateColumn::class:
+            case \Running\Dbal\Columns\DateTimeColumn::class:
                 $ddl = 'TEXT';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : "'" . $column->default . "'") : null;
                 break;

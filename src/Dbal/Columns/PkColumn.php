@@ -5,13 +5,12 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * Time value (without date) abstract type
+ * "Surrogate primary key" abstract type
  *
- * Class Time
+ * Class PkColumn
  * @package App\Dbal\Columns
- *
  */
-class Time
+class PkColumn
     extends Column
 {
 

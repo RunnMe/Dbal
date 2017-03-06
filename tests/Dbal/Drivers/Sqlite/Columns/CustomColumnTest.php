@@ -6,7 +6,7 @@ use Running\Dbal\Column;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
-class CustomTest extends \PHPUnit_Framework_TestCase
+class CustomColumnTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testColumnDDL()

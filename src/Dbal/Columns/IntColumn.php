@@ -5,13 +5,14 @@ namespace Running\Dbal\Columns;
 use Running\Dbal\Column;
 
 /**
- * Float number abstract type
+ * Integer number abstract type
  *
- * Class FloatNum
+ * Class IntColumn
  * @package App\Dbal\Columns
  *
+ * @property int $bytes
  */
-class FloatNum
+class IntColumn
     extends Column
 {
 

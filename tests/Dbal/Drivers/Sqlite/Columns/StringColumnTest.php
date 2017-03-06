@@ -2,24 +2,24 @@
 
 namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\Time;
+use Running\Dbal\Columns\StringColumn;
 use Running\Dbal\Drivers\Sqlite\Driver;
 
-class TimeTest extends \PHPUnit_Framework_TestCase
+class StringColumnTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testColumnDDL()
     {
         $driver = new Driver();
 
-        $column = new Time();
+        $column = new StringColumn();
         $this->assertSame('TEXT', $driver->getColumnDDL($column));
 
-        $column = new Time(['default' => null]);
+        $column = new StringColumn(['default' => null]);
         $this->assertSame('TEXT DEFAULT NULL', $driver->getColumnDDL($column));
 
-        $column = new Time(['default' => '12:00:00']);
-        $this->assertSame('TEXT DEFAULT \'12:00:00\'', $driver->getColumnDDL($column));
+        $column = new StringColumn(['default' => 'foo']);
+        $this->assertSame('TEXT DEFAULT \'foo\'', $driver->getColumnDDL($column));
     }
 
 }
