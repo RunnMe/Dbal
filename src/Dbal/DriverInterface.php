@@ -17,7 +17,7 @@ interface DriverInterface
 
     public function existsTable(Connection $connection, $tableName);
 
-    public function createTable(Connection $connection, string $tableName, Columns $columns = null, $indexes = [], $extensions = []);
+    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []);
 
     public function renameTable(Connection $connection, $tableName, $tableNewName);
 

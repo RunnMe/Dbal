@@ -24,7 +24,7 @@ class Driver
     {
     }
 
-    public function createTable(Connection $connection, string $tableName, Columns $columns = null, $indexes = [], $extensions = [])
+    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = [])
     {
     }
 

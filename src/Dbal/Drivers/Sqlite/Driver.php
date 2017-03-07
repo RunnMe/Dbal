@@ -75,9 +75,26 @@ class Driver
         return 0 != $connection->query($query)->fetchScalar();
     }
 
-    public function createTable(Connection $connection, string $tableName, Columns $columns = null, $indexes = [], $extensions = [])
+    protected function createTableDdl(string $tableName, Columns $columns, $indexes = [], $extensions = [])
     {
-        // TODO: Implement createTable() method.
+        $sql = 'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . "\n";
+
+        $columnsDDL = [];
+
+        foreach ($columns as $name => $column) {
+            $columnsDDL[] = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
+        }
+
+        $sql .=
+            "(\n" .
+                implode(",\n", array_unique($columnsDDL)) .
+            "\n)";
+        return $sql;
+    }
+
+    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = [])
+    {
+        return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
     }
 
     public function renameTable(Connection $connection, $tableName, $tableNewName)
