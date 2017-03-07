@@ -2,7 +2,9 @@
 
 namespace Running\Dbal\Indexes;
 
-class UniqueIndex
+use Running\Dbal\Index;
+
+class UniqueIndex extends Index
 {
 
 }

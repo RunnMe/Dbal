@@ -28,10 +28,11 @@ class Driver
     public function getIndexDDL(Index $index): string
     {
         switch (get_class($index)) {
-            case \Running\Dbal\Indexes\SimpleIndex::class:
-                return 'INDEX';
             case \Running\Dbal\Indexes\UniqueIndex::class:
                 return 'UNIQUE INDEX';
+            case \Running\Dbal\Indexes\SimpleIndex::class:
+            default:
+                return 'INDEX';
         }
     }
     

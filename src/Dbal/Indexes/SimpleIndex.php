@@ -2,7 +2,9 @@
 
 namespace Running\Dbal\Indexes;
 
-class SimpleIndex
+use Running\Dbal\Index;
+
+class SimpleIndex extends Index
 {
 
 }
