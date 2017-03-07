@@ -3,6 +3,7 @@
 namespace Running\tests\Dbal\Drivers\WithoutDsn;
 
 use Running\Dbal\Column;
+use Running\Dbal\Columns;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
@@ -23,7 +24,7 @@ class Driver
     {
     }
 
-    public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = [])
+    public function createTable(Connection $connection, string $tableName, Columns $columns = null, $indexes = [], $extensions = [])
     {
     }
 

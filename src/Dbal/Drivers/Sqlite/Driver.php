@@ -3,6 +3,7 @@
 namespace Running\Dbal\Drivers\Sqlite;
 
 use Running\Dbal\Column;
+use Running\Dbal\Columns;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
@@ -74,7 +75,7 @@ class Driver
         return 0 != $connection->query($query)->fetchScalar();
     }
 
-    public function createTable(Connection $connection, $tableName, $columns = [], $indexes = [], $extensions = [])
+    public function createTable(Connection $connection, string $tableName, Columns $columns = null, $indexes = [], $extensions = [])
     {
         // TODO: Implement createTable() method.
     }

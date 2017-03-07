@@ -39,4 +39,22 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
         $this->fail();
     }
 
+    public function testFromArray()
+    {
+        $columns = new Columns([
+            'foo' => ['class' => Columns\BooleanColumn::class, 'default' => 1],
+            'bar' => ['class' => Columns\StringColumn::class, 'default' => null],
+            'baz' => ['class' => Columns\IntColumn::class, 'bytes' => 4]
+        ]);
+
+        $this->assertEquals(3, count($columns));
+
+        $this->assertInstanceOf(Columns\BooleanColumn::class, $columns['foo']);
+        $this->assertSame(1, $columns['foo']->default);
+        $this->assertInstanceOf(Columns\StringColumn::class, $columns['bar']);
+        $this->assertSame(null, $columns['bar']->default);
+        $this->assertInstanceOf(Columns\IntColumn::class, $columns['baz']);
+        $this->assertSame(4, $columns['baz']->bytes);
+    }
+
 }
