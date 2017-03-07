@@ -7,6 +7,7 @@ use Running\Dbal\Columns;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
+use Running\Dbal\Index;
 use Running\Dbal\Query;
 
 /**
@@ -24,6 +25,16 @@ class Driver
         return new QueryBuilder;
     }
 
+    public function getIndexDDL(Index $index): string
+    {
+        switch (get_class($index)) {
+            case \Running\Dbal\Indexes\SimpleIndex::class:
+                return 'INDEX';
+            case \Running\Dbal\Indexes\UniqueIndex::class:
+                return 'UNIQUE INDEX';
+        }
+    }
+    
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
