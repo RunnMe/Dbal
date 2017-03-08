@@ -13,7 +13,7 @@ abstract class Index extends Std
         if ('columns' == $key) {
             return false;
         } else {
-            parent::needCasting($key, $value);
+            return parent::needCasting($key, $value);
         }
     }
 }
