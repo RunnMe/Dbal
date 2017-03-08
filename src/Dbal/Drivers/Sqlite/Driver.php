@@ -109,9 +109,10 @@ class Driver
         return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
     }
 
-    public function renameTable(Connection $connection, $tableName, $tableNewName)
+    public function renameTable(Connection $connection, $oldTableName, $newTableName)
     {
-        // TODO: Implement renameTable() method.
+        $query = new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($oldTableName) . ' RENAME TO ' . $this->getQueryBuilder()->quoteName($newTableName));
+        return $connection->execute($query);
     }
 
     public function truncateTable(Connection $connection, $tableName)

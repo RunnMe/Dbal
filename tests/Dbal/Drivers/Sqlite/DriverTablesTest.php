@@ -54,6 +54,25 @@ class DriverTablesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TEXT', $info[1]['type']);
     }
 
+    public function testRenameTable()
+    {
+        $connection = new Connection(new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']));
+        $driver = $connection->getDriver();
+
+        $this->assertFalse($driver->existsTable($connection, 'foo'));
+        $this->assertFalse($driver->existsTable($connection, 'bar'));
+
+        $connection->execute(new Query('CREATE TABLE foo (id SERIAL)'));
+
+        $this->assertTrue($driver->existsTable($connection, 'foo'));
+        $this->assertFalse($driver->existsTable($connection, 'bar'));
+
+        $driver->renameTable($connection, 'foo', 'bar');
+
+        $this->assertFalse($driver->existsTable($connection, 'foo'));
+        $this->assertTrue($driver->existsTable($connection, 'bar'));
+    }
+
     public function testDropTable()
     {
         $connection = new Connection(new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']));
