@@ -7,6 +7,7 @@ use Running\Dbal\Columns;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
+use Running\Dbal\Index;
 use Running\Dbal\Query;
 
 /**
@@ -24,6 +25,23 @@ class Driver
         return new QueryBuilder;
     }
 
+    public function getIndexDDL(Index $index): string
+    {
+        switch (get_class($index)) {
+            case \Running\Dbal\Indexes\UniqueIndex::class:
+                $ddl = 'UNIQUE INDEX ';
+                break;
+            case \Running\Dbal\Indexes\SimpleIndex::class:
+            default:
+                $ddl = 'INDEX ';
+        }
+        $indexName = $index->name ?? implode('_', $index->columns) . '_idx';
+        $ddl .= $index->schema ? $index->schema . '.': '';
+        $ddl .= $indexName . ' ON ' . $index->table . ' ';
+        $ddl .= '(' . implode(', ', $index->columns) . ')';
+        return $ddl;
+    }
+    
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {

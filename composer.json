@@ -7,6 +7,10 @@
   "authors": [
     {
       "name": "Albert Stepantsev"
+    },
+    {
+      "name": "Dmitriy Makarov",
+      "email": "ru.damakarov@gmail.com"
     }
   ],
   "minimum-stability": "dev",
