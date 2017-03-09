@@ -29,11 +29,17 @@ class Driver
     {
         switch (get_class($index)) {
             case \Running\Dbal\Indexes\UniqueIndex::class:
-                return 'UNIQUE INDEX';
+                $ddl = 'UNIQUE INDEX ';
+                break;
             case \Running\Dbal\Indexes\SimpleIndex::class:
             default:
-                return 'INDEX';
+                $ddl = 'INDEX ';
         }
+        $indexName = $index->name ?? implode('_', $index->columns) . '_idx';
+        $ddl .= $index->schema ? $index->schema . '.': '';
+        $ddl .= $indexName . ' ON ' . $index->table . ' ';
+        $ddl .= '(' . implode(', ', $index->columns) . ')';
+        return $ddl;
     }
     
     public function getColumnDDL(Column $column): string

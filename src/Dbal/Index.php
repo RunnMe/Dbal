@@ -6,7 +6,7 @@ use Running\Core\Std;
 
 abstract class Index extends Std
 {
-    protected static $required = ['columns'];
+    protected static $required = ['columns', 'table'];
 
     protected function needCasting($key, $value): bool
     {
