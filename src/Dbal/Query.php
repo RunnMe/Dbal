@@ -79,7 +79,7 @@ class Query
             $this->params($data['params']);
             unset($data['params']);
         }
-        parent::__construct($data);
+        $this->merge($data);
     }
 
     public function isString()

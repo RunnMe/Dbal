@@ -185,7 +185,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Statement::class, $sth);
         $this->assertEquals("SELECT *\nFROM `testtable1` AS t1", $sth->queryString);
 
-        unlink($filename);
+        @unlink($filename);
     }
 
     public function testGetErrorInfo()

@@ -29,7 +29,7 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $data[0]['foo']);
         $this->assertEquals('test', $data[0]['bar']);
 
-        unlink($filename);
+        @unlink($filename);
     }
 
     public function testParamsOutQuery()
@@ -52,7 +52,7 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $data[0]['foo']);
         $this->assertEquals('test', $data[0]['bar']);
 
-        unlink($filename);
+        @unlink($filename);
     }
 
     public function testParamsMerge()
@@ -75,7 +75,7 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(13, $data[0]['foo']);
         $this->assertEquals('test', $data[0]['bar']);
 
-        unlink($filename);
+        @unlink($filename);
     }
 
 }
