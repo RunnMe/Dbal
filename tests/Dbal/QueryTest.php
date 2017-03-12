@@ -435,8 +435,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     public function testParam()
     {
         $query = new Query();
-
         $q = $query->select()->from('foo')->where('id=:id')->param('id', 1);
+
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('select', $query->action);
@@ -456,9 +456,10 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     public function testParams()
     {
         $query = new Query();
-
         $q = $query->select()->from('foo')->where('id=:id')->params(['id' => 1, ':bar' => 'baz']);
+
         $this->assertInstanceOf(Query::class, $q);
+
         $this->assertEquals($q, $query);
         $this->assertEquals('select', $query->action);
         $this->assertEquals(['foo'], $query->tables);
@@ -469,6 +470,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     public function testFromString()
     {
         $query = new Query('SELECT * FROM foo WHERE bar=42');
+
         $this->assertInstanceOf(Query::class, $query);
         $this->assertTrue($query->isString());
         $this->assertEquals('SELECT * FROM foo WHERE bar=42', $query->string);
@@ -496,7 +498,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertInstanceOf(Query::class, $query);
+
         $this->assertFalse($query->isString());
+
         $this->assertEquals('select', $query->action);
         $this->assertEquals(['foo', 'bar', '"baz" AS b', 'public.table1'], $query->columns);
         $this->assertEquals(['tbl'], $query->tables);
@@ -538,7 +542,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $query = new Query($options);
 
         $this->assertInstanceOf(Query::class, $query);
+
         $this->assertFalse($query->isString());
+
         $this->assertEquals('select', $query->action);
         $this->assertEquals(['foo', 'bar', '"baz" AS b', 'public.table1'], $query->columns);
         $this->assertEquals(['tbl'], $query->tables);
