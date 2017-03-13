@@ -123,7 +123,8 @@ class Driver
 
     public function truncateTable(Connection $connection, $tableName)
     {
-        // TODO: Implement truncateTable() method.
+        $query = new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName));
+        return $connection->execute($query);
     }
 
     public function dropTable(Connection $connection, $tableName)
