@@ -40,11 +40,19 @@ class Driver
     {
     }
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    public function addColumn(Connection $connection, $tableName, string $columnName, Column $column)
     {
     }
 
-    public function dropColumn(Connection $connection, $tableName, array $columns)
+    public function addColumns(Connection $connection, $tableName, Columns $columns)
+    {
+    }
+
+    public function dropColumn(Connection $connection, $tableName, string $columnName)
+    {
+    }
+
+    public function dropColumns(Connection $connection, $tableName, array $columns)
     {
     }
 
