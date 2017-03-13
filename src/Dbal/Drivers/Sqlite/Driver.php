@@ -36,18 +36,18 @@ class Driver
                 $ddl = 'INDEX ';
         }
         $indexName = $index->name ?? implode('_', $index->columns) . '_idx';
-        $ddl .= $index->schema ? $index->schema . '.': '';
+        $ddl .= $index->schema ? $index->schema . '.' : '';
         $ddl .= $indexName . ' ON ' . $index->table . ' ';
         $ddl .= '(' . implode(', ', $index->columns) . ')';
         return $ddl;
     }
-    
+
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
             case \Running\Dbal\Columns\SerialColumn::class:
             case \Running\Dbal\Columns\PkColumn::class:
-                $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
+                $ddl = 'INTEGER PRIMARY KEY AUTOINCREMENT';
                 break;
             case \Running\Dbal\Columns\LinkColumn::class:
                 $ddl = 'INTEGER DEFAULT NULL';
@@ -87,8 +87,8 @@ class Driver
     public function existsTable(Connection $connection, $tableName)
     {
         $query = (new Query())->select('count(*)')->from('sqlite_master')->where('type=:type AND name=:name')->params([
-            ':type'=>'table',
-            ':name'=>$tableName,
+            ':type' => 'table',
+            ':name' => $tableName,
         ]);
         return 0 != $connection->query($query)->fetchScalar();
     }
@@ -105,7 +105,7 @@ class Driver
 
         $sql .=
             "(\n" .
-                implode(",\n", array_unique($columnsDDL)) .
+            implode(",\n", array_unique($columnsDDL)) .
             "\n)";
         return $sql;
     }
@@ -132,19 +132,89 @@ class Driver
         return $connection->execute($query);
     }
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    public function addColumn(Connection $connection, $tableName, string $columnName, Column $column)
     {
-        // TODO: Implement addColumn() method.
+        $query = new Query(
+            'ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) .
+            ' ADD COLUMN ' . $this->getQueryBuilder()->quoteName($columnName) .
+            ' ' . $this->getColumnDDL($column)
+        );
+        return $connection->execute($query);
     }
 
-    public function dropColumn(Connection $connection, $tableName, array $columns)
+    public function addColumns(Connection $connection, $tableName, Columns $columns)
     {
-        // TODO: Implement dropColumn() method.
+        $result = true;
+        foreach ($columns as $colName => $column) {
+            $result = $result && $this->addColumn($connection, $tableName, $colName, $column);
+        }
+        return $result;
+    }
+
+    public function dropColumn(Connection $connection, $tableName, string $columnName)
+    {
+        $columnsInfo = $connection->query(new Query('PRAGMA table_info(foo)'))->fetchAll();
+        $newColumns = [];
+        foreach ($columnsInfo as $columnInfo) {
+            $name = $columnInfo['name'];
+            if ($name != $columnName) {
+                $newColumns[] = $this->getQueryBuilder()->quoteName($columnInfo['name']);
+            }
+        }
+        $tmpTable = $tableName . '_backup';
+        $result = true;
+        $result = $result && $connection->transactionBegin();
+        if ($result) {
+            $query = new Query(
+                'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tmpTable) .
+                ' AS SELECT ' . implode(', ', $newColumns) .
+                'FROM ' . $this->getQueryBuilder()->quoteName($tableName)
+            );
+            $result = $result && $connection->execute($query);
+            $result = $result && $this->dropTable($connection, $tableName);
+            $result = $result && $this->renameTable($connection, $tmpTable, $tableName);
+            $result = $result && $connection->transactionCommit();
+        }
+        return $result;
+    }
+
+    public function dropColumns(Connection $connection, $tableName, array $columns)
+    {
+        $result = true;
+        foreach ($columns as $columnName) {
+            $result = $result && $this->dropColumn($connection, $tableName, $columnName);
+        }
+        return $result;
     }
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName)
     {
-        // TODO: Implement renameColumn() method.
+        $columnsInfo = $connection->query(new Query('PRAGMA table_info(foo)'))->fetchAll();
+        $newColumns = [];
+        foreach ($columnsInfo as $columnInfo) {
+            $name = $columnInfo['name'];
+            if ($name != $oldName) {
+                $newColumns[] = $this->getQueryBuilder()->quoteName($columnInfo['name']);
+            } else {
+                $newColumns[] = $this->getQueryBuilder()->quoteName($oldName) .
+                    ' AS ' . $this->getQueryBuilder()->quoteName($newName);
+            }
+        }
+        $tmpTable = $tableName . '_backup';
+        $result = true;
+        $result = $result && $connection->transactionBegin();
+        if ($result) {
+            $query = new Query(
+                'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tmpTable) .
+                ' AS SELECT ' . implode(', ', $newColumns) .
+                ' FROM ' . $this->getQueryBuilder()->quoteName($tableName)
+            );
+            $result = $result && $connection->execute($query);
+            $result = $result && $this->dropTable($connection, $tableName);
+            $result = $result && $this->renameTable($connection, $tmpTable, $tableName);
+            $result = $result && $connection->transactionCommit();
+        }
+        return $result;
     }
 
     public function addIndex(Connection $connection, $tableName, array $indexes)
