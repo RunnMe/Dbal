@@ -37,7 +37,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $index = new class() extends Index {};
             $this->fail();
         } catch (MultiException $errors) {
-            $this->assertSame('Required property "columns" is missing', $errors[0]->getMessage());
+            $this->assertContains('You need at least one of', $errors[0]->getMessage());
             return;
         }
         $this->fail();

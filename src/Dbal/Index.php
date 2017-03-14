@@ -21,7 +21,26 @@ use Running\Validation\Validators\ArrayValue;
 abstract class Index
     extends Std
 {
-    protected static $required = ['columns'];
+    protected static $required = ['columns', 'name'];
+
+    /**
+     * Checks if all required properties are set
+     * @return bool
+     * @throws \Running\Dbal\Exception
+     */
+    protected function checkRequired()
+    {
+        $one = false;
+        foreach ($this->getRequiredProperties() as $required) {
+            if (isset($this->$required)) {
+                $one = $one || true;
+            }
+        }
+        if (!$one) {
+            throw new Exception('You need at least one of [' . implode(', ', $this->getRequiredProperties()) . '] to be set');
+        }
+        return true;
+    }
 
     protected function needCasting($key, $value): bool
     {
