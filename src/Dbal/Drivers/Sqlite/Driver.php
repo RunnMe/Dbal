@@ -25,8 +25,9 @@ class Driver
         return new QueryBuilder;
     }
 
-    public function getIndexDDL(Index $index): string
+    public function getIndexDDL(string $table, Index $index): string
     {
+        $sortOrders = ['ASC', 'DESC'];
         switch (get_class($index)) {
             case \Running\Dbal\Indexes\UniqueIndex::class:
                 $ddl = 'UNIQUE INDEX ';
@@ -35,9 +36,9 @@ class Driver
             default:
                 $ddl = 'INDEX ';
         }
-        $indexName = $index->name ?? implode('_', $index->columns) . '_idx';
-        $ddl .= $index->schema ? $index->schema . '.': '';
-        $ddl .= $indexName . ' ON ' . $index->table . ' ';
+        $index->name = $index->name ?? implode('_', $index->columns) . '_idx';
+        $ddl .= in_array(strtoupper($index->order), $sortOrders) ? strtoupper($index->order) . '.': '';
+        $ddl .= $index->name . ' ON ' . $table . ' ';
         $ddl .= '(' . implode(', ', $index->columns) . ')';
         return $ddl;
     }
@@ -149,12 +150,21 @@ class Driver
 
     public function addIndex(Connection $connection, $tableName, array $indexes)
     {
-        // TODO: Implement addIndex() method.
+        $result = true;
+        foreach ($indexes as $index) {
+            $result = $result && $connection->execute(new Query('CREATE ' . $this->getIndexDDL($tableName, $index)));
+        }
+        return $result;
     }
 
     public function dropIndex(Connection $connection, $tableName, array $indexes)
     {
-        // TODO: Implement dropIndex() method.
+        $result = true;
+        foreach ($indexes as $index) {
+            $order = $index->order ? $index->order . '.' : '';
+            $result = $result && $connection->execute(new Query('DROP INDEX ' . $order . $index->name));
+        }
+        return $result;
     }
 
     public function insert(Connection $connection, $tableName, array $data)
