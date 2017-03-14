@@ -1,6 +1,6 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Running\tests\Dbal\Columns;
 
 use Running\Core\CollectionInterface;
 use Running\Core\TypedCollection;

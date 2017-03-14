@@ -25,24 +25,6 @@ class Driver
         return new QueryBuilder;
     }
 
-    public function getIndexDDL(string $table, Index $index): string
-    {
-        $sortOrders = ['ASC', 'DESC'];
-        switch (get_class($index)) {
-            case \Running\Dbal\Indexes\UniqueIndex::class:
-                $ddl = 'UNIQUE INDEX ';
-                break;
-            case \Running\Dbal\Indexes\SimpleIndex::class:
-            default:
-                $ddl = 'INDEX ';
-        }
-        $index->name = $index->name ?? implode('_', $index->columns) . '_idx';
-        $ddl .= in_array(strtoupper($index->order), $sortOrders) ? strtoupper($index->order) . '.': '';
-        $ddl .= $index->name . ' ON ' . $table . ' ';
-        $ddl .= '(' . implode(', ', $index->columns) . ')';
-        return $ddl;
-    }
-    
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
@@ -81,6 +63,37 @@ class Driver
         if (isset($default)) {
             $ddl .= ' DEFAULT ' . $default;
         }
+
+        return $ddl;
+    }
+
+    public function getIndexDDL(string $table, Index $index): string
+    {
+        switch (get_class($index)) {
+            case \Running\Dbal\Indexes\UniqueIndex::class:
+                $ddl = 'UNIQUE INDEX ';
+                break;
+            case \Running\Dbal\Indexes\SimpleIndex::class:
+                $ddl = 'INDEX ';
+                break;
+            default:
+                return $index->getIndexDdlByDriver($this);
+        }
+
+        $columns = [];
+        $columnNames = [];
+        foreach ($index->columns as $column) {
+            preg_match('~^([\S]+)(\s+(asc|desc))?~i', $column, $m);
+            $columnName = trim($m[1], '`" ');
+            $columnNames[] = $columnName;
+            $columns[] = $this->getQueryBuilder()->quoteName($columnName) . (!empty($m[3]) ? ' ' . strtoupper($m[3]) : '');
+        }
+
+        $index->name  = $index->name ?? implode('_', $columnNames) . '_idx';
+        $index->table = $table;
+
+        $ddl .= $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);
+        $ddl .= ' (' . implode(', ', $columns) . ')';
 
         return $ddl;
     }

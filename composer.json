@@ -17,7 +17,8 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.0",
-    "pr-of-it/running-core": "*"
+    "pr-of-it/running-core": "dev-master",
+    "pr-of-it/running-validation": "dev-master"
   },
   "require-dev": {
     "ext-pdo_sqlite": "*",
