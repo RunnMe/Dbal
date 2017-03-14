@@ -191,4 +191,17 @@ class Driver
         return $result;
     }
 
+    public function insert(Connection $connection, $tableName, array $data)
+    {
+        $queryValues = [];
+        $executeValues = [];
+        foreach ($data as $key => $value) {
+            $queryValues[$key] = ':' . $key;
+            $executeValues[':' . $key] = $value;
+        }
+        $query = new Query();
+        $query->insert()->table($tableName)->values($queryValues);
+        $connection->execute($query, $executeValues);
+        return $connection->lastInsertId();
+    }
 }
