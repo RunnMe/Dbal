@@ -21,6 +21,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['foo'], $index->columns);
     }
 
+    public function testNeedCasting()
+    {
+        $index = new class(['columns' => ['foo'], 'option' => 'sample', 'options' => ['test', 'example']]) extends Index {};
+
+        $this->assertSame(['foo'], $index->columns);
+
+        $this->assertSame('sample', $index->option);
+        $this->assertSame(['test', 'example'], $index->options);
+    }
+
     public function testRequiredColumns()
     {
         try {

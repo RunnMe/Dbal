@@ -25,11 +25,7 @@ abstract class Index
 
     protected function needCasting($key, $value): bool
     {
-        if ('columns' == $key) {
-            return false;
-        } else {
-            return parent::needCasting($key, $value);
-        }
+        return false;
     }
 
     protected function validateColumns($value)
