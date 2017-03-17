@@ -49,6 +49,7 @@ class Driver
                 break;
             case \Running\Dbal\Columns\CharColumn::class:
             case \Running\Dbal\Columns\StringColumn::class:
+            case \Running\Dbal\Columns\TextColumn::class:
             case \Running\Dbal\Columns\TimeColumn::class:
             case \Running\Dbal\Columns\DateColumn::class:
             case \Running\Dbal\Columns\DateTimeColumn::class:
