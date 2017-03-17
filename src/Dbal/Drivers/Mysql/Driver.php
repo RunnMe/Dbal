@@ -8,6 +8,8 @@ use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
 use Running\Dbal\Index;
+use Running\Sanitization\Sanitizers\Date;
+use Running\Sanitization\Sanitizers\DateTime;
 
 /**
  * DBAL mysql driver
@@ -30,7 +32,102 @@ class Driver
      */
     public function getColumnDDL(Column $column): string
     {
-        // TODO: Implement getColumnDDL() method.
+        switch (get_class($column)) {
+            case \Running\Dbal\Columns\SerialColumn::class:
+                $ddl = 'SERIAL';
+                break;
+            case \Running\Dbal\Columns\PkColumn::class:
+                if (isset($column->autoincrement) && false == $column->autoincrement) {
+                    $ddl = 'BIGINT UNSIGNED NOT NULL';
+                } else {
+                    $ddl = 'SERIAL';
+                }
+                break;
+            case \Running\Dbal\Columns\LinkColumn::class:
+                $ddl = 'BIGINT UNSIGNED NULL DEFAULT NULL';
+                break;
+            case \Running\Dbal\Columns\BooleanColumn::class:
+                $ddl = 'BOOLEAN';
+                $default = isset($column->default) ?
+                    (null === $column->default ? 'NULL' : (bool)$column->default) :
+                    null;
+                break;
+            case \Running\Dbal\Columns\IntColumn::class:
+                $ddl = 'INTEGER';
+                $ddl .= isset($column->dimension) ? '(' . $column->dimension . ')' : '';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
+                break;
+            case \Running\Dbal\Columns\FloatColumn::class:
+                $ddl = 'REAL';
+                $ddl .= isset($column->dimension) ? '(' . $column->dimension . ')' : '';
+                $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
+                break;
+            case \Running\Dbal\Columns\CharColumn::class:
+                $ddl = 'CHAR';
+                $ddl .= isset($column->length) ? '(' . (int)$column->length . ')' : '(255)';
+                $default = isset($column->default) ?
+                    (null === $column->default ? 'NULL' : "'" . $column->default . "'") :
+                    null;
+                break;
+            case \Running\Dbal\Columns\StringColumn::class:
+                $ddl = 'VARCHAR';
+                $ddl .= isset($column->length) ? '(' . (int)$column->length . ')' : '(255)';
+                $default = isset($column->default) ?
+                    (null === $column->default ? 'NULL' : "'" . $column->default . "'") :
+                    null;
+                break;
+            case \Running\Dbal\Columns\TextColumn::class:
+                $ddl = 'TEXT';
+                $default = isset($column->default) ?
+                    (null === $column->default ? 'NULL' : "'" . $column->default . "'") :
+                    null;
+                break;
+            case \Running\Dbal\Columns\TimeColumn::class:
+                $ddl = 'TIME';
+                if (isset($column->default)) {
+                    $default = 'NULL';
+                    if (!is_null($column->default)) {
+                        try {
+                            $default = "'" . (new DateTime())->sanitize($column->default)->format('H:i:s') . "'";
+                        } catch (\Exception $e) {
+                        }
+                    }
+                }
+                break;
+            case \Running\Dbal\Columns\DateColumn::class:
+                $ddl = 'DATE';
+                if (isset($column->default)) {
+                    $default = 'NULL';
+                    if (!is_null($column->default)) {
+                        try {
+                            $default = "'" . (new Date())->sanitize($column->default)->format('Y-m-d') . "'";
+                        } catch (\Exception $e) {
+                        }
+                    }
+                }
+                break;
+            case \Running\Dbal\Columns\DateTimeColumn::class:
+                $ddl = 'DATETIME';
+                if (isset($column->default)) {
+                    $default = 'NULL';
+                    if (!is_null($column->default)) {
+                        try {
+                            $default = "'" . (new DateTime())->sanitize($column->default)->format('Y-m-d H:i:s') . "'";
+                        } catch (\Exception $e) {
+                        }
+                    }
+                }
+                break;
+            default:
+                $ddl = $column->getColumnDdlByDriver($this);
+                break;
+        }
+
+        if (isset($default)) {
+            $ddl .= ' DEFAULT ' . $default;
+        }
+
+        return $ddl;
     }
 
     /**
