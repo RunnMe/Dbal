@@ -11,19 +11,69 @@ namespace Running\Dbal;
 interface DriverInterface
 {
 
+    /**
+     * @return \Running\Dbal\DriverQueryBuilderInterface
+     */
     public function getQueryBuilder(): DriverQueryBuilderInterface;
 
+    /**
+     * @param \Running\Dbal\Column $column
+     * @return string
+     */
     public function getColumnDDL(Column $column): string;
 
-    public function existsTable(Connection $connection, $tableName);
+    /**
+     * @param \Running\Dbal\Column $column
+     * @param mixed $value
+     * @return mixed
+     */
+    public function processValueAfterLoad(Column $column, $value);
 
-    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []);
+    /**
+     * @param \Running\Dbal\Column $column
+     * @param mixed $value
+     * @return mixed
+     */
+    public function processValueBeforeSave(Column $column, $value);
 
-    public function renameTable(Connection $connection, $tableName, $tableNewName);
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @return mixed
+     */
+    public function existsTable(Connection $connection, string $tableName): bool;
 
-    public function truncateTable(Connection $connection, $tableName);
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param \Running\Dbal\Columns $columns
+     * @param array $indexes
+     * @param array $extensions
+     * @return mixed
+     */
+    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool;
 
-    public function dropTable(Connection $connection, $tableName);
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $tableNewName
+     * @return bool
+     */
+    public function renameTable(Connection $connection, string $tableName, string $tableNewName): bool;
+
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @return bool
+     */
+    public function truncateTable(Connection $connection, string $tableName): bool;
+
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @return bool
+     */
+    public function dropTable(Connection $connection, string $tableName): bool;
 
     public function addColumn(Connection $connection, $tableName, array $columns);
 
@@ -31,10 +81,13 @@ interface DriverInterface
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName);
 
+    public function getIndexDDL(string $table, Index $index): string;
+
     public function addIndex(Connection $connection, $tableName, array $indexes);
 
     public function dropIndex(Connection $connection, $tableName, array $indexes);
 
+    /*
     public function insert(Connection $connection, $tableName, array $data);
 
     public function findAllByQuery($class, $query, $params = []);
@@ -52,6 +105,7 @@ interface DriverInterface
     public function countAll($class, $options = []);
 
     public function countAllByColumn($class, $column, $value, $options = []);
+    */
 
     /*
     public function save(Model $model);

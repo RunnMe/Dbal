@@ -67,6 +67,16 @@ class Driver
         return $ddl;
     }
 
+    public function processValueAfterLoad(Column $column, $value)
+    {
+        return $value;
+    }
+
+    public function processValueBeforeSave(Column $column, $value)
+    {
+        return $value;
+    }
+
     public function getIndexDDL(string $table, Index $index): string
     {
         switch (get_class($index)) {
@@ -98,7 +108,7 @@ class Driver
         return $ddl;
     }
 
-    public function existsTable(Connection $connection, $tableName)
+    public function existsTable(Connection $connection, string $tableName): bool
     {
         $query = (new Query())->select('count(*)')->from('sqlite_master')->where('type=:type AND name=:name')->params([
             ':type'=>'table',
@@ -124,25 +134,26 @@ class Driver
         return $sql;
     }
 
-    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = [])
+    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool
     {
         return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
     }
 
-    public function renameTable(Connection $connection, $oldTableName, $newTableName)
+    public function renameTable(Connection $connection, string $oldTableName, string $newTableName): bool
     {
         $query = new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($oldTableName) . ' RENAME TO ' . $this->getQueryBuilder()->quoteName($newTableName));
         return $connection->execute($query);
     }
 
-    public function truncateTable(Connection $connection, $tableName)
+    public function truncateTable(Connection $connection, string $tableName): bool
     {
-        // TODO: Implement truncateTable() method.
+        $query = new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName));
+        return $connection->execute($query);
     }
 
-    public function dropTable(Connection $connection, $tableName)
+    public function dropTable(Connection $connection, string $tableName): bool
     {
-        $query = new Query('DROP TABLE' . $this->getQueryBuilder()->quoteName($tableName));
+        $query = new Query('DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName));
         return $connection->execute($query);
     }
 
@@ -178,51 +189,6 @@ class Driver
             $result = $result && $connection->execute(new Query('DROP INDEX ' . $order . $index->name));
         }
         return $result;
-    }
-
-    public function insert(Connection $connection, $tableName, array $data)
-    {
-        // TODO: Implement insert() method.
-    }
-
-    public function findAllByQuery($class, $query, $params = [])
-    {
-        // TODO: Implement findAllByQuery() method.
-    }
-
-    public function findByQuery($class, $query, $params = [])
-    {
-        // TODO: Implement findByQuery() method.
-    }
-
-    public function findAll($class, $options = [])
-    {
-        // TODO: Implement findAll() method.
-    }
-
-    public function findAllByColumn($class, $column, $value, $options = [])
-    {
-        // TODO: Implement findAllByColumn() method.
-    }
-
-    public function findByColumn($class, $column, $value, $options = [])
-    {
-        // TODO: Implement findByColumn() method.
-    }
-
-    public function countAllByQuery($class, $query, $params = [])
-    {
-        // TODO: Implement countAllByQuery() method.
-    }
-
-    public function countAll($class, $options = [])
-    {
-        // TODO: Implement countAll() method.
-    }
-
-    public function countAllByColumn($class, $column, $value, $options = [])
-    {
-        // TODO: Implement countAllByColumn() method.
     }
 
 }
