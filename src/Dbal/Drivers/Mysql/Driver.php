@@ -221,7 +221,36 @@ class Driver
 
     public function getIndexDDL(string $table, Index $index): string
     {
-        // TODO: Implement getIndexDDL() method.
+        switch (get_class($index)) {
+            case \Running\Dbal\Indexes\FulltextIndex::class:
+                $ddl = 'FULLTEXT INDEX ';
+                break;
+            case \Running\Dbal\Indexes\UniqueIndex::class:
+                $ddl = 'UNIQUE INDEX ';
+                break;
+            case \Running\Dbal\Indexes\SimpleIndex::class:
+                $ddl = 'INDEX ';
+                break;
+            default:
+                return $index->getIndexDdlByDriver($this);
+        }
+
+        $columns = [];
+        $columnNames = [];
+        foreach ($index->columns as $column) {
+            preg_match('~^([\S]+)(\s+(asc|desc))?~i', $column, $m);
+            $columnName = trim($m[1], '`" ');
+            $columnNames[] = explode('(', $columnName)[0];
+            $columns[] = $this->getQueryBuilder()->quoteName($columnName) . (!empty($m[3]) ? ' ' . strtoupper($m[3]) : '');
+        }
+
+        $index->name  = $index->name ?? implode('_', $columnNames) . '_idx';
+        $index->table = $table;
+
+        $ddl .= $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);
+        $ddl .= ' (' . implode(', ', $columns) . ')';
+
+        return $ddl;
     }
 
     public function addIndex(Connection $connection, $tableName, array $indexes)
