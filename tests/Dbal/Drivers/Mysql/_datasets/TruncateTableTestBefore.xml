@@ -1,0 +1,12 @@
+<dataset>
+    <table name="bar">
+        <column>id</column>
+        <column>num</column>
+        <column>name</column>
+        <row>
+            <value>1</value>
+            <value>42</value>
+            <value>'baz'</value>
+        </row>
+    </table>
+</dataset>

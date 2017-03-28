@@ -7,7 +7,9 @@ use Running\Dbal\Columns;
 use Running\Dbal\Connection;
 use Running\Dbal\DriverInterface;
 use Running\Dbal\DriverQueryBuilderInterface;
+use Running\Dbal\Drivers\Exception;
 use Running\Dbal\Index;
+use Running\Dbal\Query;
 use Running\Sanitization\Sanitizers\Date;
 use Running\Sanitization\Sanitizers\DateTime;
 
@@ -157,7 +159,25 @@ class Driver
      */
     public function existsTable(Connection $connection, string $tableName): bool
     {
-        // TODO: Implement existsTable() method.
+        $query = (new Query('SHOW TABLES LIKE :name'))->params([':name' => $tableName,]);
+        return $tableName === $connection->query($query)->fetchScalar();
+    }
+
+    protected function createTableDdl(string $tableName, Columns $columns, $indexes = [], $extensions = [])
+    {
+        $sql = 'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . "\n";
+
+        $columnsDDL = [];
+
+        foreach ($columns as $name => $column) {
+            $columnsDDL[] = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
+        }
+
+        $sql .=
+            "(\n" .
+            implode(",\n", array_unique($columnsDDL)) .
+            "\n)";
+        return $sql;
     }
 
     /**
@@ -167,10 +187,11 @@ class Driver
      * @param array $indexes
      * @param array $extensions
      * @return mixed
+     * @throws \Running\Dbal\Drivers\Exception
      */
     public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool
     {
-        // TODO: Implement createTable() method.
+        return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
     }
 
     /**
@@ -178,30 +199,51 @@ class Driver
      * @param string $tableName
      * @param string $tableNewName
      * @return bool
+     * @throws \Running\Dbal\Drivers\Exception
      */
     public function renameTable(Connection $connection, string $tableName, string $tableNewName): bool
     {
-        // TODO: Implement renameTable() method.
+        $sql = 'RENAME TABLE ' .
+            $this->getQueryBuilder()->quoteName($tableName) .
+            ' TO ' .
+            $this->getQueryBuilder()->quoteName($tableNewName);
+        try {
+            return $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception('Error renameTable: ' . $e->getMessage());
+        }
     }
 
     /**
      * @param \Running\Dbal\Connection $connection
      * @param string $tableName
      * @return bool
+     * @throws \Running\Dbal\Drivers\Exception
      */
     public function truncateTable(Connection $connection, string $tableName): bool
     {
-        // TODO: Implement truncateTable() method.
+        $sql = 'TRUNCATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName);
+        try {
+            return $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception('Error truncateTable: ' . $e->getMessage());
+        }
     }
 
     /**
      * @param \Running\Dbal\Connection $connection
      * @param string $tableName
      * @return bool
+     * @throws \Running\Dbal\Drivers\Exception
      */
     public function dropTable(Connection $connection, string $tableName): bool
     {
-        // TODO: Implement dropTable() method.
+        $sql = 'DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName);
+        try {
+            return $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception('Error dropTable: ' . $e->getMessage());
+        }
     }
 
     public function addColumn(Connection $connection, $tableName, array $columns)
@@ -244,7 +286,7 @@ class Driver
             $columns[] = $this->getQueryBuilder()->quoteName($columnName) . (!empty($m[3]) ? ' ' . strtoupper($m[3]) : '');
         }
 
-        $index->name  = $index->name ?? implode('_', $columnNames) . '_idx';
+        $index->name = $index->name ?? implode('_', $columnNames) . '_idx';
         $index->table = $table;
 
         $ddl .= $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);

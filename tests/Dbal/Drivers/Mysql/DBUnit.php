@@ -9,6 +9,8 @@ use Running\tests\Dbal\DeployDBUnit;
 
 abstract class DBUnit extends DeployDBUnit
 {
+    protected $connection;
+    protected $driver;
 
     /**
      * Returns the test database connection.
@@ -17,9 +19,16 @@ abstract class DBUnit extends DeployDBUnit
      */
     protected function getConnection()
     {
-        $this->settings['mysql']['driver'] = \Running\Dbal\Drivers\Mysql\Driver::class;
         return $this->createDefaultDBConnection(
             (new Connection(new Config($this->settings['mysql'])))->getDbh()
         );
+    }
+
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->settings['mysql']['driver'] = \Running\Dbal\Drivers\Mysql\Driver::class;
+        $this->connection = new Connection(new Config($this->settings['mysql']));
+        $this->driver = $this->connection->getDriver();
     }
 }
