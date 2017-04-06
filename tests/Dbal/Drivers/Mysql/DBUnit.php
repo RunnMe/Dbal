@@ -20,15 +20,23 @@ abstract class DBUnit extends DeployDBUnit
     protected function getConnection()
     {
         return $this->createDefaultDBConnection(
-            (new Connection(new Config($this->settings['mysql'])))->getDbh()
+            (new Connection(new Config(self::getSettings())))->getDbh()
         );
+    }
+
+    public static function getSettings()
+    {
+        $settings = parent::getSettings();
+        if (!array_key_exists('driver', $settings['mysql'])) {
+            $settings['mysql']['driver'] = \Running\Dbal\Drivers\Mysql\Driver::class;
+        }
+        return $settings['mysql'];
     }
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->settings['mysql']['driver'] = \Running\Dbal\Drivers\Mysql\Driver::class;
-        $this->connection = new Connection(new Config($this->settings['mysql']));
+        $this->connection = new Connection(new Config(self::getSettings()));
         $this->driver = $this->connection->getDriver();
     }
 }

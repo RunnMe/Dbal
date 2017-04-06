@@ -6,11 +6,13 @@ use PHPUnit_Extensions_Database_TestCase;
 
 abstract class DeployDBUnit extends PHPUnit_Extensions_Database_TestCase
 {
-    protected $settings;
+    protected static $settings;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public static function getSettings()
     {
-        $this->settings = require(__DIR__ . '/../connectionsSettings.php');
-        parent::__construct($name, $data, $dataName);
+        if (empty(self::$settings)) {
+            self::$settings = require(__DIR__ . '/../connectionsSettings.php');
+        }
+        return self::$settings;
     }
 }

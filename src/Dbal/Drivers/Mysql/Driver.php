@@ -246,19 +246,68 @@ class Driver
         }
     }
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @param \Running\Dbal\Column $column
+     * @return bool
+     * @throws \Running\Dbal\Drivers\Exception
+     */
+    public function addColumn(Connection $connection, $tableName, string $columnName, Column $column)
     {
-        // TODO: Implement addColumn() method.
+        $sql = 'ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) .
+            ' ADD COLUMN ' . $this->getQueryBuilder()->quoteName($columnName) .
+            ' ' . $this->getColumnDDL($column);
+        try {
+            return $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception('Error addColumn: ' . $e->getMessage());
+        }
     }
 
-    public function dropColumn(Connection $connection, $tableName, array $columns)
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @return bool
+     * @throws \Running\Dbal\Drivers\Exception
+     */
+    public function dropColumn(Connection $connection, $tableName, string $columnName)
     {
-        // TODO: Implement dropColumn() method.
+        $sql = 'ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) .
+            ' DROP COLUMN ' . $this->getQueryBuilder()->quoteName($columnName);
+        try {
+            return $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception('Error dropColumn: ' . $e->getMessage());
+        }
     }
 
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $oldName
+     * @param string $newName
+     * @return bool
+     * @throws \Running\Dbal\Drivers\Exception
+     */
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName)
     {
-        // TODO: Implement renameColumn() method.
+        $sql = 'SHOW CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName);
+        try {
+            $creationTableInfo = $connection->query(new Query($sql))->fetch()['Create Table'];
+            $m = [];
+            preg_match('~`' . $oldName . '`\s*([^,]*)~i', $creationTableInfo, $m);
+            $query = new Query(
+                'ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) .
+                ' CHANGE COLUMN ' . $this->getQueryBuilder()->quoteName($oldName) .
+                ' ' . $this->getQueryBuilder()->quoteName($newName) . ' ' . $m[1]
+            );
+            return $connection->execute($query);
+        } catch (\PDOException $e) {
+            throw new Exception('Error renameColumn: ' . $e->getMessage());
+        }
     }
 
     public function getIndexDDL(string $table, Index $index): string
@@ -283,13 +332,15 @@ class Driver
             preg_match('~^([\S]+)(\s+(asc|desc))?~i', $column, $m);
             $columnName = trim($m[1], '`" ');
             $columnNames[] = explode('(', $columnName)[0];
-            $columns[] = $this->getQueryBuilder()->quoteName($columnName) . (!empty($m[3]) ? ' ' . strtoupper($m[3]) : '');
+            $columns[] =
+                $this->getQueryBuilder()->quoteName($columnName) . (!empty($m[3]) ? ' ' . strtoupper($m[3]) : '');
         }
 
         $index->name = $index->name ?? implode('_', $columnNames) . '_idx';
         $index->table = $table;
 
-        $ddl .= $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);
+        $ddl .=
+            $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);
         $ddl .= ' (' . implode(', ', $columns) . ')';
 
         return $ddl;

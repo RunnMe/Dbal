@@ -75,9 +75,9 @@ interface DriverInterface
      */
     public function dropTable(Connection $connection, string $tableName): bool;
 
-    public function addColumn(Connection $connection, $tableName, array $columns);
+    public function addColumn(Connection $connection, $tableName, string $columnName, Column $column);
 
-    public function dropColumn(Connection $connection, $tableName, array $columns);
+    public function dropColumn(Connection $connection, $tableName, string $columnName);
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName);
 
