@@ -3,8 +3,10 @@
 namespace Running\tests\Dbal\Drivers\Mysql;
 
 use PHPUnit_Extensions_Database_DataSet_IDataSet;
+use Running\Core\Config;
 use Running\Dbal\Columns;
 use Running\Dbal\Columns\StringColumn;
+use Running\Dbal\Connection;
 use Running\Dbal\Drivers\Mysql\Driver;
 use Running\Dbal\Query;
 
@@ -13,7 +15,6 @@ class DriverTablesTest extends DBUnit
 
     public function testExistsTable()
     {
-        $this->connection->execute(new Query('DROP TABLE IF EXISTS `foo`'));
         $this->assertFalse($this->driver->existsTable($this->connection, 'foo'));
 
         $this->connection->execute(new Query('CREATE TABLE foo (id SERIAL)'));
@@ -127,6 +128,26 @@ class DriverTablesTest extends DBUnit
     public function testDropTableException()
     {
         $this->driver->dropTable($this->connection, 'bar');
+    }
+
+    /**
+     * This method is called before the first test of this test class is run.
+     */
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+        $connection = new Connection(new Config(self::getSettings()));
+        $connection->execute(new Query('DROP TABLE IF EXISTS `foo`, `bar`'));
+    }
+
+    /**
+     * This method is called after the last test of this test class is run.
+     */
+    public static function tearDownAfterClass()
+    {
+        $connection = new Connection(new Config(self::getSettings()));
+        $connection->execute(new Query('DROP TABLE IF EXISTS `foo`, `bar`'));
+        parent::tearDownAfterClass();
     }
 
     /**
