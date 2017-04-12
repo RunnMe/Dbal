@@ -339,20 +339,55 @@ class Driver
         $index->name = $index->name ?? implode('_', $columnNames) . '_idx';
         $index->table = $table;
 
-        $ddl .=
-            $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);
+        $ddl .= $this->getQueryBuilder()->quoteName($index->name);
         $ddl .= ' (' . implode(', ', $columns) . ')';
 
         return $ddl;
     }
 
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param \Running\Dbal\Index[] $indexes
+     * @throws \Running\Dbal\Drivers\Exception
+     */
     public function addIndex(Connection $connection, $tableName, array $indexes)
     {
-        // TODO: Implement addIndex() method.
+        $sql = 'ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . ' ';
+
+        $indexesDDL = [];
+        foreach ($indexes as $index) {
+            $indexesDDL[] = 'ADD ' . $this->getIndexDDL($tableName, $index);
+        }
+        $sql .= implode(', ', $indexesDDL);
+
+        try {
+            $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception($e->getMessage(), 0, $e);
+        }
     }
 
+    /**
+     * @param \Running\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string[] $indexes
+     * @throws \Running\Dbal\Drivers\Exception
+     */
     public function dropIndex(Connection $connection, $tableName, array $indexes)
     {
-        // TODO: Implement dropIndex() method.
+        $sql = 'ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . ' ';
+
+        $indexesDDL = [];
+        foreach ($indexes as $indexName) {
+            $indexesDDL[] = 'DROP INDEX ' . $this->getQueryBuilder()->quoteName($indexName);
+        }
+        $sql .= implode(', ', $indexesDDL);
+
+        try {
+            $connection->execute(new Query($sql));
+        } catch (\PDOException $e) {
+            throw new Exception($e->getMessage(), 0, $e);
+        }
     }
 }
