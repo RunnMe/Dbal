@@ -8,6 +8,8 @@ use Running\Dbal\Columns;
 use Running\Dbal\Columns\StringColumn;
 use Running\Dbal\Connection;
 use Running\Dbal\Drivers\Mysql\Driver;
+use Running\Dbal\Indexes\SimpleIndex;
+use Running\Dbal\Indexes\UniqueIndex;
 use Running\Dbal\Query;
 
 class DriverTablesTest extends DBUnit
@@ -33,7 +35,14 @@ class DriverTablesTest extends DBUnit
             'foo' => ['class' => StringColumn::class]
         ]);
 
-        $this->assertSame("CREATE TABLE `test`\n(\n`foo` VARCHAR(255)\n)", $method->invoke($driver, 'test', $columns));
+        $indexes = [
+            new SimpleIndex(['columns' => ['foo']])
+        ];
+
+        $this->assertSame(
+            "CREATE TABLE `test`\n(\n`foo` VARCHAR(255),\nINDEX `foo_idx` (`foo`)\n)",
+            $method->invoke($driver, 'test', $columns, $indexes)
+        );
     }
 
     /**
@@ -49,7 +58,11 @@ class DriverTablesTest extends DBUnit
             new Columns([
                 'id' => ['class' => Columns\SerialColumn::class],
                 'num' => ['class' => Columns\IntColumn::class],
-                'name' => ['class' => Columns\StringColumn::class]])
+                'name' => ['class' => Columns\StringColumn::class]]),
+            [
+                new UniqueIndex(['columns' => ['num']]),
+                new SimpleIndex(['columns' => ['name'], 'name' => 'simple_name_index'])
+            ]
         );
 
         $this->assertTrue($this->driver->existsTable($this->connection, 'foo'));

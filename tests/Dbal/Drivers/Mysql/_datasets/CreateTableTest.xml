@@ -18,7 +18,7 @@
             <value>num</value>
             <value>int(11)</value>
             <value>YES</value>
-            <value></value>
+            <value>UNI</value>
             <null/>
             <value></value>
         </row>
@@ -26,7 +26,7 @@
             <value>name</value>
             <value>varchar(255)</value>
             <value>YES</value>
-            <value></value>
+            <value>MUL</value>
             <null/>
             <value></value>
         </row>

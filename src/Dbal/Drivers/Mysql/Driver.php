@@ -163,6 +163,13 @@ class Driver
         return $tableName === $connection->query($query)->fetchScalar();
     }
 
+    /**
+     * @param string $tableName
+     * @param \Running\Dbal\Columns $columns
+     * @param \Running\Dbal\Index[] $indexes
+     * @param array $extensions
+     * @return string
+     */
     protected function createTableDdl(string $tableName, Columns $columns, $indexes = [], $extensions = [])
     {
         $sql = 'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . "\n";
@@ -173,10 +180,25 @@ class Driver
             $columnsDDL[] = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
         }
 
+        $indexesDDLSql = '';
+        if ($indexes) {
+            $indexesDDL = [];
+            foreach ($indexes as $index) {
+                $indexesDDL[] = $this->getIndexDDL($tableName, $index);
+            }
+            $indexesDDLSql = ",\n" . implode(",\n", array_unique($indexesDDL));
+        }
+
+        if ($extensions) {
+            // TODO: implement extensions use
+        }
+
         $sql .=
             "(\n" .
             implode(",\n", array_unique($columnsDDL)) .
+            $indexesDDLSql .
             "\n)";
+
         return $sql;
     }
 
@@ -184,14 +206,14 @@ class Driver
      * @param \Running\Dbal\Connection $connection
      * @param string $tableName
      * @param \Running\Dbal\Columns $columns
-     * @param array $indexes
+     * @param \Running\Dbal\Index[] $indexes
      * @param array $extensions
      * @return mixed
      * @throws \Running\Dbal\Drivers\Exception
      */
     public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool
     {
-        return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
+        return $connection->execute(new Query($this->createTableDdl($tableName, $columns, $indexes, $extensions)));
     }
 
     /**
