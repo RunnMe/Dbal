@@ -86,5 +86,22 @@ class DriverTablesTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($driver->existsTable($connection, 'foo'));
     }
 
-
+    public function testTruncateTable()
+    {
+        $connection = new Connection(
+            new Config(
+                ['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']
+            )
+        );
+        $driver = $connection->getDriver();
+        $this->assertFalse($driver->existsTable($connection, 'foo'));
+        $connection->execute(new Query('CREATE TABLE foo (id SERIAL)'));
+        $this->assertTrue($driver->existsTable($connection, 'foo'));
+        $this->assertEquals(0, $connection->query(new Query('SELECT COUNT(*) FROM foo'))->fetchAll()[0][0]);
+        $connection->execute(new Query('INSERT INTO foo (id) VALUES (1)'));
+        $this->assertEquals(1, $connection->query(new Query('SELECT COUNT(*) FROM foo'))->fetchAll()[0][0]);
+        $driver->truncateTable($connection, 'foo');
+        $this->assertTrue($driver->existsTable($connection, 'foo'));
+        $this->assertEquals(0, $connection->query(new Query('SELECT COUNT(*) FROM foo'))->fetchAll()[0][0]);
+    }
 }
