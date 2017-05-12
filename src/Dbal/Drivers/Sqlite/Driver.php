@@ -157,12 +157,12 @@ class Driver
         return $connection->execute($query);
     }
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    public function addColumn(Connection $connection, $tableName, string $columnName, Column $column)
     {
         // TODO: Implement addColumn() method.
     }
 
-    public function dropColumn(Connection $connection, $tableName, array $columns)
+    public function dropColumn(Connection $connection, $tableName, string $columnName)
     {
         // TODO: Implement dropColumn() method.
     }

@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'mysql' => [
+        'host' => 'Your_Host',
+        'port' => 'Your_Port',
+        'dbname' => 'Your_Database_Name',
+        'user' => 'Your_User_Name',
+        'password' => 'Your_Password',
+    ],
+    'pgsql' => [
+        'host' => 'Your_Host',
+        'port' => 'Your_Port',
+        'dbname' => 'Your_Database_Name',
+        'user' => 'Your_User_Name',
+        'password' => 'Your_Password',
+    ],
+];

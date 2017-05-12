@@ -1,0 +1,32 @@
+<dataset>
+    <table name="showFooIndexes">
+        <column>Table</column>
+        <column>Non_unique</column>
+        <column>Key_name</column>
+        <column>Seq_in_index</column>
+        <column>Column_name</column>
+        <column>Collation</column>
+        <column>Cardinality</column>
+        <column>Sub_part</column>
+        <column>Packed</column>
+        <column>Null</column>
+        <column>Index_type</column>
+        <column>Comment</column>
+        <column>Index_comment</column>
+        <row>
+            <value>foo</value>
+            <value>0</value>
+            <value>id</value>
+            <value>1</value>
+            <value>id</value>
+            <value>A</value>
+            <value>0</value>
+            <null/>
+            <null/>
+            <value></value>
+            <value>BTREE</value>
+            <value></value>
+            <value></value>
+        </row>
+    </table>
+</dataset>

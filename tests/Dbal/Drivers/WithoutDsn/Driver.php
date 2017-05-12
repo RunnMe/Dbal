@@ -95,11 +95,11 @@ class Driver
     {
     }
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    public function addColumn(Connection $connection, $tableName, string $columnName, Column $column)
     {
     }
 
-    public function dropColumn(Connection $connection, $tableName, array $columns)
+    public function dropColumn(Connection $connection, $tableName, string $columnName)
     {
     }
 

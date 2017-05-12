@@ -1,0 +1,34 @@
+<dataset>
+    <table name="showFooColumns">
+        <column>Field</column>
+        <column>Type</column>
+        <column>Null</column>
+        <column>Key</column>
+        <column>Default</column>
+        <column>Extra</column>
+        <row>
+            <value>id</value>
+            <value>bigint(20) unsigned</value>
+            <value>NO</value>
+            <value>PRI</value>
+            <null/>
+            <value>auto_increment</value>
+        </row>
+        <row>
+            <value>num</value>
+            <value>int(11)</value>
+            <value>YES</value>
+            <value>UNI</value>
+            <null/>
+            <value></value>
+        </row>
+        <row>
+            <value>name</value>
+            <value>varchar(255)</value>
+            <value>YES</value>
+            <value>MUL</value>
+            <null/>
+            <value></value>
+        </row>
+    </table>
+</dataset>
