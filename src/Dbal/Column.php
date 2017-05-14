@@ -1,14 +1,14 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
-use Running\Core\Std;
+use Runn\Core\Std;
 
 /**
  * Abstract DB type class
  *
  * Class Column
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @property mixed $default
  */
@@ -30,7 +30,7 @@ abstract class Column
     }
 
     /**
-     * @param \Running\Dbal\DriverInterface $driver
+     * @param \Runn\Dbal\DriverInterface $driver
      * @param mixed $value
      * @return mixed
      */
@@ -40,7 +40,7 @@ abstract class Column
     }
 
     /**
-     * @param \Running\Dbal\DriverInterface $driver
+     * @param \Runn\Dbal\DriverInterface $driver
      * @param mixed $value
      * @return mixed
      */

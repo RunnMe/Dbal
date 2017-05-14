@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * Interface DriverQueryBuilderInterface
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @codeCoverageIgnore
  */

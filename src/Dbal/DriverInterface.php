@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * Interface DriverInterface
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @codeCoverageIgnore
  */
@@ -12,41 +12,41 @@ interface DriverInterface
 {
 
     /**
-     * @return \Running\Dbal\DriverQueryBuilderInterface
+     * @return \Runn\Dbal\DriverQueryBuilderInterface
      */
     public function getQueryBuilder(): DriverQueryBuilderInterface;
 
     /**
-     * @param \Running\Dbal\Column $column
+     * @param \Runn\Dbal\Column $column
      * @return string
      */
     public function getColumnDDL(Column $column): string;
 
     /**
-     * @param \Running\Dbal\Column $column
+     * @param \Runn\Dbal\Column $column
      * @param mixed $value
      * @return mixed
      */
     public function processValueAfterLoad(Column $column, $value);
 
     /**
-     * @param \Running\Dbal\Column $column
+     * @param \Runn\Dbal\Column $column
      * @param mixed $value
      * @return mixed
      */
     public function processValueBeforeSave(Column $column, $value);
 
     /**
-     * @param \Running\Dbal\Connection $connection
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @return mixed
      */
     public function existsTable(Connection $connection, string $tableName): bool;
 
     /**
-     * @param \Running\Dbal\Connection $connection
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @param \Running\Dbal\Columns $columns
+     * @param \Runn\Dbal\Columns $columns
      * @param array $indexes
      * @param array $extensions
      * @return mixed
@@ -54,7 +54,7 @@ interface DriverInterface
     public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool;
 
     /**
-     * @param \Running\Dbal\Connection $connection
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param string $tableNewName
      * @return bool
@@ -62,14 +62,14 @@ interface DriverInterface
     public function renameTable(Connection $connection, string $tableName, string $tableNewName): bool;
 
     /**
-     * @param \Running\Dbal\Connection $connection
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @return bool
      */
     public function truncateTable(Connection $connection, string $tableName): bool;
 
     /**
-     * @param \Running\Dbal\Connection $connection
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @return bool
      */

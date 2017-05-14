@@ -1,8 +1,8 @@
 <?php
 
-namespace Running\Dbal\Columns;
+namespace Runn\Dbal\Columns;
 
-use Running\Dbal\Column;
+use Runn\Dbal\Column;
 
 /**
  * String value (fixed length) abstract type

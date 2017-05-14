@@ -1,14 +1,14 @@
 <?php
 
-namespace Running\Dbal\Drivers\Pgsql;
+namespace Runn\Dbal\Drivers\Pgsql;
 
 /**
  * PostgreSQL DSN object
  * Class Dsn
- * @package Running\Dbal\Drivers\Pgsql
+ * @package Runn\Dbal\Drivers\Pgsql
  */
 class Dsn
-    extends \Running\Dbal\Dsn
+    extends \Runn\Dbal\Dsn
 {
 
     /*protected */const REQUIRED = ['host'];

@@ -1,9 +1,9 @@
 <?php
 
-namespace Runn\tests\Dbal\Query;
+namespace Running\tests\Dbal\Query;
 
-use Runn\Core\Std;
-use Runn\Dbal\Query;
+use Running\Core\Std;
+use Running\Dbal\Query;
 
 class QueryTest extends \PHPUnit_Framework_TestCase
 {
@@ -220,7 +220,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $query = new Query();
 
-        $q = $query->into('foo');
+        $q = $query->insert('foo');
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('insert', $query->action);
@@ -391,14 +391,14 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $query = new Query();
 
-        $q = $query->into('foo')->value('a', 1);
+        $q = $query->insert('foo')->value('a', 1);
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('insert', $query->action);
         $this->assertEquals(['foo'], $query->tables);
         $this->assertEquals(['a' => 1], $query->values);
 
-        $q = $query->into('foo')->value('"b" ', 2);
+        $q = $query->insert('foo')->value('"b" ', 2);
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('insert', $query->action);
@@ -406,25 +406,25 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a' => 1, 'b' => 2], $query->values);
     }
 
-    public function testInsert()
+    public function testValues()
     {
         $query = new Query();
 
-        $q = $query->into('foo')->insert([]);
+        $q = $query->insert('foo')->values([]);
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('insert', $query->action);
         $this->assertEquals(['foo'], $query->tables);
         $this->assertEquals([], $query->values);
 
-        $q = $query->into('foo')->insert(['a' => 1, 'b' => 2]);
+        $q = $query->insert('foo')->values(['a' => 1, 'b' => 2]);
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('insert', $query->action);
         $this->assertEquals(['foo'], $query->tables);
         $this->assertEquals(['a' => 1, 'b' => 2], $query->values);
 
-        $q = $query->into('foo')->insert([' `a`' => 1, '"b" ' => 2]);
+        $q = $query->insert('foo')->values([' `a`' => 1, '"b" ' => 2]);
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
         $this->assertEquals('insert', $query->action);

@@ -1,14 +1,14 @@
 <?php
 
-namespace Running\Dbal\Indexes;
+namespace Runn\Dbal\Indexes;
 
-use Running\Dbal\Index;
+use Runn\Dbal\Index;
 
 /**
  * Unique index, based on one or manu columns, contains unique values
  *
  * Class UniqueIndex
- * @package Running\Dbal\Indexes
+ * @package Runn\Dbal\Indexes
  */
 class UniqueIndex extends Index
 {

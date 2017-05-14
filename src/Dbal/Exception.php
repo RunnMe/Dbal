@@ -1,17 +1,17 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * Database exception
  *
  * Class Exception
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @codeCoverageIgnore
  */
 class Exception
-    extends \Running\Core\Exception
+    extends \Runn\Core\Exception
 {
 
 } 

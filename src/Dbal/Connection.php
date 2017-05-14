@@ -1,36 +1,36 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
-use Running\Core\Config;
-use Running\Core\ArrayableInterface;
+use Runn\Core\ArrayCastingInterface;
+use Runn\Core\Config;
 
 /**
  * Class Connection
- * @package Running\Dbal
+ * @package Runn\Dbal
  */
 class Connection
 {
 
     /**
-     * @var \Running\Core\Config
+     * @var \Runn\Core\Config
      */
     protected $config;
 
     /**
-     * @var \Running\Dbal\Dbh
+     * @var \Runn\Dbal\Dbh
      */
     protected $dbh;
 
     /**
-     * @var \Running\Dbal\DriverInterface
+     * @var \Runn\Dbal\DriverInterface
      */
     protected $driver;
 
     /**
-     * @param \Running\Core\Config $config
-     * @throws \Running\Dbal\Exception
-     * @throws \Running\Core\MultiException
+     * @param \Runn\Core\Config $config
+     * @throws \Runn\Dbal\Exception
+     * @throws \Runn\Core\Exceptions
      */
     public function __construct(Config $config)
     {
@@ -40,17 +40,17 @@ class Connection
     }
 
     /**
-     * @param \Running\Core\Config $config
-     * @return \Running\Dbal\Dbh
-     * @throws \Running\Dbal\Exception
-     * @throws \Running\Core\MultiException
+     * @param \Runn\Core\Config $config
+     * @return \Runn\Dbal\Dbh
+     * @throws \Runn\Dbal\Exception
+     * @throws \Runn\Core\Exceptions
      */
     protected function getDbhByConfig(Config $config): Dbh
     {
         $dsn = Dsn::instance($config);
 
         $options = [];
-        if (!empty($config->options) && $config->options instanceof ArrayableInterface) {
+        if (!empty($config->options) && $config->options instanceof ArrayCastingInterface) {
             $options = $config->options->toArrayRecursive();
         }
 
@@ -65,7 +65,7 @@ class Connection
     }
 
     /**
-     * @return \Running\Core\Config
+     * @return \Runn\Core\Config
      */
     public function getConfig(): Config
     {
@@ -73,7 +73,7 @@ class Connection
     }
 
     /**
-     * @return \Running\Dbal\Dbh
+     * @return \Runn\Dbal\Dbh
      */
     public function getDbh(): Dbh
     {
@@ -81,7 +81,7 @@ class Connection
     }
 
     /**
-     * @return \Running\Dbal\DriverInterface
+     * @return \Runn\Dbal\DriverInterface
      */
     public function getDriver(): DriverInterface
     {
@@ -99,9 +99,9 @@ class Connection
     }
 
     /**
-     * @param \Running\Dbal\Query $query
-     * @return \Running\Dbal\Statement
-     * @throws \Running\Dbal\Exception
+     * @param \Runn\Dbal\Query $query
+     * @return \Runn\Dbal\Statement
+     * @throws \Runn\Dbal\Exception
      */
     public function prepare(Query $query)
     {
@@ -115,7 +115,7 @@ class Connection
     }
 
     /**
-     * @param \Running\Dbal\Query $query
+     * @param \Runn\Dbal\Query $query
      * @param array $params
      * @return bool
      */
@@ -127,9 +127,9 @@ class Connection
     }
 
     /**
-     * @param \Running\Dbal\Query $query
+     * @param \Runn\Dbal\Query $query
      * @param array $params
-     * @return \Running\Dbal\Statement
+     * @return \Runn\Dbal\Statement
      */
     public function query($query, array $params = [])
     {

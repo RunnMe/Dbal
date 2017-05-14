@@ -1,13 +1,15 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
-use Running\Core\ArrayableInterface;
-use Running\Core\Std;
+use Runn\Core\ArrayCastingInterface;
+use Runn\Core\Std;
 
 /**
+ * Simple Query-Builder
+ *
  * Class Query
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @property string $string
  *
@@ -43,7 +45,7 @@ class Query
             return;
         }
 
-        if ($data instanceof ArrayableInterface) {
+        if ($data instanceof ArrayCastingInterface) {
             $data = $data->toArrayRecursive();
         }
         
@@ -59,6 +61,10 @@ class Query
             $this->tables($data['tables']);
             unset($data['tables']);
         }
+        if (isset($data['into'])) {
+            $this->into($data['into']);
+            unset($data['tables']);
+        }
         if (isset($data['joins'])) {
             $this->joins($data['joins']);
             unset($data['joins']);
@@ -71,8 +77,12 @@ class Query
             $this->order($data['order']);
             unset($data['order']);
         }
+        if (isset($data['insert'])) {
+            $this->insert($data['insert']);
+            unset($data['values']);
+        }
         if (isset($data['values'])) {
-            $this->values($data['values']);
+            $this->insert($data['values']);
             unset($data['values']);
         }
         if (isset($data['params'])) {
@@ -178,7 +188,7 @@ class Query
      * @param mixed $tables
      * @return $this
      */
-    public function insert($tables = null)
+    public function into($tables = null)
     {
         if (null !== $tables) {
             $this->tables($tables);
@@ -398,7 +408,7 @@ class Query
      * @param array $values
      * @return $this
      */
-    public function values(array $values = [])
+    public function insert(array $values = [])
     {
         $values = array_combine(array_map([$this, 'trimName'], array_keys($values)), array_values($values));
         $this->values = $values;

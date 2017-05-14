@@ -1,12 +1,12 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * DBAL Drivers factory
  *
  * Class Drivers
- * @package Running\Dbal
+ * @package Runn\Dbal
  */
 class Drivers
 {

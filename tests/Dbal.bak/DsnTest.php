@@ -1,8 +1,8 @@
 <?php
 
-namespace Running\Dbal\Drivers\Test {
+namespace Runn\Dbal\Drivers\Test {
 
-    class Dsn extends \Running\Dbal\Dsn {
+    class Dsn extends \Runn\Dbal\Dsn {
         const REQUIRED = ['foo', 'bar'];
         const OPTIONAL = ['baz'];
         public function getDriverDsnName(): string {
@@ -12,22 +12,22 @@ namespace Running\Dbal\Drivers\Test {
 
 }
 
-namespace Running\tests\Dbal\Dsn {
+namespace Runn\tests\Dbal\Dsn {
 
-    use Running\Core\Config;
-    use Running\Core\MultiException;
-    use Running\Dbal\Dsn;
-    use Running\Dbal\Exception;
+    use Runn\Core\Config;
+    use Runn\Core\Exceptions;
+    use Runn\Dbal\Dsn;
+    use Runn\Dbal\Exception;
 
     class DsnTest extends \PHPUnit_Framework_TestCase
     {
 
         public function testInstanceValidDsnClass()
         {
-            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
+            $config = new Config(['class' => \Runn\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
 
-            $this->assertInstanceOf(\Running\Dbal\Drivers\Test\Dsn::class, $dsn);
+            $this->assertInstanceOf(\Runn\Dbal\Drivers\Test\Dsn::class, $dsn);
             $this->assertInstanceOf(Dsn::class, $dsn);
 
             $reflector = new \ReflectionObject($dsn);
@@ -41,10 +41,10 @@ namespace Running\tests\Dbal\Dsn {
 
         public function testInstanceValidDriver()
         {
-            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
+            $config = new Config(['class' => \Runn\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
 
-            $this->assertInstanceOf(\Running\Dbal\Drivers\Test\Dsn::class, $dsn);
+            $this->assertInstanceOf(\Runn\Dbal\Drivers\Test\Dsn::class, $dsn);
             $this->assertInstanceOf(Dsn::class, $dsn);
 
             $reflector = new \ReflectionObject($dsn);
@@ -62,7 +62,7 @@ namespace Running\tests\Dbal\Dsn {
                 $dsn = Dsn::instance(
                     new Config(['nodriver' => 'invalid'])
                 );
-            } catch (MultiException $errors) {
+            } catch (Exceptions $errors) {
                 $this->assertCount(1, $errors);
                 $this->assertInstanceOf(Exception::class, $errors[0]);
                 $this->assertEquals('Can not suggest DSN class name',  $errors[0]->getMessage());
@@ -77,7 +77,7 @@ namespace Running\tests\Dbal\Dsn {
                 $dsn = Dsn::instance(
                     new Config(['driver' => 'invalid'])
                 );
-            } catch (MultiException $errors) {
+            } catch (Exceptions $errors) {
                 $this->assertCount(1, $errors);
                 $this->assertInstanceOf(Exception::class, $errors[0]);
                 $this->assertEquals('Can not suggest DSN class name', $errors[0]->getMessage());
@@ -91,9 +91,9 @@ namespace Running\tests\Dbal\Dsn {
             require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
             try {
                 $dsn = Dsn::instance(
-                    new Config(['driver' => \Running\tests\Dbal\Drivers\WithoutDsn\Driver::class])
+                    new Config(['driver' => \Runn\tests\Dbal\Drivers\WithoutDsn\Driver::class])
                 );
-            } catch (MultiException $errors) {
+            } catch (Exceptions $errors) {
                 $this->assertCount(1, $errors);
                 $this->assertInstanceOf(Exception::class, $errors[0]);
                 $this->assertEquals('This driver has not DSN class', $errors[0]->getMessage());
@@ -106,9 +106,9 @@ namespace Running\tests\Dbal\Dsn {
         {
             try {
                 $dsn = Dsn::instance(
-                    new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class])
+                    new Config(['class' => \Runn\Dbal\Drivers\Test\Dsn::class])
                 );
-            } catch (MultiException $errors) {
+            } catch (Exceptions $errors) {
                 $this->assertCount(2, $errors);
                 $this->assertInstanceOf(Exception::class, $errors[0]);
                 $this->assertEquals('"foo" is not set in config', $errors[0]->getMessage());
@@ -121,11 +121,11 @@ namespace Running\tests\Dbal\Dsn {
 
         public function testToString()
         {
-            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
+            $config = new Config(['class' => \Runn\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
             $this->assertEquals('test:foo=test;bar=bla', (string)$dsn);
 
-            $config = new Config(['class' => \Running\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
+            $config = new Config(['class' => \Runn\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla', 'baz' => 42]);
             $dsn = Dsn::instance($config);
             $this->assertEquals('test:foo=test;bar=bla;baz=42', (string)$dsn);
         }

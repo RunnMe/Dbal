@@ -1,8 +1,8 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
-use Running\Core\TypedCollection;
+use Runn\Core\TypedCollection;
 
 class Columns
     extends TypedCollection

@@ -1,16 +1,16 @@
 <?php
 
-namespace Running\Dbal\Drivers\Sqlite;
+namespace Runn\Dbal\Drivers\Sqlite;
 
 /**
  * SQLite DSN object
  * Use 'file' => 'PATH_TO_FILE' or 'file'=>':memory:' for correct DSN
  *
  * Class Dsn
- * @package Running\Dbal\Drivers\Sqlite
+ * @package Runn\Dbal\Drivers\Sqlite
  */
 class Dsn
-    extends \Running\Dbal\Dsn
+    extends \Runn\Dbal\Dsn
 {
 
     /*protected */const REQUIRED = ['file'];

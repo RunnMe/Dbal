@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * Class Statement
- * @package Running\Dbal
+ * @package Runn\Dbal
  */
 class Statement
     extends \PDOStatement

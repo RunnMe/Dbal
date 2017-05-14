@@ -1,14 +1,14 @@
 <?php
 
-namespace Running\Dbal\Drivers\Mysql;
+namespace Runn\Dbal\Drivers\Mysql;
 
 /**
  * MySQL DSN object
  * Class Dsn
- * @package Running\Dbal\Drivers\Mysql
+ * @package Runn\Dbal\Drivers\Mysql
  */
 class Dsn
-    extends \Running\Dbal\Dsn
+    extends \Runn\Dbal\Dsn
 {
 
     /*protected */const REQUIRED = ['host'];

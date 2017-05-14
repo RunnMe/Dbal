@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * Interface DriverAwareInterface
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @codeCoverageIgnore
  */

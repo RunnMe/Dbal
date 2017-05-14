@@ -1,14 +1,14 @@
 <?php
 
-namespace Running\Dbal\Drivers\Sqlite;
+namespace Runn\Dbal\Drivers\Sqlite;
 
-use Running\Dbal\DriverQueryBuilderInterface;
-use Running\Dbal\Exception;
-use Running\Dbal\Query;
+use Runn\Dbal\DriverQueryBuilderInterface;
+use Runn\Dbal\Exception;
+use Runn\Dbal\Query;
 
 /**
  * Class QueryBuilder
- * @package Running\Dbal\Drivers\Sqlite\Sqlite
+ * @package Runn\Dbal\Drivers\Sqlite\Sqlite
  */
 class QueryBuilder
     implements DriverQueryBuilderInterface

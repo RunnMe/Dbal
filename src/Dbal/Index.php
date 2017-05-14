@@ -1,17 +1,17 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
-use Running\Core\Std;
-use Running\Validation\Exceptions\EmptyValue;
-use Running\Validation\Validators\ArrayValue;
+use Runn\Core\Std;
+use Runn\Validation\Exceptions\EmptyValue;
+use Runn\Validation\Validators\ArrayValue;
 
 /**
  * Abstract DB index schema class
  * Used for indexes creation
  *
  * Class Index
- * @package Running\Dbal
+ * @package Runn\Dbal
  *
  * @property array $columns
  *
@@ -26,7 +26,7 @@ abstract class Index
     /**
      * Checks if all required properties are set
      * @return bool
-     * @throws \Running\Dbal\Exception
+     * @throws \Runn\Dbal\Exception
      */
     protected function checkRequired()
     {

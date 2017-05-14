@@ -1,14 +1,15 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
-use Running\Core\Config;
-use Running\Core\MultiException;
+use Runn\Core\Config;
+use Runn\Core\Exceptions;
 
 /**
+ * DSN constructor class
+ *
  * Class Dsn
- * DSN maker
- * @package Running\Dbal
+ * @package Runn\Dbal
  */
 abstract class Dsn
 {
@@ -17,19 +18,19 @@ abstract class Dsn
     /*protected */const OPTIONAL = [];
 
     /**
-     * @var \Running\Core\Config
+     * @var \Runn\Core\Config
      */
     protected $config;
 
     /**
-     * @param \Running\Core\Config $config
-     * @throws \Running\Core\MultiException
+     * @param \Runn\Core\Config $config
+     * @throws \Runn\Core\Exceptions
      */
     protected function __construct(Config $config)
     {
         $this->config = $config;
 
-        $errors = new MultiException();
+        $errors = new Exceptions();
 
         foreach ((array)static::REQUIRED as $required) {
             if (!isset($this->config->$required)) {
@@ -43,9 +44,9 @@ abstract class Dsn
     }
 
     /**
-     * @param \Running\Core\Config $config
-     * @return \Running\Dbal\Dsn
-     * @throws \Running\Core\MultiException
+     * @param \Runn\Core\Config $config
+     * @return \Runn\Dbal\Dsn
+     * @throws \Runn\Core\Exceptions
      */
     public static function instance(Config $config)
     {
@@ -54,10 +55,10 @@ abstract class Dsn
         } elseif (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
             $className = '\\' . implode('\\', array_slice(explode('\\', $config->driver), 0, -1)) . '\\Dsn';
             if (!class_exists($className) || !is_subclass_of($className, self::class)) {
-                throw (new MultiException())->add(new Exception('This driver has not DSN class'));
+                throw (new Exceptions())->add(new Exception('This driver has not DSN class'));
             }
         } else {
-            throw (new MultiException())->add(new Exception('Can not suggest DSN class name'));
+            throw (new Exceptions())->add(new Exception('Can not suggest DSN class name'));
         }
 
         return new $className($config);

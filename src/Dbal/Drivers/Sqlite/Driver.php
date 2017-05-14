@@ -1,20 +1,20 @@
 <?php
 
-namespace Running\Dbal\Drivers\Sqlite;
+namespace Runn\Dbal\Drivers\Sqlite;
 
-use Running\Dbal\Column;
-use Running\Dbal\Columns;
-use Running\Dbal\Connection;
-use Running\Dbal\DriverInterface;
-use Running\Dbal\DriverQueryBuilderInterface;
-use Running\Dbal\Index;
-use Running\Dbal\Query;
+use Runn\Dbal\Column;
+use Runn\Dbal\Columns;
+use Runn\Dbal\Connection;
+use Runn\Dbal\DriverInterface;
+use Runn\Dbal\DriverQueryBuilderInterface;
+use Runn\Dbal\Index;
+use Runn\Dbal\Query;
 
 /**
  * DBAL sqlite driver
  *
  * Class Sqlite
- * @package Running\Dbal\Drivers
+ * @package Runn\Dbal\Drivers
  */
 class Driver
     implements DriverInterface
@@ -28,30 +28,30 @@ class Driver
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
-            case \Running\Dbal\Columns\SerialColumn::class:
-            case \Running\Dbal\Columns\PkColumn::class:
+            case \Runn\Dbal\Columns\SerialColumn::class:
+            case \Runn\Dbal\Columns\PkColumn::class:
                 $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
                 break;
-            case \Running\Dbal\Columns\LinkColumn::class:
+            case \Runn\Dbal\Columns\LinkColumn::class:
                 $ddl = 'INTEGER DEFAULT NULL';
                 break;
-            case \Running\Dbal\Columns\BooleanColumn::class:
+            case \Runn\Dbal\Columns\BooleanColumn::class:
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : (int)(bool)$column->default) : null;
                 break;
-            case \Running\Dbal\Columns\IntColumn::class:
+            case \Runn\Dbal\Columns\IntColumn::class:
                 $ddl = 'INTEGER';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
-            case \Running\Dbal\Columns\FloatColumn::class:
+            case \Runn\Dbal\Columns\FloatColumn::class:
                 $ddl = 'REAL';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : $column->default) : null;
                 break;
-            case \Running\Dbal\Columns\CharColumn::class:
-            case \Running\Dbal\Columns\StringColumn::class:
-            case \Running\Dbal\Columns\TimeColumn::class:
-            case \Running\Dbal\Columns\DateColumn::class:
-            case \Running\Dbal\Columns\DateTimeColumn::class:
+            case \Runn\Dbal\Columns\CharColumn::class:
+            case \Runn\Dbal\Columns\StringColumn::class:
+            case \Runn\Dbal\Columns\TimeColumn::class:
+            case \Runn\Dbal\Columns\DateColumn::class:
+            case \Runn\Dbal\Columns\DateTimeColumn::class:
                 $ddl = 'TEXT';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : "'" . $column->default . "'") : null;
                 break;
@@ -80,10 +80,10 @@ class Driver
     public function getIndexDDL(string $table, Index $index): string
     {
         switch (get_class($index)) {
-            case \Running\Dbal\Indexes\UniqueIndex::class:
+            case \Runn\Dbal\Indexes\UniqueIndex::class:
                 $ddl = 'UNIQUE INDEX ';
                 break;
-            case \Running\Dbal\Indexes\SimpleIndex::class:
+            case \Runn\Dbal\Indexes\SimpleIndex::class:
                 $ddl = 'INDEX ';
                 break;
             default:

@@ -1,11 +1,11 @@
 <?php
 
-namespace Running\Dbal;
+namespace Runn\Dbal;
 
 /**
  * Class Dbh
  * Data Base Handler
- * @package Running\Dbal
+ * @package Runn\Dbal
  */
 class Dbh
     extends \PDO

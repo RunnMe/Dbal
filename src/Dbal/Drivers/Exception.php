@@ -1,15 +1,15 @@
 <?php
 
-namespace Running\Dbal\Drivers;
+namespace Runn\Dbal\Drivers;
 
 /**
  * Class Exception
- * @package Running\Dbal\Drivers
+ * @package Runn\Dbal\Drivers
  *
  * @codeCoverageIgnore
  */
 class Exception
-    extends \Running\Dbal\Exception
+    extends \Runn\Dbal\Exception
 {
 
 }
