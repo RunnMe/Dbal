@@ -1,7 +1,7 @@
 {
-  "name": "pr-of-it/running-dbal",
-  "description": "Running.FM DBAL Library",
-  "keywords": ["running", "running.fm", "framework", "db", "dbal", "database", "connection", "pdo"],
+  "name": "runn/dbal",
+  "description": "Runn Me! DBAL Library",
+  "keywords": ["runn", "runn.me", "framework", "db", "dbal", "database", "connection", "pdo"],
   "type": "library",
   "license": "LGPL v.3",
   "authors": [
@@ -17,8 +17,8 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.0",
-    "pr-of-it/running-core": "dev-master",
-    "pr-of-it/running-validation": "dev-master"
+    "runn/core": "dev-master",
+    "runn/validation": "dev-master"
   },
   "require-dev": {
     "ext-pdo_sqlite": "*",
@@ -29,7 +29,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Running\\": "src/"
+      "Runn\\": "src/"
     }
   }
 }
