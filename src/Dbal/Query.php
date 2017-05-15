@@ -103,21 +103,15 @@ class Query
     }
 
     /**
+     * Trims quotes from different names (columns, tables, etc)
+     *
      * @param string $s
      * @return string
      */
     protected function trimName($s)
     {
         $trimmed = trim($s, " \"'`\t\n\r\0\x0B");
-        if (
-            false !== strpos($trimmed, ' ')
-            ||
-            false !== stripos($trimmed, 'as')
-            ||
-            false !== stripos($trimmed, 'asc')
-            ||
-            false !== stripos($trimmed, 'desc')
-        ) {
+        if ( preg_match('~(\s|as\asc|desc)~i', $trimmed) ) {
             return $s;
         }
         $parts = explode('.', $trimmed);

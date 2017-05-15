@@ -8,6 +8,48 @@ use Runn\Dbal\Query;
 class QueryTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testTrimName()
+    {
+        $query = new Query();
+        $reflector = new \ReflectionMethod($query, 'trimName');
+        $reflector->setAccessible(true);
+
+        $this->assertEquals(
+            'foo',
+            $reflector->invokeArgs($query, ['foo'])
+        );
+        $this->assertEquals(
+            'foo',
+            $reflector->invokeArgs($query, ['`foo`'])
+        );
+        $this->assertEquals(
+            'foo',
+            $reflector->invokeArgs($query, ['"foo"'])
+        );
+        $this->assertEquals(
+            'foo',
+            $reflector->invokeArgs($query, [' `"foo"`  '])
+        );
+
+        $this->assertEquals(
+            '`foo` AS `bar`',
+            $reflector->invokeArgs($query, ['`foo` AS `bar`'])
+        );
+        $this->assertEquals(
+            '"baz" DESC',
+            $reflector->invokeArgs($query, ['"baz" DESC'])
+        );
+
+        $this->assertEquals(
+            'foo.bar',
+            $reflector->invokeArgs($query, ['`foo`.`bar`'])
+        );
+        $this->assertEquals(
+            'foo.bar.baz',
+            $reflector->invokeArgs($query, ['"foo"."bar".baz'])
+        );
+    }
+
     public function testPrepareNames()
     {
         $query = new Query();
@@ -21,39 +63,48 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             ['*'],
-            $reflector->invokeArgs($query, [ ['*'] ])
+            $reflector->invokeArgs($query, [['*']])
         );
 
         $this->assertEquals(
             ['foo'],
-            $reflector->invokeArgs($query, [ ['foo'] ])
+            $reflector->invokeArgs($query, [['foo']])
         );
         $this->assertEquals(
             ['foo'],
-            $reflector->invokeArgs($query, [ [' `"foo"`  '] ])
+            $reflector->invokeArgs($query, [[' `"foo"`  ']])
         );
 
         $this->assertEquals(
             ['foo', 'bar'],
-            $reflector->invokeArgs($query, [ ['foo, bar'] ])
+            $reflector->invokeArgs($query, [['foo, bar']])
         );
         $this->assertEquals(
             ['foo', 'bar'],
-            $reflector->invokeArgs($query, [ ['foo', 'bar'] ])
+            $reflector->invokeArgs($query, [['foo', 'bar']])
         );
         $this->assertEquals(
             ['foo', 'bar'],
-            $reflector->invokeArgs($query, [ [' `"foo, bar"`  '] ])
+            $reflector->invokeArgs($query, [[' `"foo, bar"`  ']])
         );
         $this->assertEquals(
             ['foo', 'bar'],
-            $reflector->invokeArgs($query, [ [' `"foo', 'bar"`  '] ])
+            $reflector->invokeArgs($query, [[' `"foo', 'bar"`  ']])
         );
 
         $this->assertEquals(
             ['foo AS f', '`bar` b'],
-            $reflector->invokeArgs($query, [ ['foo AS f, `bar` b'] ])
+            $reflector->invokeArgs($query, [['foo AS f, `bar` b']])
         );
+    }
+
+    public function testIsString()
+    {
+        $query = (new Query)->select()->from('table');
+        $this->assertFalse($query->isString());
+
+        $query = new Query('SELECT * FROM table');
+        $this->assertTrue($query->isString());
     }
 
     public function testColumns()

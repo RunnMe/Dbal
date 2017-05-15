@@ -38,7 +38,7 @@ abstract class Dsn
             }
         }
 
-        if (!$errors->isEmpty()) {
+        if (!$errors->empty()) {
             throw $errors;
         }
     }
