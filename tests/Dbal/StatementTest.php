@@ -1,8 +1,8 @@
 <?php
 
-namespace Running\tests\Dbal\Statement;
+namespace Runn\tests\Dbal\Statement;
 
-use Running\Dbal\Statement;
+use Runn\Dbal\Statement;
 
 class testStatement extends Statement
 {
