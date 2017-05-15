@@ -549,7 +549,6 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertInstanceOf(Query::class, $query);
-
         $this->assertFalse($query->isString());
 
         $this->assertEquals('select', $query->action);
@@ -567,6 +566,17 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
         $this->assertEquals([':id' => 11, ':name' => 'Test1'], $query->params);
         $this->assertEquals('val1', $query->attr1);
+
+        $query = new Query([
+            'into' => 'tbl',
+            'insert' => ['`id`' => 1, 'name' => 'Test'],
+        ]);
+
+        $this->assertInstanceOf(Query::class, $query);
+        $this->assertFalse($query->isString());
+        $this->assertEquals('insert', $query->action);
+        $this->assertEquals(['tbl'], $query->tables);
+        $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
     }
 
     public function testFromArrayable()
@@ -593,7 +603,6 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $query = new Query($options);
 
         $this->assertInstanceOf(Query::class, $query);
-
         $this->assertFalse($query->isString());
 
         $this->assertEquals('select', $query->action);
@@ -611,6 +620,19 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
         $this->assertEquals([':id' => 11, ':name' => 'Test1'], $query->params);
         $this->assertEquals('val1', $query->attr1);
+
+        $options = new Std([
+            'into' => 'tbl',
+            'insert' => ['`id`' => 1, 'name' => 'Test'],
+        ]);
+
+        $query = new Query($options);
+
+        $this->assertInstanceOf(Query::class, $query);
+        $this->assertFalse($query->isString());
+        $this->assertEquals('insert', $query->action);
+        $this->assertEquals(['tbl'], $query->tables);
+        $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
     }
 
 }
