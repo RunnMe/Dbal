@@ -3,7 +3,9 @@
 namespace Runn\Dbal;
 
 use Runn\Core\Config;
+use Runn\Core\ConfigAwareTrait;
 use Runn\Core\Exceptions;
+use Runn\Core\InstanceableByConfigInterface;
 
 /**
  * DSN constructor class
@@ -12,15 +14,13 @@ use Runn\Core\Exceptions;
  * @package Runn\Dbal
  */
 abstract class Dsn
+    implements InstanceableByConfigInterface
 {
 
     /*protected */const REQUIRED = ['host', 'dbname'];
     /*protected */const OPTIONAL = [];
 
-    /**
-     * @var \Runn\Core\Config
-     */
-    protected $config;
+    use ConfigAwareTrait;
 
     /**
      * @param \Runn\Core\Config $config
@@ -28,12 +28,12 @@ abstract class Dsn
      */
     protected function __construct(Config $config)
     {
-        $this->config = $config;
+        $this->setConfig($config);
 
         $errors = new Exceptions();
 
         foreach ((array)static::REQUIRED as $required) {
-            if (!isset($this->config->$required)) {
+            if (!isset($this->getConfig()->$required)) {
                 $errors[] = new Exception('"' . $required . '" is not set in config');
             }
         }
@@ -46,19 +46,29 @@ abstract class Dsn
     /**
      * @param \Runn\Core\Config $config
      * @return \Runn\Dbal\Dsn
-     * @throws \Runn\Core\Exceptions
+     * @throws \Runn\Dbal\Exception
      */
-    public static function instance(Config $config)
+    public static function instance(Config $config = null)
     {
-        if (!empty($config->class) && is_subclass_of($config->class, self::class)) {
+        if (null === $config) {
+            throw new Exception('Empty DSN config');
+        }
+
+        if
+        (!empty($config->class) && is_subclass_of($config->class, self::class)) {
+
             $className = $config->class;
-        } elseif (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
+
+        } elseif
+        (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
+
             $className = '\\' . implode('\\', array_slice(explode('\\', $config->driver), 0, -1)) . '\\Dsn';
             if (!class_exists($className) || !is_subclass_of($className, self::class)) {
-                throw (new Exceptions())->add(new Exception('This driver has not DSN class'));
+                throw new Exception('This driver has not DSN class');
             }
+
         } else {
-            throw (new Exceptions())->add(new Exception('Can not suggest DSN class name'));
+            throw new Exception('Can not suggest DSN class name');
         }
 
         return new $className($config);
@@ -74,12 +84,12 @@ abstract class Dsn
         $parts = [];
 
         foreach ((array)static::REQUIRED as $required) {
-                $parts[] = $required . '=' . $this->config->$required;
+                $parts[] = $required . '=' . $this->getConfig()->$required;
         }
 
         foreach ((array)static::OPTIONAL as $optional) {
-            if (isset($this->config->$optional)) {
-                $parts[] = $optional . '=' . $this->config->$optional;
+            if (isset($this->getConfig()->$optional)) {
+                $parts[] = $optional . '=' . $this->getConfig()->$optional;
             }
         }
 

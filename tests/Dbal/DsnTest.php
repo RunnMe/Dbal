@@ -56,50 +56,36 @@ namespace Runn\tests\Dbal\Dsn {
             );
         }
 
+        /**
+         * @expectedException \Runn\Dbal\Exception
+         * @expectedExceptionMessage Empty DSN config
+         */
         public function testInstanceWithNoDriver()
         {
-            try {
-                $dsn = Dsn::instance(
-                    new Config(['nodriver' => 'invalid'])
-                );
-            } catch (Exceptions $errors) {
-                $this->assertCount(1, $errors);
-                $this->assertInstanceOf(Exception::class, $errors[0]);
-                $this->assertEquals('Can not suggest DSN class name',  $errors[0]->getMessage());
-                return;
-            }
-            $this->fail();
+            $dsn = Dsn::instance();
         }
 
+        /**
+         * @expectedException \Runn\Dbal\Exception
+         * @expectedExceptionMessage Can not suggest DSN class name
+         */
         public function testInstanceWithInvalidDriver()
         {
-            try {
-                $dsn = Dsn::instance(
-                    new Config(['driver' => 'invalid'])
-                );
-            } catch (Exceptions $errors) {
-                $this->assertCount(1, $errors);
-                $this->assertInstanceOf(Exception::class, $errors[0]);
-                $this->assertEquals('Can not suggest DSN class name', $errors[0]->getMessage());
-                return;
-            }
-            $this->fail();
+            $dsn = Dsn::instance(
+                new Config(['driver' => 'invalid'])
+            );
         }
 
+        /**
+         * @expectedException \Runn\Dbal\Exception
+         * @expectedExceptionMessage This driver has not DSN class
+         */
         public function testInstanceWithValidDriverWithoutDsn()
         {
             require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
-            try {
-                $dsn = Dsn::instance(
-                    new Config(['driver' => \Runn\tests\Dbal\Drivers\WithoutDsn\Driver::class])
-                );
-            } catch (Exceptions $errors) {
-                $this->assertCount(1, $errors);
-                $this->assertInstanceOf(Exception::class, $errors[0]);
-                $this->assertEquals('This driver has not DSN class', $errors[0]->getMessage());
-                return;
-            }
-            $this->fail();
+            $dsn = Dsn::instance(
+                new Config(['driver' => \Runn\tests\Dbal\Drivers\WithoutDsn\Driver::class])
+            );
         }
 
         public function testInstanceWithNoRequired()
