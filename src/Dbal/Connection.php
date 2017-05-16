@@ -4,18 +4,18 @@ namespace Runn\Dbal;
 
 use Runn\Core\ArrayCastingInterface;
 use Runn\Core\Config;
+use Runn\Core\ConfigAwareInterface;
+use Runn\Core\ConfigAwareTrait;
 
 /**
  * Class Connection
  * @package Runn\Dbal
  */
 class Connection
+    implements ConfigAwareInterface
 {
 
-    /**
-     * @var \Runn\Core\Config
-     */
-    protected $config;
+    use ConfigAwareTrait;
 
     /**
      * @var \Runn\Dbal\Dbh
@@ -62,14 +62,6 @@ class Connection
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
-    }
-
-    /**
-     * @return \Runn\Core\Config
-     */
-    public function getConfig(): Config
-    {
-        return $this->config;
     }
 
     /**
