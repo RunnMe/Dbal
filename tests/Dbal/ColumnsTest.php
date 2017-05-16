@@ -1,11 +1,11 @@
 <?php
 
-namespace Running\tests\Dbal\Columns;
+namespace Runn\tests\Dbal\Columns;
 
-use Running\Core\CollectionInterface;
-use Running\Core\TypedCollection;
-use Running\Core\TypedCollectionInterface;
-use Running\Dbal\Columns;
+use Runn\Core\CollectionInterface;
+use Runn\Core\TypedCollection;
+use Runn\Core\TypedCollectionInterface;
+use Runn\Dbal\Columns;
 
 class ColumnsTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,8 +29,8 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Running\Core\Exception
-     * @expectedExceptionMessage Typed collection class mismatch
+     * @expectedException \Runn\Core\Exception
+     * @expectedExceptionMessage Typed collection type mismatch
      */
     public function testAddInValid()
     {
