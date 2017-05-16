@@ -5,7 +5,9 @@ namespace Runn\tests\Dbal\Column;
 use Runn\Dbal\Column;
 use Runn\Dbal\DriverInterface;
 
-class testColumn extends Column {
+class testColumn1 extends Column {}
+
+class testColumn2 extends Column {
     public function processValueAfterLoad(DriverInterface $driver, $value)
     {
         return (int)$value;
@@ -24,19 +26,23 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     public function testInstance()
     {
-        $column = new testColumn();
+        $column = new testColumn2();
         $this->assertInstanceOf(Column::class, $column);
     }
 
     public function testProcessValueAfterLoad()
     {
-        $column = new testColumn();
+        $column = new testColumn1();
+        $this->assertSame('42', $column->processValueAfterLoad(new testDriver(), '42'));
+        $column = new testColumn2();
         $this->assertSame(42, $column->processValueAfterLoad(new testDriver(), '42'));
     }
 
     public function testProcessValueBeforeSave()
     {
-        $column = new testColumn();
+        $column = new testColumn1();
+        $this->assertSame(42, $column->processValueBeforeSave(new testDriver(), 42));
+        $column = new testColumn2();
         $this->assertSame('42', $column->processValueBeforeSave(new testDriver(), 42));
     }
 
