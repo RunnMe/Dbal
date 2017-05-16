@@ -3,6 +3,8 @@
 namespace Runn\Dbal;
 
 /**
+ * Custom PDOStatement class with additional methods
+ *
  * Class Statement
  * @package Runn\Dbal
  */

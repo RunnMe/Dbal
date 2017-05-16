@@ -1,8 +1,8 @@
 <?php
 
-namespace Running\tests\Dbal\Dbh;
+namespace Runn\tests\Dbal\Dbh;
 
-use Running\Dbal\Dbh;
+use Runn\Dbal\Dbh;
 
 class DbhTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,6 +3,8 @@
 namespace Runn\Dbal;
 
 /**
+ * Custom Database Handler class extends PDO connection class
+ *
  * Class Dbh
  * Data Base Handler
  * @package Runn\Dbal
