@@ -3,6 +3,7 @@
 namespace Runn\tests\Dbal\Columns;
 
 use Runn\Core\CollectionInterface;
+use Runn\Core\Std;
 use Runn\Core\TypedCollection;
 use Runn\Core\TypedCollectionInterface;
 use Runn\Dbal\Columns;
@@ -19,32 +20,12 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CollectionInterface::class, $columns);
     }
 
-    public function testAddValid()
-    {
-        $columns = new Columns();
-        $columns->add(new Columns\BooleanColumn());
-        $columns[] = new Columns\IntColumn();
-
-        $this->assertCount(2, $columns);
-    }
-
-    /**
-     * @expectedException \Runn\Core\Exception
-     * @expectedExceptionMessage Typed collection type mismatch
-     */
-    public function testAddInValid()
-    {
-        $columns = new Columns();
-        $columns->add(new \stdClass());
-        $this->fail();
-    }
-
-    public function testFromArray()
+    public function testConstructCast()
     {
         $columns = new Columns([
             'foo' => ['class' => Columns\BooleanColumn::class, 'default' => 1],
-            'bar' => ['class' => Columns\StringColumn::class, 'default' => null],
-            'baz' => ['class' => Columns\IntColumn::class, 'bytes' => 4]
+            'bar' => new Std(['class' => Columns\StringColumn::class, 'default' => null]),
+            'baz' => new Columns\IntColumn(['bytes' => 4]),
         ]);
 
         $this->assertEquals(3, count($columns));
