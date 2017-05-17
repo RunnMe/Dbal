@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\tests\Dbal\Connection;
+namespace Runn\tests\Dbal\Connection;
 
-use Running\Core\Config;
-use Running\Dbal\Connection;
-use Running\Dbal\Query;
+use Runn\Core\Config;
+use Runn\Dbal\Connection;
+use Runn\Dbal\Query;
 
 class ConnectionQueryTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class ConnectionQueryTest extends \PHPUnit_Framework_TestCase
         $dbh->exec('INSERT INTO testtable1 (foo, bar) VALUES (1, \'test1\')');
         $dbh->exec('INSERT INTO testtable1 (foo, bar) VALUES (2, \'test2\')');
 
-        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
         $query = (new Query)->select()->from('testtable1')->where('foo=:foo')->params([':foo' => 1]);
@@ -38,7 +38,7 @@ class ConnectionQueryTest extends \PHPUnit_Framework_TestCase
         $dbh->exec('INSERT INTO testtable1 (foo, bar) VALUES (1, \'test1\')');
         $dbh->exec('INSERT INTO testtable1 (foo, bar) VALUES (2, \'test2\')');
 
-        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
         $query = (new Query)->select()->from('testtable1')->where('foo=:foo')->params();
@@ -59,7 +59,7 @@ class ConnectionQueryTest extends \PHPUnit_Framework_TestCase
         $dbh->exec('INSERT INTO testtable1 (foo, bar) VALUES (1, \'test1\')');
         $dbh->exec('INSERT INTO testtable1 (foo, bar) VALUES (2, \'test2\')');
 
-        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
         $query = (new Query)->select()->from('testtable1')->where('foo=:foo')->params([':foo' => 1]);

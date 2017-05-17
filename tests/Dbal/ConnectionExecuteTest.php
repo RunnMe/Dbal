@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\tests\Dbal\Connection;
+namespace Runn\tests\Dbal\Connection;
 
-use Running\Core\Config;
-use Running\Dbal\Connection;
-use Running\Dbal\Query;
+use Runn\Core\Config;
+use Runn\Dbal\Connection;
+use Runn\Dbal\Query;
 
 class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,10 +15,10 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
-        $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
+        $query = (new Query)->into('testtable1')->insert(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
         $conn->execute($query);
 
         $sth = $dbh->query('SELECT * FROM testtable1');
@@ -38,10 +38,10 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
-        $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar']);
+        $query = (new Query)->into('testtable1')->insert(['foo' => ':foo', 'bar' => ':bar']);
         $conn->execute($query, [':foo' => 42, ':bar' => 'test']);
 
         $sth = $dbh->query('SELECT * FROM testtable1');
@@ -61,10 +61,10 @@ class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
         $dbh = new \PDO('sqlite:' . $filename);
         $dbh->exec('CREATE TABLE testtable1 (foo INT, bar TEXT)');
 
-        $config = new Config(['driver' => \Running\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => $filename]);
         $conn = new Connection($config);
 
-        $query = (new Query)->insert()->table('testtable1')->values(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
+        $query = (new Query)->into('testtable1')->insert(['foo' => ':foo', 'bar' => ':bar'])->params([':foo' => 42, ':bar' => 'test']);
         $conn->execute($query, [':foo' => 13]);
 
         $sth = $dbh->query('SELECT * FROM testtable1');
