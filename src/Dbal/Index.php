@@ -29,10 +29,10 @@ abstract class Index
 
     protected function validateColumns($value)
     {
+        (new ArrayValidator())->validate($value);
         if (empty($value) || 0 == count($value)) {
             throw new EmptyValue($value);
         }
-        (new ArrayValidator())->validate($value);
         return true;
     }
 
