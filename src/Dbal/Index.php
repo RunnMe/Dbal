@@ -41,6 +41,8 @@ abstract class Index
      *
      * @param DriverInterface $driver
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getIndexDdlByDriver(DriverInterface $driver)
     {
