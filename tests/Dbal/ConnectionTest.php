@@ -52,6 +52,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $method(new Config(['driver' => 'invalid']));
     }
 
+    /**
+     * @deprecated
+     */
     public function testDbhByConfig()
     {
         $method = $this->methodGetDbhByConfig();
@@ -74,6 +77,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([testStatement::class], $dbh->getAttribute(Dbh::ATTR_STATEMENT_CLASS));
     }
 
+    /**
+     * @deprecated
+     */
     public function testDbhOptions()
     {
         $method = $this->methodGetDbhByConfig();
@@ -81,6 +87,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Dbh::CASE_UPPER, $dbh->getAttribute(Dbh::ATTR_CASE));
     }
 
+    /**
+     * @deprecated
+     */
     public function testDbhException()
     {
         try {

@@ -5,14 +5,19 @@ namespace Runn\Dbal;
 /**
  * Interface DriverAwareInterface
  * @package Runn\Dbal
- *
- * @codeCoverageIgnore
  */
 interface DriverAwareInterface
 {
 
-    public function setDriver(DriverInterface $driver);
+    /**
+     * @param \Runn\Dbal\DriverInterface|null $driver
+     * @return $this
+     */
+    public function setDriver(/*?*/DriverInterface $driver);
 
-    public function getDriver(): DriverInterface;
+    /**
+     * @return \Runn\Dbal\DriverInterface|null
+     */
+    public function getDriver(): /*?*/DriverInterface;
 
 }
