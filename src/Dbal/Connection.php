@@ -33,9 +33,9 @@ class Connection
      */
     public function __construct(Config $config)
     {
-        $this->config   = $config;
-        $this->dbh      = Dbh::instance($this->config);
-        $this->driver   = Drivers::instance($this->config->driver);
+        $this->setConfig($config);
+        $this->dbh    = Dbh::instance($this->getConfig());
+        $this->driver = Drivers::instance($this->getConfig()->driver);
     }
 
     /**
@@ -129,8 +129,8 @@ class Connection
 
     public function __wakeup()
     {
-        $this->dbh      = Dbh::instance($this->config);
-        $this->driver   = Drivers::instance($this->config->driver);
+        $this->dbh    = Dbh::instance($this->getConfig());
+        $this->driver = Drivers::instance($this->getConfig()->driver);
     }
 
     /**
