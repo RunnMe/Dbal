@@ -1,12 +1,12 @@
 <?php
 
-namespace Running\tests\Dbal\Index;
+namespace Runn\tests\Dbal\Index;
 
-use Running\Core\MultiException;
-use Running\Core\Std;
-use Running\Dbal\Index;
-use Running\Validation\Exceptions\EmptyValue;
-use Running\Validation\Exceptions\InvalidArray;
+use Runn\Core\Exceptions;
+use Runn\Core\Std;
+use Runn\Dbal\Index;
+use Runn\Validation\Exceptions\EmptyValue;
+use Runn\Validation\Exceptions\InvalidArray;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,24 +31,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['test', 'example'], $index->options);
     }
 
-    public function testRequiredColumns()
-    {
-        try {
-            $index = new class() extends Index {};
-            $this->fail();
-        } catch (MultiException $errors) {
-            $this->assertContains('You need at least one of', $errors[0]->getMessage());
-            return;
-        }
-        $this->fail();
-    }
-
     public function testEmptyColumns()
     {
         try {
             $index = new class(['columns' => []]) extends Index {};
             $this->fail();
-        } catch (MultiException $errors) {
+        } catch (Exceptions $errors) {
             $this->assertInstanceOf(EmptyValue::class, $errors[0]);
             return;
         }
@@ -60,7 +48,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         try {
             $index = new class(['columns' => 'foo']) extends Index {};
             $this->fail();
-        } catch (MultiException $errors) {
+        } catch (Exceptions $errors) {
             $this->assertInstanceOf(InvalidArray::class, $errors[0]);
             return;
         }

@@ -4,7 +4,7 @@ namespace Runn\Dbal;
 
 use Runn\Core\Std;
 use Runn\Validation\Exceptions\EmptyValue;
-use Runn\Validation\Validators\ArrayValue;
+use Runn\Validation\Validators\ArrayValidator;
 
 /**
  * Abstract DB index schema class
@@ -21,26 +21,6 @@ use Runn\Validation\Validators\ArrayValue;
 abstract class Index
     extends Std
 {
-    protected static $required = ['columns', 'name'];
-
-    /**
-     * Checks if all required properties are set
-     * @return bool
-     * @throws \Runn\Dbal\Exception
-     */
-    protected function checkRequired()
-    {
-        $one = false;
-        foreach ($this->getRequiredProperties() as $required) {
-            if (isset($this->$required)) {
-                $one = $one || true;
-            }
-        }
-        if (!$one) {
-            throw new Exception('You need at least one of [' . implode(', ', $this->getRequiredProperties()) . '] to be set');
-        }
-        return true;
-    }
 
     protected function needCasting($key, $value): bool
     {
@@ -49,10 +29,10 @@ abstract class Index
 
     protected function validateColumns($value)
     {
-        (new ArrayValue())->validate($value);
-        if (empty($value)) {
+        if (empty($value) || 0 == count($value)) {
             throw new EmptyValue($value);
         }
+        (new ArrayValidator())->validate($value);
         return true;
     }
 

@@ -11,6 +11,4 @@ use Runn\Dbal\Index;
  * @package Runn\Dbal\Indexes
  */
 class SimpleIndex extends Index
-{
-
-}
+{}
