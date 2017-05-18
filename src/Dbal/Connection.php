@@ -2,7 +2,6 @@
 
 namespace Runn\Dbal;
 
-use Runn\Core\ArrayCastingInterface;
 use Runn\Core\Config;
 use Runn\Core\ConfigAwareInterface;
 use Runn\Core\ConfigAwareTrait;
@@ -35,33 +34,8 @@ class Connection
     public function __construct(Config $config)
     {
         $this->config   = $config;
-        $this->dbh      = $this->getDbhByConfig($this->config);
+        $this->dbh      = Dbh::instance($this->config);
         $this->driver   = Drivers::instance($this->config->driver);
-    }
-
-    /**
-     * @param \Runn\Core\Config $config
-     * @return \Runn\Dbal\Dbh
-     * @throws \Runn\Dbal\Exception
-     * @throws \Runn\Core\Exceptions
-     */
-    protected function getDbhByConfig(Config $config): Dbh
-    {
-        $dsn = Dsn::instance($config);
-
-        $options = [];
-        if (!empty($config->options) && $config->options instanceof ArrayCastingInterface) {
-            $options = $config->options->toArrayRecursive();
-        }
-
-        try {
-            $dbh = new Dbh((string)$dsn, $config->user ?? null, $config->password ?? null, $options);
-            $dbh->setAttribute(Dbh::ATTR_ERRMODE, $config->errmode ?? Dbh::ERRMODE_EXCEPTION);
-            $dbh->setAttribute(Dbh::ATTR_STATEMENT_CLASS, isset($config->statement) ? [$config->statement] : [Statement::class]);
-            return $dbh;
-        } catch (\Throwable $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
-        }
     }
 
     /**
@@ -155,7 +129,7 @@ class Connection
 
     public function __wakeup()
     {
-        $this->dbh      = $this->getDbhByConfig($this->config);
+        $this->dbh      = Dbh::instance($this->config);
         $this->driver   = Drivers::instance($this->config->driver);
     }
 
