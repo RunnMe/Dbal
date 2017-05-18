@@ -35,7 +35,7 @@ class Connection
     {
         $this->setConfig($config);
         $this->dbh    = Dbh::instance($this->getConfig());
-        $this->driver = Drivers::instance($this->getConfig()->driver);
+        $this->driver = Driver::instance($this->getConfig()->driver);
     }
 
     /**
@@ -130,7 +130,7 @@ class Connection
     public function __wakeup()
     {
         $this->dbh    = Dbh::instance($this->getConfig());
-        $this->driver = Drivers::instance($this->getConfig()->driver);
+        $this->driver = Driver::instance($this->getConfig()->driver);
     }
 
     /**

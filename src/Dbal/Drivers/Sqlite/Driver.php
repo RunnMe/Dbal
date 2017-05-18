@@ -17,7 +17,7 @@ use Runn\Dbal\Query;
  * @package Runn\Dbal\Drivers
  */
 class Driver
-    implements DriverInterface
+    extends \Runn\Dbal\Driver
 {
 
     public function getQueryBuilder(): DriverQueryBuilderInterface

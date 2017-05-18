@@ -6,9 +6,7 @@ use Runn\Core\Config;
 use Runn\Dbal\Connection;
 use Runn\Dbal\Dbh;
 use Runn\Dbal\DriverInterface;
-use Runn\Dbal\Drivers;
 use Runn\Dbal\Exception;
-use Runn\Dbal\DriverBuilderInterface;
 use Runn\Dbal\Query;
 use Runn\Dbal\Statement;
 
@@ -33,7 +31,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($config, $reflectConfig->getValue($conn));
         $this->assertEquals(new Dbh('sqlite::memory:'), $reflectDbh->getValue($conn));
-        $this->assertEquals(new Drivers\Sqlite\Driver(), $reflectDriver->getValue($conn));
+        $this->assertEquals(new \Runn\Dbal\Drivers\Sqlite\Driver(), $reflectDriver->getValue($conn));
     }
 
     public function testGetDbh()
@@ -51,7 +49,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $conn = new Connection($config);
 
         $this->assertInstanceOf(DriverInterface::class, $conn->getDriver());
-        $this->assertInstanceOf(Drivers\Sqlite\Driver::class, $conn->getDriver());
+        $this->assertInstanceOf(\Runn\Dbal\Drivers\Sqlite\Driver::class, $conn->getDriver());
     }
 
     public function testQuote()
