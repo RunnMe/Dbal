@@ -46,12 +46,12 @@ interface DriverInterface
     /**
      * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @param \Runn\Dbal\Columns $columns
-     * @param array $indexes
+     * @param \Runn\Dbal\Columns|null $columns
+     * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
-     * @return mixed
+     * @return bool
      */
-    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool;
+    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool;
 
     /**
      * @param \Runn\Dbal\Connection $connection

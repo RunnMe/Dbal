@@ -5,9 +5,9 @@ namespace Runn\Dbal\Drivers\Sqlite;
 use Runn\Dbal\Column;
 use Runn\Dbal\Columns;
 use Runn\Dbal\Connection;
-use Runn\Dbal\DriverInterface;
 use Runn\Dbal\DriverQueryBuilderInterface;
 use Runn\Dbal\Index;
+use Runn\Dbal\Indexes;
 use Runn\Dbal\Query;
 
 /**
@@ -134,7 +134,15 @@ class Driver
         return $sql;
     }
 
-    public function createTable(Connection $connection, string $tableName, Columns $columns, $indexes = [], $extensions = []): bool
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param \Runn\Dbal\Columns|null $columns
+     * @param \Runn\Dbal\Indexes|null $indexes
+     * @param array $extensions
+     * @return bool
+     */
+    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool
     {
         return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
     }
