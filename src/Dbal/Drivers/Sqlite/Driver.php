@@ -36,6 +36,8 @@ class Driver
     {
         switch (get_class($column)) {
             case \Runn\Dbal\Columns\SerialColumn::class:
+                $ddl =  'INTEGER AUTOINCREMENT';
+                break;
             case \Runn\Dbal\Columns\PkColumn::class:
                 $ddl =  'INTEGER PRIMARY KEY AUTOINCREMENT';
                 break;

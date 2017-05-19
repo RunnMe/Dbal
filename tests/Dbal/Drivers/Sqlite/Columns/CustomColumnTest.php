@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Column;
-use Running\Dbal\DriverInterface;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Column;
+use Runn\Dbal\DriverInterface;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class CustomColumnTest extends \PHPUnit_Framework_TestCase
 {

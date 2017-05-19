@@ -1,9 +1,9 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\TimeColumn;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Columns\TimeColumn;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class TimeColumnTest extends \PHPUnit_Framework_TestCase
 {

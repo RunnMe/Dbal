@@ -1,9 +1,9 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\IntColumn;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Columns\IntColumn;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class IntColumnTest extends \PHPUnit_Framework_TestCase
 {

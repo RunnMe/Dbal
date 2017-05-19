@@ -1,10 +1,10 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\DateColumn;
-use Running\Dbal\Columns\DateTimeColumn;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Columns\DateColumn;
+use Runn\Dbal\Columns\DateTimeColumn;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class DateTimeColumnTest extends \PHPUnit_Framework_TestCase
 {

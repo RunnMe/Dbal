@@ -1,9 +1,9 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\CharColumn;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Columns\CharColumn;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class CharColumnTest extends \PHPUnit_Framework_TestCase
 {

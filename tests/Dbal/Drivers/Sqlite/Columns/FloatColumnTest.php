@@ -1,9 +1,9 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\FloatColumn;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Columns\FloatColumn;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class FloatColumnTest extends \PHPUnit_Framework_TestCase
 {

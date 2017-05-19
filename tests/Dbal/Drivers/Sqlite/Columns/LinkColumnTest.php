@@ -1,9 +1,9 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Sqlite\Columns;
+namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
-use Running\Dbal\Columns\LinkColumn;
-use Running\Dbal\Drivers\Sqlite\Driver;
+use Runn\Dbal\Columns\LinkColumn;
+use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class LinkColumnTest extends \PHPUnit_Framework_TestCase
 {
