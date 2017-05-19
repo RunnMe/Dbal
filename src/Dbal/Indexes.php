@@ -6,18 +6,18 @@ use Runn\Core\ObjectAsArrayInterface;
 use Runn\Core\TypedCollection;
 
 /**
- * Typed collection contains Column class objects
+ * Typed collection contains Index class objects
  *
- * Class Columns
+ * Class Indexes
  * @package Runn\Dbal
  */
-class Columns
+class Indexes
     extends TypedCollection
 {
 
     public static function getType()
     {
-        return Column::class;
+        return Index::class;
     }
 
     /**

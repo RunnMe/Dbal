@@ -12,6 +12,4 @@ namespace Runn\Dbal;
  */
 class Exception
     extends \Runn\Core\Exception
-{
-
-} 
+{}
