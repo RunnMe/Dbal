@@ -5,12 +5,11 @@ namespace Runn\tests\Dbal\Drivers\WithoutDsn;
 use Runn\Dbal\Column;
 use Runn\Dbal\Columns;
 use Runn\Dbal\Connection;
-use Runn\Dbal\DriverInterface;
 use Runn\Dbal\DriverQueryBuilderInterface;
 use Runn\Dbal\Index;
 
 class Driver
-    implements DriverInterface
+    extends \Runn\Dbal\Driver
 {
 
     /**

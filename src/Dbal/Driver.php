@@ -4,6 +4,13 @@ namespace Runn\Dbal;
 
 use Runn\Core\InstanceableInterface;
 
+/**
+ * Abstract DBAL driver class
+ * Contains InstanceableInterface implementation
+ *
+ * Class Driver
+ * @package Runn\Dbal
+ */
 abstract class Driver
     implements DriverInterface, InstanceableInterface
 {
