@@ -3,6 +3,8 @@
 namespace Runn\Dbal;
 
 /**
+ * DB Driver common interface
+ *
  * Interface DriverInterface
  * @package Runn\Dbal
  *
@@ -21,6 +23,12 @@ interface DriverInterface
      * @return string
      */
     public function getColumnDDL(Column $column): string;
+
+    /**
+     * @param \Runn\Dbal\Index $index
+     * @return string
+     */
+    public function getIndexDDL(Index $index): string;
 
     /**
      * @param \Runn\Dbal\Column $column
@@ -80,8 +88,6 @@ interface DriverInterface
     public function dropColumn(Connection $connection, $tableName, array $columns);
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName);
-
-    public function getIndexDDL(string $table, Index $index): string;
 
     public function addIndex(Connection $connection, $tableName, array $indexes);
 

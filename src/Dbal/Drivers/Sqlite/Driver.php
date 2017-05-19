@@ -20,11 +20,18 @@ class Driver
     extends \Runn\Dbal\Driver
 {
 
+    /**
+     * @return \Runn\Dbal\DriverQueryBuilderInterface
+     */
     public function getQueryBuilder(): DriverQueryBuilderInterface
     {
         return new QueryBuilder;
     }
 
+    /**
+     * @param \Runn\Dbal\Column $column
+     * @return string
+     */
     public function getColumnDDL(Column $column): string
     {
         switch (get_class($column)) {
@@ -67,17 +74,11 @@ class Driver
         return $ddl;
     }
 
-    public function processValueAfterLoad(Column $column, $value)
-    {
-        return $value;
-    }
-
-    public function processValueBeforeSave(Column $column, $value)
-    {
-        return $value;
-    }
-
-    public function getIndexDDL(string $table, Index $index): string
+    /**
+     * @param \Runn\Dbal\Index $index
+     * @return string
+     */
+    public function getIndexDDL(Index $index): string
     {
         switch (get_class($index)) {
             case \Runn\Dbal\Indexes\UniqueIndex::class:
@@ -90,6 +91,8 @@ class Driver
                 return $index->getIndexDdlByDriver($this);
         }
 
+        // @todo: check required "columns" and "table"
+
         $columns = [];
         $columnNames = [];
         foreach ($index->columns as $column) {
@@ -100,12 +103,21 @@ class Driver
         }
 
         $index->name  = $index->name ?? implode('_', $columnNames) . '_idx';
-        $index->table = $table;
 
-        $ddl .= $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($table);
+        $ddl .= $this->getQueryBuilder()->quoteName($index->name) . ' ON ' . $this->getQueryBuilder()->quoteName($index->table);
         $ddl .= ' (' . implode(', ', $columns) . ')';
 
         return $ddl;
+    }
+
+    public function processValueAfterLoad(Column $column, $value)
+    {
+        return $value;
+    }
+
+    public function processValueBeforeSave(Column $column, $value)
+    {
+        return $value;
     }
 
     public function existsTable(Connection $connection, string $tableName): bool

@@ -1,11 +1,11 @@
 <?php
 
-namespace Running\tests\Dbal\Drivers\Mysql\Dsn;
+namespace Runn\tests\Dbal\Drivers\Mysql\Dsn;
 
-use Running\Core\Config;
-use Running\Core\MultiException;
-use Running\Dbal\Exception;
-use Running\Dbal\Dsn;
+use Runn\Core\Config;
+use Runn\Core\Exceptions;
+use Runn\Dbal\Exception;
+use Runn\Dbal\Dsn;
 
 class DsnTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,9 +14,9 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $dsn = Dsn::instance(
-                new Config(['class' => \Running\Dbal\Drivers\Mysql\Dsn::class, 'foo' => 'bar', 'baz' => 42])
+                new Config(['class' => \Runn\Dbal\Drivers\Mysql\Dsn::class, 'foo' => 'bar', 'baz' => 42])
             );
-        } catch (MultiException $errors) {
+        } catch (Exceptions $errors) {
             $this->assertCount(1, $errors);
             $this->assertInstanceOf(Exception::class, $errors[0]);
             $this->assertEquals('"host" is not set in config', $errors[0]->getMessage());
@@ -28,7 +28,7 @@ class DsnTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $config = new Config([
-            'class' => \Running\Dbal\Drivers\Mysql\Dsn::class, 'host' => 'foo', 'dbname' => 'baz', 'port' => 1234, 'charset' => 'utf8', 'foo' => 'baz'
+            'class' => \Runn\Dbal\Drivers\Mysql\Dsn::class, 'host' => 'foo', 'dbname' => 'baz', 'port' => 1234, 'charset' => 'utf8', 'foo' => 'baz'
         ]);
         $dsn = Dsn::instance($config);
         $this->assertEquals('mysql:host=foo;port=1234;dbname=baz;charset=utf8', (string)$dsn);

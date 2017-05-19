@@ -17,13 +17,21 @@ class Driver
      * @return \Runn\Dbal\DriverQueryBuilderInterface
      */
     public function getQueryBuilder(): DriverQueryBuilderInterface
-    {}
+    {
+    }
 
     /**
      * @param \Runn\Dbal\Column $column
      * @return string
      */
     public function getColumnDDL(Column $column): string
+    {}
+
+    /**
+     * @param \Runn\Dbal\Index $index
+     * @return string
+     */
+    public function getIndexDDL(Index $index): string
     {}
 
     /**
@@ -93,9 +101,6 @@ class Driver
     {}
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName)
-    {}
-
-    public function getIndexDDL(string $table, Index $index): string
     {}
 
     public function addIndex(Connection $connection, $tableName, array $indexes)
