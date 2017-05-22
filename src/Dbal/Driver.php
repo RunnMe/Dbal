@@ -34,4 +34,16 @@ abstract class Driver
         return new $class(...$args);
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function existsTable(Connection $connection, string $tableName): bool
+    {
+        return (bool)$connection->query($this->getExistsTableQuery($tableName))->fetchScalar();
+    }
+
 }

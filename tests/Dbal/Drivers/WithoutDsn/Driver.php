@@ -8,6 +8,7 @@ use Runn\Dbal\Connection;
 use Runn\Dbal\DriverQueryBuilderInterface;
 use Runn\Dbal\Index;
 use Runn\Dbal\Indexes;
+use Runn\Dbal\Query;
 
 class Driver
     extends \Runn\Dbal\Driver
@@ -51,11 +52,10 @@ class Driver
     {}
 
     /**
-     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @return mixed
+     * @return \Runn\Dbal\Query
      */
-    public function existsTable(Connection $connection, string $tableName): bool
+    public function getExistsTableQuery(string $tableName): Query
     {}
 
     /**

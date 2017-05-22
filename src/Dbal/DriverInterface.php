@@ -45,11 +45,10 @@ interface DriverInterface
     public function processValueBeforeSave(Column $column, $value);
 
     /**
-     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @return mixed
+     * @return \Runn\Dbal\Query
      */
-    public function existsTable(Connection $connection, string $tableName): bool;
+    public function getExistsTableQuery(string $tableName): Query;
 
     /**
      * @param \Runn\Dbal\Connection $connection

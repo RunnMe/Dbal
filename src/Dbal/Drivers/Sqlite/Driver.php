@@ -122,13 +122,16 @@ class Driver
         return $value;
     }
 
-    public function existsTable(Connection $connection, string $tableName): bool
+    /**
+     * @param string $tableName
+     * @return \Runn\Dbal\Query
+     */
+    public function getExistsTableQuery(string $tableName): Query
     {
-        $query = (new Query())->select('count(*)')->from('sqlite_master')->where('type=:type AND name=:name')->params([
+        return (new Query())->select('count(*)>0')->from('sqlite_master')->where('type=:type AND name=:name')->params([
             ':type'=>'table',
             ':name'=>$tableName,
         ]);
-        return 0 != $connection->query($query)->fetchScalar();
     }
 
     protected function createTableDdl(string $tableName, Columns $columns, $indexes = [], $extensions = [])
