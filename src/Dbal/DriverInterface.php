@@ -51,14 +51,13 @@ interface DriverInterface
     public function getExistsTableQuery(string $tableName): Query;
 
     /**
-     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param \Runn\Dbal\Columns|null $columns
      * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
-     * @return bool
+     * @return \Runn\Dbal\Query
      */
-    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool;
+    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): Query;
 
     /**
      * @param \Runn\Dbal\Connection $connection

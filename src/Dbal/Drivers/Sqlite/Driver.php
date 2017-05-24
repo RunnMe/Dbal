@@ -134,7 +134,14 @@ class Driver
         ]);
     }
 
-    protected function createTableDdl(string $tableName, Columns $columns, $indexes = [], $extensions = [])
+    /**
+     * @param string $tableName
+     * @param \Runn\Dbal\Columns|null $columns
+     * @param \Runn\Dbal\Indexes|null $indexes
+     * @param array $extensions
+     * @return \Runn\Dbal\Query
+     */
+    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): Query
     {
         $sql = 'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . "\n";
 
@@ -148,20 +155,7 @@ class Driver
             "(\n" .
                 implode(",\n", array_unique($columnsDDL)) .
             "\n)";
-        return $sql;
-    }
-
-    /**
-     * @param \Runn\Dbal\Connection $connection
-     * @param string $tableName
-     * @param \Runn\Dbal\Columns|null $columns
-     * @param \Runn\Dbal\Indexes|null $indexes
-     * @param array $extensions
-     * @return bool
-     */
-    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool
-    {
-        return $connection->execute(new Query($this->createTableDdl($tableName, $columns)));
+        return new Query($sql);
     }
 
     public function renameTable(Connection $connection, string $oldTableName, string $newTableName): bool

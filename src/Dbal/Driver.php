@@ -46,4 +46,19 @@ abstract class Driver
         return (bool)$connection->query($this->getExistsTableQuery($tableName))->fetchScalar();
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param \Runn\Dbal\Columns|null $columns
+     * @param \Runn\Dbal\Indexes|null $indexes
+     * @param array $extensions
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool
+    {
+        return $connection->execute($this->getCreateTableQuery($tableName, $columns, $indexes, $extensions));
+    }
+
 }

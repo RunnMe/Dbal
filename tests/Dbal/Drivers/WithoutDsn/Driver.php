@@ -18,8 +18,7 @@ class Driver
      * @return \Runn\Dbal\DriverQueryBuilderInterface
      */
     public function getQueryBuilder(): DriverQueryBuilderInterface
-    {
-    }
+    {}
 
     /**
      * @param \Runn\Dbal\Column $column
@@ -59,14 +58,13 @@ class Driver
     {}
 
     /**
-     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param \Runn\Dbal\Columns|null $columns
      * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
-     * @return bool
+     * @return \Runn\Dbal\Query
      */
-    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool
+    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): Query
     {}
 
     /**
