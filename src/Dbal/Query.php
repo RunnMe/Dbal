@@ -2,6 +2,7 @@
 
 namespace Runn\Dbal;
 
+use Dbal\ExecutableInterface;
 use Runn\Core\ArrayCastingInterface;
 use Runn\Core\Std;
 
@@ -32,6 +33,7 @@ use Runn\Core\Std;
  */
 class Query
     extends Std
+    implements ExecutableInterface
 {
 
     /**
