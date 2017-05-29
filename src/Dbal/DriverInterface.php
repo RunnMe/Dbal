@@ -60,26 +60,23 @@ interface DriverInterface
     public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): Query;
 
     /**
-     * @param \Runn\Dbal\Connection $connection
-     * @param string $tableName
+     * @param string $tableOldName
      * @param string $tableNewName
-     * @return bool
+     * @return \Runn\Dbal\Query
      */
-    public function renameTable(Connection $connection, string $tableName, string $tableNewName): bool;
+    public function getRenameTableQuery(string $tableOldName, string $tableNewName): Query;
 
     /**
-     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @return bool
+     * @return \Runn\Dbal\Query
      */
-    public function truncateTable(Connection $connection, string $tableName): bool;
+    public function getTruncateTableQuery(string $tableName): Query;
 
     /**
-     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @return bool
+     * @return \Runn\Dbal\Query
      */
-    public function dropTable(Connection $connection, string $tableName): bool;
+    public function getDropTableQuery(string $tableName): Query;
 
     public function addColumn(Connection $connection, $tableName, array $columns);
 

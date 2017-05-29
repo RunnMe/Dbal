@@ -158,22 +158,32 @@ class Driver
         return new Query($sql);
     }
 
-    public function renameTable(Connection $connection, string $oldTableName, string $newTableName): bool
+    /**
+     * @param string $tableOldName
+     * @param string $tableNewName
+     * @return \Runn\Dbal\Query
+     */
+    public function getRenameTableQuery(string $tableOldName, string $tableNewName): Query
     {
-        $query = new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($oldTableName) . ' RENAME TO ' . $this->getQueryBuilder()->quoteName($newTableName));
-        return $connection->execute($query);
+        return new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableOldName) . ' RENAME TO ' . $this->getQueryBuilder()->quoteName($tableNewName));
     }
 
-    public function truncateTable(Connection $connection, string $tableName): bool
+    /**
+     * @param string $tableName
+     * @return \Runn\Dbal\Query
+     */
+    public function getTruncateTableQuery(string $tableName): Query
     {
-        $query = new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName));
-        return $connection->execute($query);
+        return new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName));
     }
 
-    public function dropTable(Connection $connection, string $tableName): bool
+    /**
+     * @param string $tableName
+     * @return \Runn\Dbal\Query
+     */
+    public function getDropTableQuery(string $tableName): Query
     {
-        $query = new Query('DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName));
-        return $connection->execute($query);
+        return new Query('DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName));
     }
 
     public function addColumn(Connection $connection, $tableName, array $columns)

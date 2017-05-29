@@ -61,4 +61,41 @@ abstract class Driver
         return $connection->execute($this->getCreateTableQuery($tableName, $columns, $indexes, $extensions));
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableOldName
+     * @param string $tableNewName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function renameTable(Connection $connection, string $tableOldName, string $tableNewName): bool
+    {
+        return $connection->execute($this->getRenameTableQuery($tableOldName, $tableNewName));
+    }
+
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function truncateTable(Connection $connection, string $tableName): bool
+    {
+        return $connection->execute($this->getTruncateTableQuery($tableName));
+    }
+
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function dropTable(Connection $connection, string $tableName): bool
+    {
+        return $connection->execute($this->getDropTableQuery($tableName));
+    }
+
 }
