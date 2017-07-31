@@ -2,9 +2,9 @@
 
 namespace Runn\tests\Dbal\Queries;
 
-use Dbal\Queries;
 use Runn\Core\CollectionInterface;
 use Runn\Core\TypedCollectionInterface;
+use Runn\Dbal\Queries;
 use Runn\Dbal\Query;
 
 class QueriesTest extends \PHPUnit_Framework_TestCase
