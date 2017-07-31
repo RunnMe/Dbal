@@ -67,6 +67,11 @@ abstract class Dsn
                 throw new Exception('This driver has not DSN class');
             }
 
+        } elseif
+        (get_called_class() != self::class) {
+
+            $className = get_called_class();
+
         } else {
             throw new Exception('Can not suggest DSN class name');
         }

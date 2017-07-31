@@ -24,6 +24,23 @@ namespace Runn\tests\Dbal\Dsn {
 
         public function testInstanceValidDsnClass()
         {
+            $config = new Config(['foo' => 'test', 'bar' => 'bla']);
+            $dsn = \Runn\Dbal\Drivers\Test\Dsn::instance($config);
+
+            $this->assertInstanceOf(\Runn\Dbal\Drivers\Test\Dsn::class, $dsn);
+            $this->assertInstanceOf(Dsn::class, $dsn);
+
+            $reflector = new \ReflectionObject($dsn);
+            $property = $reflector->getProperty('config');
+            $property->setAccessible(true);
+            $this->assertEquals(
+                $property->getValue($dsn),
+                $config
+            );
+        }
+
+        public function testInstanceValidDsnClassInConfig()
+        {
             $config = new Config(['class' => \Runn\Dbal\Drivers\Test\Dsn::class, 'foo' => 'test', 'bar' => 'bla']);
             $dsn = Dsn::instance($config);
 
