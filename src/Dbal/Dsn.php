@@ -3,6 +3,7 @@
 namespace Runn\Dbal;
 
 use Runn\Core\Config;
+use Runn\Core\ConfigAwareInterface;
 use Runn\Core\ConfigAwareTrait;
 use Runn\Core\Exceptions;
 use Runn\Core\InstanceableByConfigInterface;
@@ -14,7 +15,7 @@ use Runn\Core\InstanceableByConfigInterface;
  * @package Runn\Dbal
  */
 abstract class Dsn
-    implements InstanceableByConfigInterface
+    implements ConfigAwareInterface, InstanceableByConfigInterface
 {
 
     /*protected */const REQUIRED = ['host', 'dbname'];
