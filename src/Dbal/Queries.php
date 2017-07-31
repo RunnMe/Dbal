@@ -4,6 +4,7 @@ namespace Dbal;
 
 use Runn\Core\TypedCollectionInterface;
 use Runn\Core\TypedCollectionTrait;
+use Runn\Dbal\ExecutableInterface;
 use Runn\Dbal\Query;
 
 /**

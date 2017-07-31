@@ -2,7 +2,6 @@
 
 namespace Runn\Dbal;
 
-use Dbal\ExecutableInterface;
 use Runn\Core\ArrayCastingInterface;
 use Runn\Core\Std;
 

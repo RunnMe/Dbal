@@ -1,6 +1,6 @@
 <?php
 
-namespace Dbal;
+namespace Runn\Dbal;
 
 /**
  * Common interface for single Query and Queries (query typed collection)
