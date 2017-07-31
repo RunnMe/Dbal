@@ -19,14 +19,12 @@ abstract class Column
     /**
      * You need to realize this method for you own custom column types!
      *
-     * @codeCoverageIgnore
-     *
      * @param DriverInterface $driver
      * @return string
      */
-    public function getColumnDdlByDriver(DriverInterface $driver)
+    public function getColumnDdlByDriver(DriverInterface $driver): string
     {
-        return null;
+        throw new \BadMethodCallException;
     }
 
     /**

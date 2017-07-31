@@ -8,13 +8,22 @@ use Runn\Dbal\Drivers\Sqlite\Driver;
 
 class CustomColumnTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testUnoverridedMethod()
+    {
+        $driver = new Driver();
+        $column = new class extends Column {};
+        $driver->getColumnDDL($column);
+    }
 
     public function testColumnDDL()
     {
         $driver = new Driver();
 
         $column = new class extends Column {
-            public function getColumnDdlByDriver(DriverInterface $driver)
+            public function getColumnDdlByDriver(DriverInterface $driver): string
             {
                 return 'CUSTOM_COLUMN';
             }
@@ -22,7 +31,7 @@ class CustomColumnTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('CUSTOM_COLUMN', $driver->getColumnDDL($column));
 
         $column = new class (['default' => null]) extends Column {
-            public function getColumnDdlByDriver(DriverInterface $driver)
+            public function getColumnDdlByDriver(DriverInterface $driver): string
             {
                 return 'CUSTOM_COLUMN' . ( isset($this->default) ? ' DEFAULT ' . (null === $this->default ? 'NULL' : "'" . $this->default . "'") : null );
             }
@@ -30,7 +39,7 @@ class CustomColumnTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('CUSTOM_COLUMN DEFAULT NULL', $driver->getColumnDDL($column));
 
         $column = new class (['default' => 'foo']) extends Column {
-            public function getColumnDdlByDriver(DriverInterface $driver)
+            public function getColumnDdlByDriver(DriverInterface $driver): string
             {
                 return 'CUSTOM_COLUMN' . ( isset($this->default) ? ' DEFAULT ' . (null === $this->default ? 'NULL' : "'" . $this->default . "'") : null );
             }
