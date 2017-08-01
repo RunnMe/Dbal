@@ -2,22 +2,20 @@
 
 namespace Runn\Dbal;
 
-use Runn\Core\TypedCollectionInterface;
-use Runn\Core\TypedCollectionTrait;
+use Runn\Core\TypedCollection;
 
 /**
  * Queries collection
  * Can be executed
- * @todo: transaction(true)
+ * @todo: transaction(=false)
  *
  * Class Queries
  * @package Dbal
  */
 class Queries
-    implements TypedCollectionInterface, ExecutableInterface
+    extends TypedCollection
+    implements ExecutableInterface
 {
-
-    use TypedCollectionTrait;
 
     public static function getType()
     {

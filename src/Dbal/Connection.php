@@ -99,7 +99,7 @@ class Connection
      * @param iterable $params
      * @return \Runn\Dbal\Statement
      */
-    public function query($query, /*iterable */$params = [])
+    public function query(Query $query, /*iterable */$params = [])
     {
         $statement = $this->prepare($query)->bindQueryParams($query);
         foreach ($params as $name => $value) {

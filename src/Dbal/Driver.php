@@ -19,6 +19,8 @@ abstract class Driver
      * @param string $class
      * @return static
      * @throws \Runn\Dbal\Exception
+     *
+     * @todo: wrong arguments list! either $class is set or all args are not required?
      */
     public static function instance($class = null, ...$args)
     {
