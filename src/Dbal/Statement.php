@@ -13,6 +13,20 @@ class Statement
 {
 
     /**
+     * @param \Runn\Dbal\Query $query
+     * @return \Runn\Dbal\Statement
+     */
+    public function bindQueryParams(Query $query)
+    {
+        foreach ($query->getParams() as $param) {
+            if (isset($param['name'], $param['value'])) {
+                $this->bindValue($param['name'], $param['value'], $param['type'] ?? Dbh::DEFAULT_PARAM_TYPE);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Returns one (first) scalar column from the result
      * @return string
      */

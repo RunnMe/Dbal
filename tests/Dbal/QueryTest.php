@@ -3,6 +3,7 @@
 namespace Runn\tests\Dbal\Query;
 
 use Runn\Core\Std;
+use Runn\Dbal\Dbh;
 use Runn\Dbal\Query;
 
 class QueryTest extends \PHPUnit_Framework_TestCase
@@ -483,41 +484,6 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a' => 1, 'b' => 2], $query->values);
     }
 
-    public function testParam()
-    {
-        $query = new Query();
-        $q = $query->select()->from('foo')->where('id=:id')->param('id', 1);
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['foo'], $query->tables);
-        $this->assertEquals('id=:id', $query->where);
-        $this->assertEquals(['id' => 1], $query->params);
-
-        $q = $query->param(':bar', 'baz');
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['foo'], $query->tables);
-        $this->assertEquals('id=:id', $query->where);
-        $this->assertEquals(['id' => 1, ':bar' => 'baz'], $query->params);
-    }
-
-    public function testParams()
-    {
-        $query = new Query();
-        $q = $query->select()->from('foo')->where('id=:id')->params(['id' => 1, ':bar' => 'baz']);
-
-        $this->assertInstanceOf(Query::class, $q);
-
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['foo'], $query->tables);
-        $this->assertEquals('id=:id', $query->where);
-        $this->assertEquals(['id' => 1, ':bar' => 'baz'], $query->params);
-    }
-
     public function testFromString()
     {
         $query = new Query('SELECT * FROM foo WHERE bar=42');
@@ -564,7 +530,10 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, $query->offset);
         $this->assertEquals(10, $query->limit);
         $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
-        $this->assertEquals([':id' => 11, ':name' => 'Test1'], $query->params);
+        $this->assertEquals([
+            ['name' => ':id', 'value' => 11, 'type' => Dbh::DEFAULT_PARAM_TYPE],
+            ['name' => ':name', 'value' => 'Test1', 'type' => Dbh::DEFAULT_PARAM_TYPE],
+        ], $query->params);
         $this->assertEquals('val1', $query->attr1);
 
         $query = new Query([
@@ -618,7 +587,10 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, $query->offset);
         $this->assertEquals(10, $query->limit);
         $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
-        $this->assertEquals([':id' => 11, ':name' => 'Test1'], $query->params);
+        $this->assertEquals([
+            ['name' => ':id', 'value' => 11, 'type' => Dbh::DEFAULT_PARAM_TYPE],
+            ['name' => ':name', 'value' => 'Test1', 'type' => Dbh::DEFAULT_PARAM_TYPE],
+        ], $query->params);
         $this->assertEquals('val1', $query->attr1);
 
         $options = new Std([

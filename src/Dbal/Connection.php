@@ -59,7 +59,7 @@ class Connection
      * @param int $parameter_type
      * @return string
      */
-    public function quote(string $string = null, $parameter_type = Dbh::PARAM_STR)
+    public function quote(string $string = null, $parameter_type = Dbh::DEFAULT_PARAM_TYPE)
     {
         return $this->dbh->quote($string, $parameter_type);
     }
@@ -82,26 +82,30 @@ class Connection
 
     /**
      * @param \Runn\Dbal\Query $query
-     * @param array $params
+     * @param iterable $params
      * @return bool
      */
-    public function execute(Query $query, array $params = [])
+    public function execute(Query $query, /*iterable */$params = [])
     {
-        $statement = $this->prepare($query);
-        $params = array_merge($query->getParams(), $params);
-        return $statement->execute($params);
+        $statement = $this->prepare($query)->bindQueryParams($query);
+        foreach ($params as $name => $value) {
+            $statement->bindValue($name, $value);
+        }
+        return $statement->execute();
     }
 
     /**
      * @param \Runn\Dbal\Query $query
-     * @param array $params
+     * @param iterable $params
      * @return \Runn\Dbal\Statement
      */
-    public function query($query, array $params = [])
+    public function query($query, /*iterable */$params = [])
     {
-        $statement = $this->prepare($query);
-        $params = array_merge($query->getParams(), $params);
-        $statement->execute($params);
+        $statement = $this->prepare($query)->bindQueryParams($query);
+        foreach ($params as $name => $value) {
+            $statement->bindValue($name, $value);
+        }
+        $statement->execute();
         return $statement;
     }
 

@@ -28,7 +28,7 @@ use Runn\Core\Std;
  * @property int $limit
  *
  * @property array $values
- * @property array $params
+ * @property array $params Bound parameters {"name", "value", "type"}
  */
 class Query
     extends Std
@@ -411,25 +411,33 @@ class Query
     }
 
     /**
-     * Sets one bind parameter
-     * @param string $key
+     * Binds a value to a parameter
+     * @param string $parameter
      * @param mixed $value
      * @return $this
      */
-    public function param($key, $value)
+    public function param($parameter, $value, $type = Dbh::DEFAULT_PARAM_TYPE)
     {
-        $this->params = array_merge($this->params ?? [], [$key => $value]);
+        $this->params = array_merge($this->params ?? [], [['name' => $parameter, 'value' => $value, 'type' => $type]]);
         return $this;
     }
 
     /**
      * Sets all query's bind parameters
-     * @param array $values
+     * @param iterable $params
      * @return $this
      */
-    public function params(array $values = [])
+    public function params(/*iterable */$params = [])
     {
-        $this->params = $values;
+        $this->params = [];
+        foreach ($params as $name => $value) {
+            if (is_array($value)) {
+                $this->params = array_merge($this->params ?? [], [$value]);
+            } else {
+                $this->param($name, $value);
+            }
+
+        }
         return $this;
     }
 
