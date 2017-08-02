@@ -114,11 +114,21 @@ class Driver
         return $ddl;
     }
 
+    /**
+     * @param \Runn\Dbal\Column $column
+     * @param mixed $value
+     * @return mixed
+     */
     public function processValueAfterLoad(Column $column, $value)
     {
         return $value;
     }
 
+    /**
+     * @param \Runn\Dbal\Column $column
+     * @param mixed $value
+     * @return mixed
+     */
     public function processValueBeforeSave(Column $column, $value)
     {
         return $value;
