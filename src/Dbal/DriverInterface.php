@@ -85,6 +85,13 @@ interface DriverInterface
      */
     public function getAddColumnQuery(string $tableName, Column $column): ExecutableInterface;
 
+    /**
+     * @param string $tableName
+     * @param \Runn\Dbal\Columns $columns
+     * @return \Runn\Dbal\ExecutableInterface
+     */
+    public function getAddColumnsQuery(string $tableName, Columns $columns): ExecutableInterface;
+
     public function dropColumn(Connection $connection, $tableName, array $columns);
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName);

@@ -9,6 +9,7 @@ use Runn\Dbal\DriverQueryBuilderInterface;
 use Runn\Dbal\ExecutableInterface;
 use Runn\Dbal\Index;
 use Runn\Dbal\Indexes;
+use Runn\Dbal\Queries;
 use Runn\Dbal\Query;
 
 /**
@@ -196,6 +197,23 @@ class Driver
     {
         $columnDDL = $this->getQueryBuilder()->quoteName($column->name) . ' ' . $this->getColumnDDL($column);
         return new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . ' ADD COLUMN ' . $columnDDL);
+    }
+
+    /**
+     * @param string $tableName
+     * @param \Runn\Dbal\Columns $columns
+     * @return \Runn\Dbal\ExecutableInterface
+     */
+    public function getAddColumnsQuery(string $tableName, Columns $columns): ExecutableInterface
+    {
+        $tableName = $this->getQueryBuilder()->quoteName($tableName);
+        $ret = new Queries;
+        foreach ($columns as $name => $column) {
+            $name = $column->name ?? $name;
+            $columnDDL = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
+            $ret[] = new Query('ALTER TABLE ' . $tableName . ' ADD COLUMN ' . $columnDDL);
+        }
+        return $ret;
     }
 
     public function dropColumn(Connection $connection, $tableName, array $columns)

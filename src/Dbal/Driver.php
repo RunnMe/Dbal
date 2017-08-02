@@ -113,4 +113,17 @@ abstract class Driver
         return $connection->execute($this->getAddColumnQuery($tableName, $column));
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param \Runn\Dbal\Columns $columns
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function addColumns(Connection $connection, string $tableName, Columns $columns): bool
+    {
+        return $connection->execute($this->getAddColumnsQuery($tableName, $columns));
+    }
+
 }
