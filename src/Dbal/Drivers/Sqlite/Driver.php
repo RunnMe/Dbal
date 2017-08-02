@@ -170,6 +170,10 @@ class Driver
         $columnsDDL = [];
 
         foreach ($columns as $name => $column) {
+            $name = $column->name ?? $name;
+            if (empty($name) || is_numeric($name)) {
+                throw new Exception('Empty column name');
+            }
             $columnsDDL[] = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
         }
 
@@ -230,6 +234,9 @@ class Driver
         $ret = new Queries;
         foreach ($columns as $name => $column) {
             $name = $column->name ?? $name;
+            if (empty($name) || is_numeric($name)) {
+                throw new Exception('Empty column name');
+            }
             $columnDDL = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
             $ret[] = new Query('ALTER TABLE ' . $tableName . ' ADD COLUMN ' . $columnDDL);
         }

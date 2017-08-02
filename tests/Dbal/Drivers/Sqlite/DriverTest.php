@@ -76,12 +76,25 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         $driver->getCreateTableQuery('foo', new Columns());
     }
 
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty column name
+     */
+    public function testGetCreateTableQueryEmptyColumnName()
+    {
+        $driver = new Driver();
+        $driver->getCreateTableQuery('foo', new Columns([
+            new Columns\IntColumn,
+        ]));
+    }
+
     public function testGetCreateTableQuery()
     {
         $driver = new Driver();
         $query = $driver->getCreateTableQuery('test', new Columns([
             'foo' => new Columns\SerialColumn(),
             'bar' => new Columns\StringColumn(['default' => 'oops']),
+            new Columns\IntColumn(['name' => 'baz', 'default' => 0]),
         ]));
 
         $this->assertInstanceOf(ExecutableInterface::class, $query);
@@ -89,7 +102,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($query->isString());
         $this->assertSame(
-            "CREATE TABLE `test`\n(\n`foo` INTEGER AUTOINCREMENT,\n`bar` TEXT DEFAULT 'oops'\n)",
+            "CREATE TABLE `test`\n(\n`foo` INTEGER AUTOINCREMENT,\n`bar` TEXT DEFAULT 'oops',\n`baz` INTEGER DEFAULT 0\n)",
             $query->string
         );
     }
