@@ -81,17 +81,26 @@ class Connection
     }
 
     /**
-     * @param \Runn\Dbal\Query $query
+     * @param \Runn\Dbal\ExecutableInterface $exec
      * @param iterable $params
      * @return bool
      */
-    public function execute(Query $query, /*iterable */$params = [])
+    public function execute(ExecutableInterface $exec, /*iterable */$params = [])
     {
-        $statement = $this->prepare($query)->bindQueryParams($query);
-        foreach ($params as $name => $value) {
-            $statement->bindValue($name, $value);
+        if ($exec instanceof Query) {
+            $exec = new Queries([$exec]);
         }
-        return $statement->execute();
+        foreach ($exec as $query) {
+            $statement = $this->prepare($query)->bindQueryParams($query);
+            foreach ($params as $name => $value) {
+                $statement->bindValue($name, $value);
+            }
+            $res = $statement->execute();
+            if (false === $res) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

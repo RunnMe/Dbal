@@ -6,7 +6,7 @@ use Runn\Core\TypedCollection;
 
 /**
  * Queries collection
- * Can be executed
+ * Can be executed (every query in collection)
  * @todo: transaction(=false)
  *
  * Class Queries
