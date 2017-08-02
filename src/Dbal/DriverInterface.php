@@ -57,26 +57,26 @@ interface DriverInterface
      * @param array $extensions
      * @return \Runn\Dbal\Query
      */
-    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): Query;
+    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface;
 
     /**
      * @param string $tableOldName
      * @param string $tableNewName
      * @return \Runn\Dbal\Query
      */
-    public function getRenameTableQuery(string $tableOldName, string $tableNewName): Query;
+    public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface;
 
     /**
      * @param string $tableName
      * @return \Runn\Dbal\Query
      */
-    public function getTruncateTableQuery(string $tableName): Query;
+    public function getTruncateTableQuery(string $tableName): ExecutableInterface;
 
     /**
      * @param string $tableName
      * @return \Runn\Dbal\Query
      */
-    public function getDropTableQuery(string $tableName): Query;
+    public function getDropTableQuery(string $tableName): ExecutableInterface;
 
     public function addColumn(Connection $connection, $tableName, array $columns);
 

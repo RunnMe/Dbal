@@ -6,6 +6,7 @@ use Runn\Dbal\Column;
 use Runn\Dbal\Columns;
 use Runn\Dbal\Connection;
 use Runn\Dbal\DriverQueryBuilderInterface;
+use Runn\Dbal\ExecutableInterface;
 use Runn\Dbal\Index;
 use Runn\Dbal\Indexes;
 use Runn\Dbal\Query;
@@ -141,7 +142,7 @@ class Driver
      * @param array $extensions
      * @return \Runn\Dbal\Query
      */
-    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): Query
+    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface
     {
         $sql = 'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . "\n";
 
@@ -163,7 +164,7 @@ class Driver
      * @param string $tableNewName
      * @return \Runn\Dbal\Query
      */
-    public function getRenameTableQuery(string $tableOldName, string $tableNewName): Query
+    public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface
     {
         return new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableOldName) . ' RENAME TO ' . $this->getQueryBuilder()->quoteName($tableNewName));
     }
@@ -172,7 +173,7 @@ class Driver
      * @param string $tableName
      * @return \Runn\Dbal\Query
      */
-    public function getTruncateTableQuery(string $tableName): Query
+    public function getTruncateTableQuery(string $tableName): ExecutableInterface
     {
         return new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName));
     }
@@ -181,7 +182,7 @@ class Driver
      * @param string $tableName
      * @return \Runn\Dbal\Query
      */
-    public function getDropTableQuery(string $tableName): Query
+    public function getDropTableQuery(string $tableName): ExecutableInterface
     {
         return new Query('DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName));
     }
