@@ -100,4 +100,17 @@ abstract class Driver
         return $connection->execute($this->getDropTableQuery($tableName));
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param \Runn\Dbal\Column $column
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function addColumn(Connection $connection, string $tableName, Column $column): bool
+    {
+        return $connection->execute($this->getAddColumnQuery($tableName, $column));
+    }
+
 }

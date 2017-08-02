@@ -10,6 +10,7 @@ use Runn\Core\Std;
  * Class Column
  * @package Runn\Dbal
  *
+ * @property mixed $name
  * @property mixed $default
  */
 abstract class Column

@@ -63,7 +63,7 @@ class Driver
      * @param \Runn\Dbal\Columns|null $columns
      * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface
     {}
@@ -71,26 +71,31 @@ class Driver
     /**
      * @param string $tableOldName
      * @param string $tableNewName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface
     {}
 
     /**
      * @param string $tableName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getTruncateTableQuery(string $tableName): ExecutableInterface
     {}
 
     /**
      * @param string $tableName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getDropTableQuery(string $tableName): ExecutableInterface
     {}
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    /**
+     * @param string $tableName
+     * @param \Runn\Dbal\Column $column
+     * @return \Runn\Dbal\ExecutableInterface
+     */
+    public function getAddColumnQuery(string $tableName, Column $column): ExecutableInterface
     {}
 
     public function dropColumn(Connection $connection, $tableName, array $columns)

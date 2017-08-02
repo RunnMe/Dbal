@@ -130,8 +130,8 @@ class Driver
     public function getExistsTableQuery(string $tableName): Query
     {
         return (new Query())->select('count(*)>0')->from('sqlite_master')->where('type=:type AND name=:name')->params([
-            ':type'=>'table',
-            ':name'=>$tableName,
+            ':type' => 'table',
+            ':name' => $tableName,
         ]);
     }
 
@@ -140,7 +140,7 @@ class Driver
      * @param \Runn\Dbal\Columns|null $columns
      * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface
     {
@@ -162,7 +162,7 @@ class Driver
     /**
      * @param string $tableOldName
      * @param string $tableNewName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface
     {
@@ -171,7 +171,7 @@ class Driver
 
     /**
      * @param string $tableName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getTruncateTableQuery(string $tableName): ExecutableInterface
     {
@@ -180,16 +180,22 @@ class Driver
 
     /**
      * @param string $tableName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\ExecutableInterface
      */
     public function getDropTableQuery(string $tableName): ExecutableInterface
     {
         return new Query('DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName));
     }
 
-    public function addColumn(Connection $connection, $tableName, array $columns)
+    /**
+     * @param string $tableName
+     * @param \Runn\Dbal\Column $column
+     * @return \Runn\Dbal\ExecutableInterface
+     */
+    public function getAddColumnQuery(string $tableName, Column $column): ExecutableInterface
     {
-        // TODO: Implement addColumn() method.
+        $columnDDL = $this->getQueryBuilder()->quoteName($column->name) . ' ' . $this->getColumnDDL($column);
+        return new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . ' ADD COLUMN ' . $columnDDL);
     }
 
     public function dropColumn(Connection $connection, $tableName, array $columns)
