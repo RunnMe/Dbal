@@ -6,6 +6,7 @@ use Runn\Dbal\Column;
 use Runn\Dbal\Columns;
 use Runn\Dbal\Connection;
 use Runn\Dbal\DriverQueryBuilderInterface;
+use Runn\Dbal\Drivers\Exception;
 use Runn\Dbal\ExecutableInterface;
 use Runn\Dbal\Index;
 use Runn\Dbal\Indexes;
@@ -152,9 +153,18 @@ class Driver
      * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
      * @return \Runn\Dbal\ExecutableInterface
+     * @throws \Runn\Dbal\Drivers\Exception
      */
     public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface
     {
+        if (empty($tableName)) {
+            throw new Exception('Empty table name');
+        }
+
+        if (null == $columns || $columns->empty()) {
+            throw new Exception('Empty columns list');
+        }
+
         $sql = 'CREATE TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . "\n";
 
         $columnsDDL = [];
