@@ -215,8 +215,8 @@ class Driver
         }
 
         return new Queries([
-             new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName)),
-            (new Query('UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = :name'))->param(':name', $tableName),
+            (new Query)->delete()->from($tableName),
+            (new Query)->update('SQLITE_SEQUENCE')->set('seq', 0)->where('name=:name')->param(':name', $tableName),
         ]);
     }
 

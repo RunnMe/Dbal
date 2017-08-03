@@ -54,6 +54,20 @@ class Query
             $this->action = $data['action'];
             unset($data['action']);
         }
+
+        if (isset($data['select'])) {
+            $this->select($data['select']);
+            unset($data['select']);
+        }
+        if (isset($data['insert'])) {
+            $this->insert($data['insert']);
+            unset($data['insert']);
+        }
+        if (isset($data['update'])) {
+            $this->update($data['update']);
+            unset($data['update']);
+        }
+
         if (isset($data['columns'])) {
             $this->columns($data['columns']);
             unset($data['columns']);
@@ -77,10 +91,6 @@ class Query
         if (isset($data['order'])) {
             $this->order($data['order']);
             unset($data['order']);
-        }
-        if (isset($data['insert'])) {
-            $this->insert($data['insert']);
-            unset($data['values']);
         }
         if (isset($data['values'])) {
             $this->insert($data['values']);
@@ -395,6 +405,23 @@ class Query
     public function value($key, $value)
     {
         $this->values = array_merge($this->values ?? [], [$this->trimName($key) => $value]);
+        return $this;
+    }
+
+    /**
+     * Add query's value (or all values) for update
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function set($key, $value = null)
+    {
+        if (is_array($key)) {
+            $values = array_combine(array_map([$this, 'trimName'], array_keys($key)), array_values($key));
+            $this->values = $values;
+            return $this;
+        }
+        $this->value($key, $value);
         return $this;
     }
 

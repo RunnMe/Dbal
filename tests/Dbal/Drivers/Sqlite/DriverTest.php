@@ -156,21 +156,23 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetTruncateTableQuery()
     {
         $driver = new Driver();
+        $builder = $driver->getQueryBuilder();
+
         $query = $driver->getTruncateTableQuery('foo');
 
         $this->assertInstanceOf(ExecutableInterface::class, $query);
         $this->assertInstanceOf(Queries::class, $query);
 
-        $this->assertTrue($query[0]->isString());
+        $this->assertFalse($query[0]->isString());
         $this->assertSame(
             "DELETE FROM `foo`",
-            $query[0]->string
+            $builder->makeQueryString($query[0])
         );
 
-        $this->assertTrue($query[1]->isString());
+        $this->assertFalse($query[1]->isString());
         $this->assertSame(
-            "UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = :name",
-            $query[1]->string
+            "UPDATE `SQLITE_SEQUENCE`\nSET `seq`=0\nWHERE name=:name",
+            $builder->makeQueryString($query[1])
         );
         $this->assertSame(
             [['name' => ':name', 'value' => 'foo', 'type' => Dbh::PARAM_STR]],
