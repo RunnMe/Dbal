@@ -7,61 +7,132 @@ use Runn\Dbal\Query;
 class QuerySelectTest extends \PHPUnit_Framework_TestCase
 {
 
+    protected function getExpectationsForPrepareNames()
+    {
+        return [
+            [
+                'args' => [],
+                'result' => []
+            ],
+            [
+                'args' => ['foo'],
+                'result' => ['foo']
+            ],
+            [
+                'args' => ['`foo`'],
+                'result' => ['foo']
+            ],
+            [
+                'args' => ['`foo` AS `bar`'],
+                'result' => ['`foo` AS `bar`']
+            ],
+            [
+                'args' => ['foo1, bar1'],
+                'result' => ['foo1', 'bar1']
+            ],
+            [
+                'args' => ['foo2', 'bar2'],
+                'result' => ['foo2', 'bar2']
+            ],
+            [
+                'args' => ['foo3, `bar3`'],
+                'result' => ['foo3', 'bar3']
+            ],
+            [
+                'args' => ['foo4', '"bar4"'],
+                'result' => ['foo4', 'bar4']
+            ],
+            [
+                'args' => ['foo.bar'],
+                'result' => ['foo.bar']
+            ],
+            [
+                'args' => ['"foo"."bar"'],
+                'result' => ['foo.bar']
+            ],
+        ];
+    }
+
+    protected function getExpectationsForColumnsPrepareNames()
+    {
+        $expectations =
+            array_diff($this->getExpectationsForPrepareNames(), [
+                [
+                    'args' => [],
+                    'result' => []
+                ]
+            ]) + [
+                [
+                    'args' => [],
+                    'result' => ['*']
+                ],
+                [
+                    'args' => ['*'],
+                    'result' => ['*']
+                ],
+                [
+                    'args' => ['foo, bar, *'],
+                    'result' => ['foo', 'bar']
+                ],
+            ];
+        return $expectations;
+    }
+
     public function testColumns()
     {
+        $expectations = $this->getExpectationsForColumnsPrepareNames();
+
+        foreach ($expectations as $exp) {
+
+            $query = new Query();
+            $q = $query->columns(...$exp['args']);
+
+            $this->assertInstanceOf(Query::class, $q);
+            $this->assertSame($q, $query);
+            $this->assertEquals($exp['result'], $query->columns);
+
+        }
+    }
+
+    public function testSelectColumns()
+    {
+        $expectations = $this->getExpectationsForColumnsPrepareNames();
+
+        foreach ($expectations as $exp) {
+
+            $query = new Query();
+            $q = $query->select(...$exp['args']);
+
+            $this->assertInstanceOf(Query::class, $q);
+            $this->assertSame($q, $query);
+            $this->assertEquals('select', $query->action);
+            $this->assertEquals($exp['result'], $query->columns);
+
+        }
+    }
+
+    public function testColumn()
+    {
+
         $query = new Query();
-        $q = $query->select();
+        $q = $query->column('*');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertSame($q, $query);
         $this->assertSame(['*'], $query->columns);
-        $this->assertSame('select', $query->action);
 
         $query = new Query();
-        $q = $query->select('*');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertSame($q, $query);
-        $this->assertSame(['*'], $query->columns);
-        $this->assertSame('select', $query->action);
-
-        $query = new Query();
-        $q = $query->select()->column('*');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertSame($q, $query);
-        $this->assertSame(['*'], $query->columns);
-        $this->assertSame('select', $query->action);
-
-        $query = new Query();
-
-        $q = $query->select()->column('foo1');
+        $q = $query->column('foo1');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertSame($q, $query);
         $this->assertSame(['foo1'], $query->columns);
-        $this->assertSame('select', $query->action);
 
         $q = $q->column('bar1');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertSame($q, $query);
         $this->assertSame(['foo1', 'bar1'], $query->columns);
-        $this->assertSame('select', $query->action);
-
-        $q = $q->columns('baz11, baz12');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertSame($q, $query);
-        $this->assertSame(['baz11', 'baz12'], $query->columns);
-        $this->assertSame('select', $query->action);
-
-        $q = $q->columns(['baz21', 'baz22']);
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertSame($q, $query);
-        $this->assertSame(['baz21', 'baz22'], $query->columns);
-        $this->assertSame('select', $query->action);
     }
 
     public function testTablesAndFrom()
@@ -135,42 +206,9 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
 
     public function testWith()
     {
-        $query = new Query();
+        $expectations = $this->getExpectationsForPrepareNames();
 
-        $expectations = [
-            [
-                'args'   => ['foo'],
-                'result' => ['foo']
-            ],
-            [
-                'args'   => ['foo1, bar1'],
-                'result' => ['foo1', 'bar1']
-            ],
-            [
-                'args'   => ['foo2', 'bar2'],
-                'result' => ['foo2', 'bar2']
-            ],
-            [
-                'args'   => ['foo3, `bar3`'],
-                'result' => ['foo3', 'bar3']
-            ],
-            [
-                'args'   => ['foo4', '"bar4"'],
-                'result' => ['foo4', 'bar4']
-            ],
-            [
-                'args'   => ['foo.bar'],
-                'result' => ['foo.bar']
-            ],
-            [
-                'args'   => ['"foo"."bar"'],
-                'result' => ['foo.bar']
-            ],
-            [
-                'args'   => ['"foo" AS "bar"'],
-                'result' => ['"foo" AS "bar"']
-            ],
-        ];
+        $query = new Query();
 
         foreach ($expectations as $exp) {
 
@@ -183,7 +221,6 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($exp['result'], $query->with);
 
         }
-
     }
 
     public function testJoins()
