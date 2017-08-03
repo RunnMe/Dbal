@@ -8,6 +8,7 @@ use Runn\Dbal\DriverQueryBuilderInterface;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 use Runn\Dbal\Drivers\Sqlite\QueryBuilder;
 use Runn\Dbal\ExecutableInterface;
+use Runn\Dbal\Queries;
 use Runn\Dbal\Query;
 
 class DriverTest extends \PHPUnit_Framework_TestCase
@@ -92,7 +93,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     {
         $driver = new Driver();
         $query = $driver->getCreateTableQuery('test', new Columns([
-            'foo' => new Columns\SerialColumn(),
+            'foo' => new Columns\PkColumn(),
             'bar' => new Columns\StringColumn(['default' => 'oops']),
             new Columns\IntColumn(['name' => 'baz', 'default' => 0]),
         ]));
@@ -102,8 +103,78 @@ class DriverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($query->isString());
         $this->assertSame(
-            "CREATE TABLE `test`\n(\n`foo` INTEGER AUTOINCREMENT,\n`bar` TEXT DEFAULT 'oops',\n`baz` INTEGER DEFAULT 0\n)",
+            "CREATE TABLE `test`\n(\n`foo` INTEGER PRIMARY KEY AUTOINCREMENT,\n`bar` TEXT DEFAULT 'oops',\n`baz` INTEGER DEFAULT 0\n)",
             $query->string
+        );
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty old table name
+     */
+    public function testGetRenameTableQueryEmptyOldName()
+    {
+        $driver = new Driver();
+        $driver->getRenameTableQuery('', 'foo');
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty new table name
+     */
+    public function testGetRenameTableQueryEmptyNewName()
+    {
+        $driver = new Driver();
+        $driver->getRenameTableQuery('foo', '');
+    }
+
+    public function testGetRenameTableQuery()
+    {
+        $driver = new Driver();
+        $query = $driver->getRenameTableQuery('foo', 'bar');
+
+        $this->assertInstanceOf(ExecutableInterface::class, $query);
+        $this->assertInstanceOf(Query::class, $query);
+
+        $this->assertTrue($query->isString());
+        $this->assertSame(
+            "ALTER TABLE `foo` RENAME TO `bar`",
+            $query->string
+        );
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty table name
+     */
+    public function testGetTruncateTableQueryEmptyName()
+    {
+        $driver = new Driver();
+        $driver->getTruncateTableQuery('');
+    }
+
+    public function testGetTruncateTableQuery()
+    {
+        $driver = new Driver();
+        $query = $driver->getTruncateTableQuery('foo');
+
+        $this->assertInstanceOf(ExecutableInterface::class, $query);
+        $this->assertInstanceOf(Queries::class, $query);
+
+        $this->assertTrue($query[0]->isString());
+        $this->assertSame(
+            "DELETE FROM `foo`",
+            $query[0]->string
+        );
+
+        $this->assertTrue($query[1]->isString());
+        $this->assertSame(
+            "UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = :name",
+            $query[1]->string
+        );
+        $this->assertSame(
+            [['name' => ':name', 'value' => 'foo', 'type' => Dbh::PARAM_STR]],
+            $query[1]->getParams()
         );
     }
 

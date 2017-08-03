@@ -188,19 +188,36 @@ class Driver
      * @param string $tableOldName
      * @param string $tableNewName
      * @return \Runn\Dbal\ExecutableInterface
+     * @throws \Runn\Dbal\Drivers\Exception
      */
     public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface
     {
+        if (empty($tableOldName)) {
+            throw new Exception('Empty old table name');
+        }
+
+        if (empty($tableNewName)) {
+            throw new Exception('Empty new table name');
+        }
+
         return new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableOldName) . ' RENAME TO ' . $this->getQueryBuilder()->quoteName($tableNewName));
     }
 
     /**
      * @param string $tableName
      * @return \Runn\Dbal\ExecutableInterface
+     * @throws \Runn\Dbal\Drivers\Exception
      */
     public function getTruncateTableQuery(string $tableName): ExecutableInterface
     {
-        return new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName));
+        if (empty($tableName)) {
+            throw new Exception('Empty table name');
+        }
+
+        return new Queries([
+             new Query('DELETE FROM ' . $this->getQueryBuilder()->quoteName($tableName)),
+            (new Query('UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = :name'))->param(':name', $tableName),
+        ]);
     }
 
     /**
