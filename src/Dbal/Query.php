@@ -93,8 +93,12 @@ class Query
             unset($data['order']);
         }
         if (isset($data['values'])) {
-            $this->insert($data['values']);
+            $this->set($data['values']);
             unset($data['values']);
+        }
+        if (isset($data['set'])) {
+            $this->set($data['set']);
+            unset($data['set']);
         }
         if (isset($data['params'])) {
             $this->params($data['params']);
@@ -106,11 +110,6 @@ class Query
     public function isString()
     {
         return !empty($this->string);
-    }
-
-    public function getParams()
-    {
-        return $this->__data['params'] ?? [];
     }
 
     /**
@@ -434,6 +433,7 @@ class Query
     {
         $values = array_combine(array_map([$this, 'trimName'], array_keys($values)), array_values($values));
         $this->values = $values;
+        $this->action = 'insert';
         return $this;
     }
 
@@ -466,6 +466,11 @@ class Query
 
         }
         return $this;
+    }
+
+    public function getParams()
+    {
+        return $this->__data['params'] ?? [];
     }
 
 }
