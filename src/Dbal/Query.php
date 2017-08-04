@@ -368,7 +368,7 @@ class Query
      */
     public function order($order)
     {
-        $order = $this->prepareNames(func_get_args(),false);
+        $order = $this->prepareNames(func_get_args(), false);
         $this->order = $order;
         return $this;
     }
