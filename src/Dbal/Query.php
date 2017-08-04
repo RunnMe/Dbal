@@ -166,10 +166,10 @@ class Query
 
     /**
      * Set all tables
-     * @param mixed $table
+     * @param mixed $tables
      * @return $this
      */
-    public function from($table = [])
+    public function from($tables = [])
     {
         $this->tables(...func_get_args());
         return $this;

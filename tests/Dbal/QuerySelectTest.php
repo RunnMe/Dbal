@@ -115,6 +115,13 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
     {
 
         $query = new Query();
+        $q = $query->column();
+
+        $this->assertInstanceOf(Query::class, $q);
+        $this->assertSame($q, $query);
+        $this->assertSame(['*'], $query->columns);
+
+        $query = new Query();
         $q = $query->column('*');
 
         $this->assertInstanceOf(Query::class, $q);
@@ -122,86 +129,64 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['*'], $query->columns);
 
         $query = new Query();
-        $q = $query->column('foo1');
+
+        $q = $query->column('foo');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertSame($q, $query);
-        $this->assertSame(['foo1'], $query->columns);
+        $this->assertSame(['foo'], $query->columns);
 
-        $q = $q->column('bar1');
+        $q = $q->column('`bar`');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertSame($q, $query);
-        $this->assertSame(['foo1', 'bar1'], $query->columns);
+        $this->assertSame(['foo', 'bar'], $query->columns);
     }
 
-    public function testTablesAndFrom()
+    public function testFromAndTables()
+    {
+        $expectations = $this->getExpectationsForPrepareNames();
+
+        foreach ($expectations as $exp) {
+
+            $query = new Query();
+            $q = $query->from(...$exp['args']);
+
+            $this->assertInstanceOf(Query::class, $q);
+            $this->assertSame($q, $query);
+            $this->assertEquals($exp['result'], $query->tables);
+
+            $query = new Query();
+            $q = $query->tables(...$exp['args']);
+
+            $this->assertInstanceOf(Query::class, $q);
+            $this->assertSame($q, $query);
+            $this->assertEquals($exp['result'], $query->tables);
+
+        }
+    }
+
+    public function testTable()
     {
         $query = new Query();
 
-        $q = $query->select()->table('foo');
+        $q = $query->table('foo');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
         $this->assertEquals(['foo'], $query->tables);
 
-        $q = $query->select()->table('bar');
+        $q = $query->table('bar');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
         $this->assertEquals(['foo', 'bar'], $query->tables);
 
-        $q = $query->select()->tables('foo1, `bar1`');
+        $q = $query->table('`baz`');
 
         $this->assertInstanceOf(Query::class, $q);
         $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
-        $this->assertEquals(['foo1', 'bar1'], $query->tables);
-
-        $q = $query->select()->tables('foo', '`bar`');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
-        $this->assertEquals(['foo', 'bar'], $query->tables);
-
-        $q = $query->select()->tables(['foo1', '`bar1`']);
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
-        $this->assertEquals(['foo1', 'bar1'], $query->tables);
-
-        $q = $query->select()->from('foo', 'bar');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
-        $this->assertEquals(['foo', 'bar'], $query->tables);
-
-        $q = $query->select()->from('foo.bar');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
-        $this->assertEquals(['foo.bar'], $query->tables);
-
-        $q = $query->select()->from('"foo"."bar"');
-
-        $this->assertInstanceOf(Query::class, $q);
-        $this->assertEquals($q, $query);
-        $this->assertEquals('select', $query->action);
-        $this->assertEquals(['*'], $query->columns);
-        $this->assertEquals(['foo.bar'], $query->tables);
+        $this->assertEquals(['foo', 'bar', 'baz'], $query->tables);
     }
 
     public function testWith()
