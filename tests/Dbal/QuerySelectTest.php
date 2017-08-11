@@ -7,125 +7,59 @@ use Runn\Dbal\Query;
 class QuerySelectTest extends \PHPUnit_Framework_TestCase
 {
 
-    protected function getExpectationsWithoutEmptyPrepareNames()
+    protected function getExpectationsWithoutEmpty()
     {
         return [
-            [
-                'args' => ['foo'],
-                'result' => ['foo']
-            ],
-            [
-                'args' => ['`foo`'],
-                'result' => ['foo']
-            ],
-            [
-                'args' => ['`foo` AS `bar`'],
-                'result' => ['`foo` AS `bar`']
-            ],
-            [
-                'args' => ['foo1, bar1'],
-                'result' => ['foo1', 'bar1']
-            ],
-            [
-                'args' => ['foo2', 'bar2'],
-                'result' => ['foo2', 'bar2']
-            ],
-            [
-                'args' => ['foo3, `bar3`'],
-                'result' => ['foo3', 'bar3']
-            ],
-            [
-                'args' => ['foo4', '"bar4"'],
-                'result' => ['foo4', 'bar4']
-            ],
-            [
-                'args' => ['foo.bar'],
-                'result' => ['foo.bar']
-            ],
-            [
-                'args' => ['"foo"."bar"'],
-                'result' => ['foo.bar']
-            ],
+            ['args' => ['foo'],             'result' => ['foo']],
+            ['args' => ['`foo`'],           'result' => ['foo']],
+            ['args' => ['`foo` AS `bar`'],  'result' => ['`foo` AS `bar`']],
+            ['args' => ['foo1, bar1'],      'result' => ['foo1', 'bar1']],
+            ['args' => ['foo2', 'bar2'],    'result' => ['foo2', 'bar2']],
+            ['args' => ['foo3, `bar3`'],    'result' => ['foo3', 'bar3']],
+            ['args' => ['foo4', '"bar4"'],  'result' => ['foo4', 'bar4']],
+            ['args' => ['foo.bar'],         'result' => ['foo.bar']],
+            ['args' => ['"foo"."bar"'],     'result' => ['foo.bar']],
         ];
     }
 
-    protected function getExpectationsWithoutEmptyWithoutTrimPrepareNames()
+    protected function getExpectationsWithoutEmptyWithoutTrim()
     {
         return [
-            [
-                'args' => ['foo'],
-                'result' => ['foo']
-            ],
-            [
-                'args' => ['`foo`'],
-                'result' => ['`foo`']
-            ],
-            [
-                'args' => ['`foo` AS `bar`'],
-                'result' => ['`foo` AS `bar`']
-            ],
-            [
-                'args' => ['foo1, bar1'],
-                'result' => ['foo1', 'bar1']
-            ],
-            [
-                'args' => ['foo2', 'bar2'],
-                'result' => ['foo2', 'bar2']
-            ],
-            [
-                'args' => ['foo3, `bar3`'],
-                'result' => ['foo3', '`bar3`']
-            ],
-            [
-                'args' => ['foo4', '"bar4"'],
-                'result' => ['foo4', '"bar4"']
-            ],
-            [
-                'args' => ['foo.bar'],
-                'result' => ['foo.bar']
-            ],
-            [
-                'args' => ['"foo"."bar"'],
-                'result' => ['"foo"."bar"']
-            ],
+            ['args' => ['foo'],             'result' => ['foo']],
+            ['args' => ['`foo`'],           'result' => ['`foo`']],
+            ['args' => ['`foo` AS `bar`'],  'result' => ['`foo` AS `bar`']],
+            ['args' => ['foo1, bar1'],      'result' => ['foo1', 'bar1']],
+            ['args' => ['foo2', 'bar2'],    'result' => ['foo2', 'bar2']],
+            ['args' => ['foo3, `bar3`'],    'result' => ['foo3', '`bar3`']],
+            ['args' => ['foo4', '"bar4"'],  'result' => ['foo4', '"bar4"']],
+            ['args' => ['foo.bar'],         'result' => ['foo.bar']],
+            ['args' => ['"foo"."bar"'],     'result' => ['"foo"."bar"']],
         ];
     }
 
     protected function getExpectationsForPrepareNames()
     {
         return
-            $this->getExpectationsWithoutEmptyPrepareNames() +
+            $this->getExpectationsWithoutEmpty() +
             [
-                [
-                    'args' => [],
-                    'result' => []
-                ],
+                ['args' => [],'result' => []],
             ];
     }
 
-    protected function getExpectationsForColumnsPrepareNames()
+    protected function getExpectationsForColumns()
     {
         $expectations =
-            $this->getExpectationsWithoutEmptyPrepareNames() + [
-                [
-                    'args' => [],
-                    'result' => ['*']
-                ],
-                [
-                    'args' => ['*'],
-                    'result' => ['*']
-                ],
-                [
-                    'args' => ['foo, bar, *'],
-                    'result' => ['foo', 'bar']
-                ],
+            $this->getExpectationsWithoutEmpty() + [
+                ['args' => [],              'result' => ['*']],
+                ['args' => ['*'],           'result' => ['*']],
+                ['args' => ['foo, bar, *'], 'result' => ['foo', 'bar']],
             ];
         return $expectations;
     }
 
     public function testColumns()
     {
-        $expectations = $this->getExpectationsForColumnsPrepareNames();
+        $expectations = $this->getExpectationsForColumns();
 
         foreach ($expectations as $exp) {
 
@@ -141,7 +75,7 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectColumns()
     {
-        $expectations = $this->getExpectationsForColumnsPrepareNames();
+        $expectations = $this->getExpectationsForColumns();
 
         foreach ($expectations as $exp) {
 
@@ -322,7 +256,7 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
 
     public function testGroup()
     {
-        $expectations = $this->getExpectationsWithoutEmptyWithoutTrimPrepareNames();
+        $expectations = $this->getExpectationsWithoutEmptyWithoutTrim();
 
         $query = new Query();
 
@@ -358,7 +292,7 @@ class QuerySelectTest extends \PHPUnit_Framework_TestCase
     public function testOrder()
     {
 
-        $expectations = $this->getExpectationsWithoutEmptyWithoutTrimPrepareNames();
+        $expectations = $this->getExpectationsWithoutEmptyWithoutTrim();
 
         $query = new Query();
 
