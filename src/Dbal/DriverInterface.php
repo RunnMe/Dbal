@@ -99,7 +99,13 @@ interface DriverInterface
      */
     public function getDropColumnQuery(string $tableName, string $columnName): ExecutableInterface;
 
-    public function renameColumn(Connection $connection, $tableName, $oldName, $newName);
+    /**
+     * @param string $tableName
+     * @param string $oldColumnName
+     * @param string $newColumnName
+     * @return \Runn\Dbal\ExecutableInterface
+     */
+    public function getRenameColumnQuery(string $tableName, string $oldColumnName, string $newColumnName): ExecutableInterface;
 
     public function addIndex(Connection $connection, $tableName, array $indexes);
 

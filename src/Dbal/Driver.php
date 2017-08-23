@@ -139,4 +139,18 @@ abstract class Driver
         return $connection->execute($this->getDropColumnQuery($tableName, $columnName));
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $oldColumnName
+     * @param string $newColumnName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function renameColumn(Connection $connection, string $tableName, string $oldColumnName, string $newColumnName): bool
+    {
+        return $connection->execute($this->getRenameColumnQuery($tableName, $oldColumnName, $newColumnName));
+    }
+
 }

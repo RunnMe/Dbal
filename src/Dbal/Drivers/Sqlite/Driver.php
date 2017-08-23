@@ -291,9 +291,15 @@ class Driver
         throw new \BadMethodCallException;
     }
 
-    public function renameColumn(Connection $connection, $tableName, $oldName, $newName)
+    /**
+     * @param string $tableName
+     * @param string $oldColumnName
+     * @param string $newColumnName
+     * @return \Runn\Dbal\ExecutableInterface
+     */
+    public function getRenameColumnQuery(string $tableName, string $oldColumnName, string $newColumnName): ExecutableInterface
     {
-        // TODO: Implement renameColumn() method.
+        throw new \BadMethodCallException;
     }
 
     public function addIndex(Connection $connection, $tableName, array $indexes)
