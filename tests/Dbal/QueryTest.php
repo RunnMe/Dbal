@@ -117,12 +117,6 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SELECT * FROM foo WHERE bar=42', $query->string);
     }
 
-    public function testParamsIsArray()
-    {
-        $query = new Query;
-        $this->assertSame([], $query->params);
-    }
-
     public function testAction()
     {
         $query = new Query();

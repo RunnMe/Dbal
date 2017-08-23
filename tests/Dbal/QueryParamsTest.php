@@ -9,6 +9,12 @@ use Runn\Dbal\Query;
 class QueryParamsTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testEmptyParamsIsArray()
+    {
+        $query = new Query;
+        $this->assertSame([], $query->params);
+    }
+
     public function testParam()
     {
         $query = new Query();
@@ -70,6 +76,7 @@ class QueryParamsTest extends \PHPUnit_Framework_TestCase
             ['name' => ':bar', 'value' => 'baz', 'type' => Dbh::PARAM_STR],
             ['name' => ':bla', 'value' => 42, 'type' => Dbh::PARAM_INT],
         ]);
+
         $this->assertEquals($q, $query);
         $this->assertEquals('select', $query->action);
         $this->assertEquals(['foo'], $query->tables);
