@@ -158,25 +158,27 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
         $builder = $driver->getQueryBuilder();
 
-        $query = $driver->getTruncateTableQuery('foo');
+        $queries = $driver->getTruncateTableQuery('foo');
 
-        $this->assertInstanceOf(ExecutableInterface::class, $query);
-        $this->assertInstanceOf(Queries::class, $query);
+        $this->assertInstanceOf(ExecutableInterface::class, $queries);
+        $this->assertInstanceOf(Queries::class, $queries);
 
-        $this->assertFalse($query[0]->isString());
+        $this->assertCount(2, $queries);
+
+        $this->assertFalse($queries[0]->isString());
         $this->assertSame(
             "DELETE FROM `foo`",
-            $builder->makeQueryString($query[0])
+            $builder->makeQueryString($queries[0])
         );
 
-        $this->assertFalse($query[1]->isString());
+        $this->assertFalse($queries[1]->isString());
         $this->assertSame(
             "UPDATE `SQLITE_SEQUENCE`\nSET `seq`=0\nWHERE name=:name",
-            $builder->makeQueryString($query[1])
+            $builder->makeQueryString($queries[1])
         );
         $this->assertSame(
             [['name' => ':name', 'value' => 'foo', 'type' => Dbh::PARAM_STR]],
-            $query[1]->getParams()
+            $queries[1]->getParams()
         );
     }
 
@@ -237,6 +239,52 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             "ALTER TABLE `foo` ADD COLUMN `bar` INTEGER",
             $query->string
+        );
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty table name
+     */
+    public function testGetAddColumnsQueryEmptyTableName()
+    {
+        $driver = new Driver();
+        $driver->getAddColumnsQuery('', new Columns([new Columns\IntColumn()]));
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty column name
+     */
+    public function testGetAddColumnsQueryEmptyColumnName()
+    {
+        $driver = new Driver();
+        $driver->getAddColumnsQuery('foo', new Columns([new Columns\IntColumn()]));
+    }
+
+    public function  testGetAddColumnsQuery()
+    {
+        $driver = new Driver();
+        $queries = $driver->getAddColumnsQuery('foo', new Columns([
+            'c1' => new Columns\IntColumn(),
+            new Columns\StringColumn(['name' => 'c2'])
+        ]));
+
+        $this->assertInstanceOf(ExecutableInterface::class, $queries);
+        $this->assertInstanceOf(Queries::class, $queries);
+
+        $this->assertCount(2, $queries);
+
+        $this->assertTrue($queries[0]->isString());
+        $this->assertSame(
+            "ALTER TABLE `foo` ADD COLUMN `c1` INTEGER",
+            $queries[0]->string
+        );
+
+        $this->assertTrue($queries[1]->isString());
+        $this->assertSame(
+            "ALTER TABLE `foo` ADD COLUMN `c2` TEXT",
+            $queries[1]->string
         );
     }
 

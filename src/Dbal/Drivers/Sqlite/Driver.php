@@ -262,16 +262,21 @@ class Driver
      */
     public function getAddColumnsQuery(string $tableName, Columns $columns): ExecutableInterface
     {
-        $tableName = $this->getQueryBuilder()->quoteName($tableName);
+        if (empty($tableName)) {
+            throw new Exception('Empty table name');
+        }
+
         $ret = new Queries;
+
         foreach ($columns as $name => $column) {
             $name = $column->name ?? $name;
             if (empty($name) || is_numeric($name)) {
                 throw new Exception('Empty column name');
             }
-            $columnDDL = $this->getQueryBuilder()->quoteName($name) . ' ' . $this->getColumnDDL($column);
-            $ret[] = new Query('ALTER TABLE ' . $tableName . ' ADD COLUMN ' . $columnDDL);
+            $column->name = $name;
+            $ret[] = $this->getAddColumnQuery($tableName, $column);
         }
+
         return $ret;
     }
 
