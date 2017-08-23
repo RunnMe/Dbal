@@ -223,9 +223,14 @@ class Driver
     /**
      * @param string $tableName
      * @return \Runn\Dbal\ExecutableInterface
+     * @throws \Runn\Dbal\Drivers\Exception
      */
     public function getDropTableQuery(string $tableName): ExecutableInterface
     {
+        if (empty($tableName)) {
+            throw new Exception('Empty table name');
+        }
+
         return new Query('DROP TABLE ' . $this->getQueryBuilder()->quoteName($tableName));
     }
 
@@ -244,6 +249,7 @@ class Driver
      * @param string $tableName
      * @param \Runn\Dbal\Columns $columns
      * @return \Runn\Dbal\ExecutableInterface
+     * @throws \Runn\Dbal\Drivers\Exception
      */
     public function getAddColumnsQuery(string $tableName, Columns $columns): ExecutableInterface
     {

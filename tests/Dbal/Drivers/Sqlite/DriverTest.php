@@ -180,4 +180,29 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty table name
+     */
+    public function testGetDropTableQueryEmptyName()
+    {
+        $driver = new Driver();
+        $driver->getDropTableQuery('');
+    }
+
+    public function testGetDropTableQuery()
+    {
+        $driver = new Driver();
+        $query = $driver->getDropTableQuery('foo');
+
+        $this->assertInstanceOf(ExecutableInterface::class, $query);
+        $this->assertInstanceOf(Query::class, $query);
+
+        $this->assertTrue($query->isString());
+        $this->assertSame(
+            "DROP TABLE `foo`",
+            $query->string
+        );
+    }
+
 }
