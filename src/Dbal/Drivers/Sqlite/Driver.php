@@ -238,9 +238,18 @@ class Driver
      * @param string $tableName
      * @param \Runn\Dbal\Column $column
      * @return \Runn\Dbal\ExecutableInterface
+     * @throws \Runn\Dbal\Drivers\Exception
      */
     public function getAddColumnQuery(string $tableName, Column $column): ExecutableInterface
     {
+        if (empty($tableName)) {
+            throw new Exception('Empty table name');
+        }
+
+        if (empty($column->name)) {
+            throw new Exception('Empty column name');
+        }
+
         $columnDDL = $this->getQueryBuilder()->quoteName($column->name) . ' ' . $this->getColumnDDL($column);
         return new Query('ALTER TABLE ' . $this->getQueryBuilder()->quoteName($tableName) . ' ADD COLUMN ' . $columnDDL);
     }

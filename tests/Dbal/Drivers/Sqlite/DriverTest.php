@@ -205,4 +205,39 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty table name
+     */
+    public function testGetAddColumnQueryEmptyTableName()
+    {
+        $driver = new Driver();
+        $driver->getAddColumnQuery('', new Columns\IntColumn());
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Drivers\Exception
+     * @expectedExceptionMessage Empty column name
+     */
+    public function testGetAddColumnQueryEmptyColumnName()
+    {
+        $driver = new Driver();
+        $driver->getAddColumnQuery('table', new Columns\IntColumn());
+    }
+
+    public function testGetAddColumnQuery()
+    {
+        $driver = new Driver();
+        $query = $driver->getAddColumnQuery('foo', new Columns\IntColumn(['name' => 'bar']));
+
+        $this->assertInstanceOf(ExecutableInterface::class, $query);
+        $this->assertInstanceOf(Query::class, $query);
+
+        $this->assertTrue($query->isString());
+        $this->assertSame(
+            "ALTER TABLE `foo` ADD COLUMN `bar` INTEGER",
+            $query->string
+        );
+    }
+
 }
