@@ -288,4 +288,13 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testGetDropColumnQuery()
+    {
+        $driver = new Driver();
+        $driver->getDropColumnQuery('foo', 'bar');
+    }
+
 }

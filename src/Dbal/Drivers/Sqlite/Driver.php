@@ -280,9 +280,15 @@ class Driver
         return $ret;
     }
 
-    public function dropColumn(Connection $connection, $tableName, array $columns)
+    /**
+     * @param string $tableName
+     * @param string $columnName
+     * @return \Runn\Dbal\ExecutableInterface
+     * @throws \BadMethodCallException
+     */
+    public function getDropColumnQuery(string $tableName, string $columnName): ExecutableInterface
     {
-        // TODO: Implement dropColumn() method.
+        throw new \BadMethodCallException;
     }
 
     public function renameColumn(Connection $connection, $tableName, $oldName, $newName)

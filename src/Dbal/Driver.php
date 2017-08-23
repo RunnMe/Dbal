@@ -126,4 +126,17 @@ abstract class Driver
         return $connection->execute($this->getAddColumnsQuery($tableName, $columns));
     }
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function dropColumn(Connection $connection, string $tableName, string $columnName): bool
+    {
+        return $connection->execute($this->getDropColumnQuery($tableName, $columnName));
+    }
+
 }
