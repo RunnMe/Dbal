@@ -28,7 +28,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
         $builder = $driver->getQueryBuilder();
 
-        $query = $driver->getExistsTableQuery('foo');
+        $query = $builder->getExistsTableQuery('foo');
 
         $this->assertInstanceOf(ExecutableInterface::class, $query);
         $this->assertInstanceOf(Query::class, $query);
@@ -54,7 +54,8 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateTableQueryEmptyName()
     {
         $driver = new Driver();
-        $driver->getCreateTableQuery('');
+        $builder = $driver->getQueryBuilder();
+        $builder->getCreateTableQuery('');
     }
 
     /**
@@ -64,7 +65,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateTableQueryNullColumns()
     {
         $driver = new Driver();
-        $driver->getCreateTableQuery('foo');
+        $driver->getQueryBuilder()->getCreateTableQuery('foo');
     }
 
     /**
@@ -74,7 +75,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateTableQueryEmptyColumns()
     {
         $driver = new Driver();
-        $driver->getCreateTableQuery('foo', new Columns());
+        $driver->getQueryBuilder()->getCreateTableQuery('foo', new Columns());
     }
 
     /**
@@ -84,7 +85,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateTableQueryEmptyColumnName()
     {
         $driver = new Driver();
-        $driver->getCreateTableQuery('foo', new Columns([
+        $driver->getQueryBuilder()->getCreateTableQuery('foo', new Columns([
             new Columns\IntColumn,
         ]));
     }
@@ -92,7 +93,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateTableQuery()
     {
         $driver = new Driver();
-        $query = $driver->getCreateTableQuery('test', new Columns([
+        $query = $driver->getQueryBuilder()->getCreateTableQuery('test', new Columns([
             'foo' => new Columns\PkColumn(),
             'bar' => new Columns\StringColumn(['default' => 'oops']),
             new Columns\IntColumn(['name' => 'baz', 'default' => 0]),
@@ -115,7 +116,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetRenameTableQueryEmptyOldName()
     {
         $driver = new Driver();
-        $driver->getRenameTableQuery('', 'foo');
+        $driver->getQueryBuilder()->getRenameTableQuery('', 'foo');
     }
 
     /**
@@ -125,13 +126,13 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetRenameTableQueryEmptyNewName()
     {
         $driver = new Driver();
-        $driver->getRenameTableQuery('foo', '');
+        $driver->getQueryBuilder()->getRenameTableQuery('foo', '');
     }
 
     public function testGetRenameTableQuery()
     {
         $driver = new Driver();
-        $query = $driver->getRenameTableQuery('foo', 'bar');
+        $query = $driver->getQueryBuilder()->getRenameTableQuery('foo', 'bar');
 
         $this->assertInstanceOf(ExecutableInterface::class, $query);
         $this->assertInstanceOf(Query::class, $query);
@@ -150,7 +151,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetTruncateTableQueryEmptyName()
     {
         $driver = new Driver();
-        $driver->getTruncateTableQuery('');
+        $driver->getQueryBuilder()->getTruncateTableQuery('');
     }
 
     public function testGetTruncateTableQuery()
@@ -158,7 +159,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
         $builder = $driver->getQueryBuilder();
 
-        $queries = $driver->getTruncateTableQuery('foo');
+        $queries = $driver->getQueryBuilder()->getTruncateTableQuery('foo');
 
         $this->assertInstanceOf(ExecutableInterface::class, $queries);
         $this->assertInstanceOf(Queries::class, $queries);
@@ -189,13 +190,13 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetDropTableQueryEmptyName()
     {
         $driver = new Driver();
-        $driver->getDropTableQuery('');
+        $driver->getQueryBuilder()->getDropTableQuery('');
     }
 
     public function testGetDropTableQuery()
     {
         $driver = new Driver();
-        $query = $driver->getDropTableQuery('foo');
+        $query = $driver->getQueryBuilder()->getDropTableQuery('foo');
 
         $this->assertInstanceOf(ExecutableInterface::class, $query);
         $this->assertInstanceOf(Query::class, $query);
@@ -214,7 +215,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetAddColumnQueryEmptyTableName()
     {
         $driver = new Driver();
-        $driver->getAddColumnQuery('', new Columns\IntColumn());
+        $driver->getQueryBuilder()->getAddColumnQuery('', new Columns\IntColumn());
     }
 
     /**
@@ -224,13 +225,13 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetAddColumnQueryEmptyColumnName()
     {
         $driver = new Driver();
-        $driver->getAddColumnQuery('table', new Columns\IntColumn());
+        $driver->getQueryBuilder()->getAddColumnQuery('table', new Columns\IntColumn());
     }
 
     public function testGetAddColumnQuery()
     {
         $driver = new Driver();
-        $query = $driver->getAddColumnQuery('foo', new Columns\IntColumn(['name' => 'bar']));
+        $query = $driver->getQueryBuilder()->getAddColumnQuery('foo', new Columns\IntColumn(['name' => 'bar']));
 
         $this->assertInstanceOf(ExecutableInterface::class, $query);
         $this->assertInstanceOf(Query::class, $query);
@@ -249,7 +250,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetAddColumnsQueryEmptyTableName()
     {
         $driver = new Driver();
-        $driver->getAddColumnsQuery('', new Columns([new Columns\IntColumn()]));
+        $driver->getQueryBuilder()->getAddColumnsQuery('', new Columns([new Columns\IntColumn()]));
     }
 
     /**
@@ -259,13 +260,13 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetAddColumnsQueryEmptyColumnName()
     {
         $driver = new Driver();
-        $driver->getAddColumnsQuery('foo', new Columns([new Columns\IntColumn()]));
+        $driver->getQueryBuilder()->getAddColumnsQuery('foo', new Columns([new Columns\IntColumn()]));
     }
 
     public function  testGetAddColumnsQuery()
     {
         $driver = new Driver();
-        $queries = $driver->getAddColumnsQuery('foo', new Columns([
+        $queries = $driver->getQueryBuilder()->getAddColumnsQuery('foo', new Columns([
             'c1' => new Columns\IntColumn(),
             new Columns\StringColumn(['name' => 'c2'])
         ]));
@@ -294,7 +295,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetDropColumnQuery()
     {
         $driver = new Driver();
-        $driver->getDropColumnQuery('foo', 'bar');
+        $driver->getQueryBuilder()->getDropColumnQuery('foo', 'bar');
     }
 
     /**
@@ -303,7 +304,7 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testGetRenameColumnQuery()
     {
         $driver = new Driver();
-        $driver->getRenameColumnQuery('foo', 'bar', 'baz');
+        $driver->getQueryBuilder()->getRenameColumnQuery('foo', 'bar', 'baz');
     }
 
 }

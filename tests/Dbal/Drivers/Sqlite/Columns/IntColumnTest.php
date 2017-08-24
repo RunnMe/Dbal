@@ -13,13 +13,13 @@ class IntColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new IntColumn();
-        $this->assertSame('INTEGER', $driver->getColumnDDL($column));
+        $this->assertSame('INTEGER', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new IntColumn(['default' => null]);
-        $this->assertSame('INTEGER DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('INTEGER DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new IntColumn(['default' => 42]);
-        $this->assertSame('INTEGER DEFAULT 42', $driver->getColumnDDL($column));
+        $this->assertSame('INTEGER DEFAULT 42', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

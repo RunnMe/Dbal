@@ -14,23 +14,6 @@ interface DriverInterface
 {
 
     /**
-     * @return \Runn\Dbal\DriverQueryBuilderInterface
-     */
-    public function getQueryBuilder(): DriverQueryBuilderInterface;
-
-    /**
-     * @param \Runn\Dbal\Column $column
-     * @return string
-     */
-    public function getColumnDDL(Column $column): string;
-
-    /**
-     * @param \Runn\Dbal\Index $index
-     * @return string
-     */
-    public function getIndexDDL(Index $index): string;
-
-    /**
      * @param \Runn\Dbal\Column $column
      * @param mixed $value
      * @return mixed
@@ -45,73 +28,87 @@ interface DriverInterface
     public function processValueBeforeSave(Column $column, $value);
 
     /**
-     * @param string $tableName
-     * @return \Runn\Dbal\Query
+     * @return \Runn\Dbal\DriverQueryBuilderInterface
      */
-    public function getExistsTableQuery(string $tableName): Query;
+    public function getQueryBuilder(): DriverQueryBuilderInterface;
 
     /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @return bool
+     */
+    public function existsTable(Connection $connection, string $tableName): bool;
+
+    /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param \Runn\Dbal\Columns|null $columns
      * @param \Runn\Dbal\Indexes|null $indexes
      * @param array $extensions
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface;
+    public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool;
 
     /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableOldName
      * @param string $tableNewName
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface;
+    public function renameTable(Connection $connection, string $tableOldName, string $tableNewName): bool;
 
     /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getTruncateTableQuery(string $tableName): ExecutableInterface;
+    public function truncateTable(Connection $connection, string $tableName): bool;
 
     /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getDropTableQuery(string $tableName): ExecutableInterface;
+    public function dropTable(Connection $connection, string $tableName): bool;
 
     /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param \Runn\Dbal\Column $column
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getAddColumnQuery(string $tableName, Column $column): ExecutableInterface;
+    public function addColumn(Connection $connection, string $tableName, Column $column): bool;
 
     /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param \Runn\Dbal\Columns $columns
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getAddColumnsQuery(string $tableName, Columns $columns): ExecutableInterface;
+    public function addColumns(Connection $connection, string $tableName, Columns $columns): bool;
 
     /**
-     * @param string $tableName
-     * @param string $columnName
-     * @return \Runn\Dbal\ExecutableInterface
-     */
-    public function getDropColumnQuery(string $tableName, string $columnName): ExecutableInterface;
-
-    /**
+     * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @param string $oldColumnName
      * @param string $newColumnName
-     * @return \Runn\Dbal\ExecutableInterface
+     * @return bool
      */
-    public function getRenameColumnQuery(string $tableName, string $oldColumnName, string $newColumnName): ExecutableInterface;
+    public function renameColumn(Connection $connection, string $tableName, string $oldColumnName, string $newColumnName): bool;
 
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @return bool
+     */
+    public function dropColumn(Connection $connection, string $tableName, string $columnName): bool;
+
+    /*
     public function addIndex(Connection $connection, $tableName, array $indexes);
 
     public function dropIndex(Connection $connection, $tableName, array $indexes);
 
-    /*
     public function insert(Connection $connection, $tableName, array $data);
 
     public function findAllByQuery($class, $query, $params = []);

@@ -13,13 +13,13 @@ class TimeColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new TimeColumn();
-        $this->assertSame('TEXT', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new TimeColumn(['default' => null]);
-        $this->assertSame('TEXT DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new TimeColumn(['default' => '12:00:00']);
-        $this->assertSame('TEXT DEFAULT \'12:00:00\'', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT \'12:00:00\'', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

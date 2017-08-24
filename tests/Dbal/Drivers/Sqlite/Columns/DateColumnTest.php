@@ -13,13 +13,13 @@ class DateColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new DateColumn();
-        $this->assertSame('TEXT', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new DateColumn(['default' => null]);
-        $this->assertSame('TEXT DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new DateColumn(['default' => '2000-01-01']);
-        $this->assertSame('TEXT DEFAULT \'2000-01-01\'', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT \'2000-01-01\'', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

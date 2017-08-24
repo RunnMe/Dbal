@@ -14,13 +14,13 @@ class DateTimeColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new DateTimeColumn();
-        $this->assertSame('TEXT', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new DateTimeColumn(['default' => null]);
-        $this->assertSame('TEXT DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new DateTimeColumn(['default' => '2000-01-01 12:00:00']);
-        $this->assertSame('TEXT DEFAULT \'2000-01-01 12:00:00\'', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT \'2000-01-01 12:00:00\'', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

@@ -11,7 +11,7 @@ class SerialColumnTest extends \PHPUnit_Framework_TestCase
     public function testColumnDDL()
     {
         $driver = new Driver();
-        $this->assertSame('INTEGER AUTOINCREMENT', $driver->getColumnDDL(new SerialColumn()));
+        $this->assertSame('INTEGER AUTOINCREMENT', $driver->getQueryBuilder()->getColumnDDL(new SerialColumn()));
     }
 
 }

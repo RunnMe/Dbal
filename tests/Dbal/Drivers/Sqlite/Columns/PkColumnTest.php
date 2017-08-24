@@ -11,7 +11,7 @@ class PkColumnTest extends \PHPUnit_Framework_TestCase
     public function testColumnDDL()
     {
         $driver = new Driver();
-        $this->assertSame('INTEGER PRIMARY KEY AUTOINCREMENT', $driver->getColumnDDL(new PkColumn()));
+        $this->assertSame('INTEGER PRIMARY KEY AUTOINCREMENT', $driver->getQueryBuilder()->getColumnDDL(new PkColumn()));
     }
 
 }

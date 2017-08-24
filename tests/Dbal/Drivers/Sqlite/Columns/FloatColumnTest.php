@@ -13,13 +13,13 @@ class FloatColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new FloatColumn();
-        $this->assertSame('REAL', $driver->getColumnDDL($column));
+        $this->assertSame('REAL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new FloatColumn(['default' => null]);
-        $this->assertSame('REAL DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('REAL DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new FloatColumn(['default' => 3.14]);
-        $this->assertSame('REAL DEFAULT 3.14', $driver->getColumnDDL($column));
+        $this->assertSame('REAL DEFAULT 3.14', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

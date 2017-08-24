@@ -11,7 +11,7 @@ class LinkColumnTest extends \PHPUnit_Framework_TestCase
     public function testColumnDDL()
     {
         $driver = new Driver();
-        $this->assertSame('INTEGER DEFAULT NULL', $driver->getColumnDDL(new LinkColumn()));
+        $this->assertSame('INTEGER DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL(new LinkColumn()));
     }
 
 }

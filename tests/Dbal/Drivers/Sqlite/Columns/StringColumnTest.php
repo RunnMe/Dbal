@@ -13,13 +13,13 @@ class StringColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new StringColumn();
-        $this->assertSame('TEXT', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new StringColumn(['default' => null]);
-        $this->assertSame('TEXT DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new StringColumn(['default' => 'foo']);
-        $this->assertSame('TEXT DEFAULT \'foo\'', $driver->getColumnDDL($column));
+        $this->assertSame('TEXT DEFAULT \'foo\'', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

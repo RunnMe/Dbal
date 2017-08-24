@@ -13,13 +13,13 @@ class BooleanColumnTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $column = new BooleanColumn();
-        $this->assertSame('INTEGER', $driver->getColumnDDL($column));
+        $this->assertSame('INTEGER', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new BooleanColumn(['default' => null]);
-        $this->assertSame('INTEGER DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('INTEGER DEFAULT NULL', $driver->getQueryBuilder()->getColumnDDL($column));
 
         $column = new BooleanColumn(['default' => true]);
-        $this->assertSame('INTEGER DEFAULT 1', $driver->getColumnDDL($column));
+        $this->assertSame('INTEGER DEFAULT 1', $driver->getQueryBuilder()->getColumnDDL($column));
     }
 
 }

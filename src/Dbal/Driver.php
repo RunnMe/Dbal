@@ -37,6 +37,26 @@ abstract class Driver
     }
 
     /**
+     * @param \Runn\Dbal\Column $column
+     * @param mixed $value
+     * @return mixed
+     */
+    public function processValueAfterLoad(Column $column, $value)
+    {
+        return $value;
+    }
+
+    /**
+     * @param \Runn\Dbal\Column $column
+     * @param mixed $value
+     * @return mixed
+     */
+    public function processValueBeforeSave(Column $column, $value)
+    {
+        return $value;
+    }
+
+    /**
      * @param \Runn\Dbal\Connection $connection
      * @param string $tableName
      * @return bool
@@ -45,7 +65,7 @@ abstract class Driver
      */
     public function existsTable(Connection $connection, string $tableName): bool
     {
-        return (bool)$connection->query($this->getExistsTableQuery($tableName))->fetchScalar();
+        return (bool)$connection->query($this->getQueryBuilder()->getExistsTableQuery($tableName))->fetchScalar();
     }
 
     /**
@@ -60,7 +80,7 @@ abstract class Driver
      */
     public function createTable(Connection $connection, string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): bool
     {
-        return $connection->execute($this->getCreateTableQuery($tableName, $columns, $indexes, $extensions));
+        return $connection->execute($this->getQueryBuilder()->getCreateTableQuery($tableName, $columns, $indexes, $extensions));
     }
 
     /**
@@ -73,7 +93,7 @@ abstract class Driver
      */
     public function renameTable(Connection $connection, string $tableOldName, string $tableNewName): bool
     {
-        return $connection->execute($this->getRenameTableQuery($tableOldName, $tableNewName));
+        return $connection->execute($this->getQueryBuilder()->getRenameTableQuery($tableOldName, $tableNewName));
     }
 
     /**
@@ -85,7 +105,7 @@ abstract class Driver
      */
     public function truncateTable(Connection $connection, string $tableName): bool
     {
-        return $connection->execute($this->getTruncateTableQuery($tableName));
+        return $connection->execute($this->getQueryBuilder()->getTruncateTableQuery($tableName));
     }
 
     /**
@@ -97,7 +117,7 @@ abstract class Driver
      */
     public function dropTable(Connection $connection, string $tableName): bool
     {
-        return $connection->execute($this->getDropTableQuery($tableName));
+        return $connection->execute($this->getQueryBuilder()->getDropTableQuery($tableName));
     }
 
     /**
@@ -110,7 +130,7 @@ abstract class Driver
      */
     public function addColumn(Connection $connection, string $tableName, Column $column): bool
     {
-        return $connection->execute($this->getAddColumnQuery($tableName, $column));
+        return $connection->execute($this->getQueryBuilder()->getAddColumnQuery($tableName, $column));
     }
 
     /**
@@ -123,20 +143,7 @@ abstract class Driver
      */
     public function addColumns(Connection $connection, string $tableName, Columns $columns): bool
     {
-        return $connection->execute($this->getAddColumnsQuery($tableName, $columns));
-    }
-
-    /**
-     * @param \Runn\Dbal\Connection $connection
-     * @param string $tableName
-     * @param string $columnName
-     * @return bool
-     *
-     * @codeCoverageIgnore
-     */
-    public function dropColumn(Connection $connection, string $tableName, string $columnName): bool
-    {
-        return $connection->execute($this->getDropColumnQuery($tableName, $columnName));
+        return $connection->execute($this->getQueryBuilder()->getAddColumnsQuery($tableName, $columns));
     }
 
     /**
@@ -150,7 +157,20 @@ abstract class Driver
      */
     public function renameColumn(Connection $connection, string $tableName, string $oldColumnName, string $newColumnName): bool
     {
-        return $connection->execute($this->getRenameColumnQuery($tableName, $oldColumnName, $newColumnName));
+        return $connection->execute($this->getQueryBuilder()->getRenameColumnQuery($tableName, $oldColumnName, $newColumnName));
+    }
+
+    /**
+     * @param \Runn\Dbal\Connection $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    public function dropColumn(Connection $connection, string $tableName, string $columnName): bool
+    {
+        return $connection->execute($this->getQueryBuilder()->getDropColumnQuery($tableName, $columnName));
     }
 
 }

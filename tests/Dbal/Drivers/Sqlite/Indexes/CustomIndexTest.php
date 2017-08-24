@@ -18,7 +18,7 @@ class CustomIndexTest extends \PHPUnit_Framework_TestCase
         $driver = new Driver();
 
         $index = new class(['table' => 't1', 'columns' => ['foo']]) extends Index {};
-        $this->assertNull($driver->getIndexDDL($index));
+        $this->assertNull($driver->getQueryBuilder()->getIndexDDL($index));
     }
 
     public function testIndexDDL()
@@ -32,7 +32,7 @@ class CustomIndexTest extends \PHPUnit_Framework_TestCase
                 return 'CUSTOM_INDEX';
             }
         };
-        $this->assertSame('CUSTOM_INDEX', $driver->getIndexDDL($index));
+        $this->assertSame('CUSTOM_INDEX', $driver->getQueryBuilder()->getIndexDDL($index));
     }
 
 }

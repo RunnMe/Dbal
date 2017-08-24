@@ -15,12 +15,13 @@ class CustomColumnTest extends \PHPUnit_Framework_TestCase
     {
         $driver = new Driver();
         $column = new class extends Column {};
-        $driver->getColumnDDL($column);
+        $driver->getQueryBuilder()->getColumnDDL($column);
     }
 
     public function testColumnDDL()
     {
         $driver = new Driver();
+        $builder = $driver->getQueryBuilder();
 
         $column = new class extends Column {
             public function getColumnDdlByDriver(DriverInterface $driver): string
@@ -28,7 +29,7 @@ class CustomColumnTest extends \PHPUnit_Framework_TestCase
                 return 'CUSTOM_COLUMN';
             }
         };
-        $this->assertSame('CUSTOM_COLUMN', $driver->getColumnDDL($column));
+        $this->assertSame('CUSTOM_COLUMN', $builder->getColumnDDL($column));
 
         $column = new class (['default' => null]) extends Column {
             public function getColumnDdlByDriver(DriverInterface $driver): string
@@ -36,7 +37,7 @@ class CustomColumnTest extends \PHPUnit_Framework_TestCase
                 return 'CUSTOM_COLUMN' . ( isset($this->default) ? ' DEFAULT ' . (null === $this->default ? 'NULL' : "'" . $this->default . "'") : null );
             }
         };
-        $this->assertSame('CUSTOM_COLUMN DEFAULT NULL', $driver->getColumnDDL($column));
+        $this->assertSame('CUSTOM_COLUMN DEFAULT NULL', $builder->getColumnDDL($column));
 
         $column = new class (['default' => 'foo']) extends Column {
             public function getColumnDdlByDriver(DriverInterface $driver): string
@@ -44,7 +45,7 @@ class CustomColumnTest extends \PHPUnit_Framework_TestCase
                 return 'CUSTOM_COLUMN' . ( isset($this->default) ? ' DEFAULT ' . (null === $this->default ? 'NULL' : "'" . $this->default . "'") : null );
             }
         };
-        $this->assertSame('CUSTOM_COLUMN DEFAULT \'foo\'', $driver->getColumnDDL($column));
+        $this->assertSame('CUSTOM_COLUMN DEFAULT \'foo\'', $builder->getColumnDDL($column));
     }
 
 }
