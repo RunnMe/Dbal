@@ -2,6 +2,8 @@
 
 namespace Runn\tests\Dbal\Driver;
 
+use Runn\Dbal\Columns\IntColumn;
+
 require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
 class testDriver extends \Runn\tests\Dbal\Drivers\WithoutDsn\Driver {
     public function __construct($val = null) {
@@ -38,6 +40,20 @@ class DriverTest extends \PHPUnit_Framework_TestCase
     public function testInstanceInvalidDriverClass()
     {
         $driver = testDriver::instance(\stdClass::class);
+    }
+
+    public function testProcessValueAfterLoad()
+    {
+        $driver = testDriver::instance();
+        $value = 42;
+        $this->assertSame($value, $driver->processValueAfterLoad(new IntColumn(), $value));
+    }
+
+    public function testProcessValueBeforeSave()
+    {
+        $driver = testDriver::instance();
+        $value = 42;
+        $this->assertSame($value, $driver->processValueBeforeSave(new IntColumn(), $value));
     }
 
 }

@@ -36,22 +36,6 @@ class Driver
     {}
 
     /**
-     * @param \Runn\Dbal\Column $column
-     * @param mixed $value
-     * @return mixed
-     */
-    public function processValueAfterLoad(Column $column, $value)
-    {}
-
-    /**
-     * @param \Runn\Dbal\Column $column
-     * @param mixed $value
-     * @return mixed
-     */
-    public function processValueBeforeSave(Column $column, $value)
-    {}
-
-    /**
      * @param string $tableName
      * @return \Runn\Dbal\Query
      */
