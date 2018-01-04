@@ -2,8 +2,10 @@
 
 namespace Runn\Dbal;
 
+use Runn\Core\TypedCollectionInterface;
+
 /**
- * Custom PDOStatement class with additional methods
+ * Custom PDOStatement class with additional helpful methods
  *
  * Class Statement
  * @package Runn\Dbal
@@ -37,13 +39,34 @@ class Statement
 
     /**
      * Returns an array containing all of the result set rows as instances of the specified class, mapping the columns of each row to named properties in the class
-     * @param string $class Class name
-     * @param array $args Arguments of custom class constructor
+     *
+     * @param string $itemClass Item class name
+     * @param array $args Arguments of custom item class constructor
      * @return array
      */
-    public function fetchAllObjects($class, ...$args)
+    public function fetchAllObjects($itemClass, ...$args)
     {
-        return $this->fetchAll(\PDO::FETCH_CLASS, $class, $args);
+        return $this->fetchAll(\PDO::FETCH_CLASS, $itemClass, $args);
+    }
+
+    /**
+     * Returns a typed collection containing all of the result set rows as instances of the specified class
+     *
+     * @param string $collectionClass Typed collection class name
+     * @param string|null $itemClass Item class name
+     * @param array $args Arguments of custom item class constructor
+     * @return \Runn\Core\TypedCollectionInterface
+     * @throws \Runn\Dbal\Exception
+     */
+    public function fetchAllObjectsCollection($collectionClass, $itemClass = null, ...$args)
+    {
+        if (!is_subclass_of($collectionClass, TypedCollectionInterface::class)) {
+            throw new Exception('Invalid collection class: ' . $collectionClass);
+        }
+        if (null === $itemClass) {
+            $itemClass = $collectionClass::getType();
+        }
+        return new $collectionClass($this->fetchAllObjects($itemClass, ...$args));
     }
 
 }

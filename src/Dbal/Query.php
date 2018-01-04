@@ -453,6 +453,8 @@ class Query
      * Sets all query's bind parameters
      * @param iterable $params
      * @return $this
+     *
+     * @7.1
      */
     public function params(/*iterable */$params = [])
     {

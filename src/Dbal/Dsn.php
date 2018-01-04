@@ -18,6 +18,7 @@ abstract class Dsn
     implements ConfigAwareInterface, InstanceableByConfigInterface
 {
 
+    // @7.1
     /*protected */const REQUIRED = ['host', 'dbname'];
     /*protected */const OPTIONAL = [];
 

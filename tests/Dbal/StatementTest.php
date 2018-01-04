@@ -3,6 +3,9 @@
 namespace Runn\tests\Dbal\Statement;
 
 use PDO;
+use Runn\Core\Config;
+use Runn\Core\Std;
+use Runn\Core\TypedCollection;
 use Runn\Dbal\Dbh;
 use Runn\Dbal\Query;
 use Runn\Dbal\Statement;
@@ -21,7 +24,7 @@ class testStatement extends Statement
         echo 'arg:' . $column_number;
     }
 
-    public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = [])
+    public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = null)
     {
         echo 'style:' . $fetch_style;
         echo 'argument:' . $fetch_argument;
@@ -70,6 +73,64 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $sth = new testStatement();
         $this->expectOutputString('style:' . \PDO::FETCH_CLASS . 'argument:Test' . 'ctor:[1,2,3]');
         $sth->fetchAllObjects('Test', 1, 2, 3);
+    }
+
+    /**
+     * @expectedException \Runn\Dbal\Exception
+     * @expectedExceptionMessage Invalid collection class: stdClass
+     */
+    public function testFetchAllObjectsCollectionInvalidCollectionClass()
+    {
+        $sth = new testStatement();
+        $sth->fetchAllObjectsCollection(\stdClass::class);
+    }
+
+    public function testFetchAllObjectsCollectionEmptyItemClass1()
+    {
+        $collection = new class extends TypedCollection {
+            public static function getType()
+            {
+                return \stdClass::class;
+            }
+        };
+        $sth = new testStatement();
+
+        $this->expectOutputString('style:' . \PDO::FETCH_CLASS . 'argument:stdClass' . 'ctor:[]');
+        $res = $sth->fetchAllObjectsCollection(get_class($collection));
+
+        $this->assertSame(get_class($collection), get_class($res));
+    }
+
+    public function testFetchAllObjectsCollectionEmptyItemClass2()
+    {
+        $collection = new class extends TypedCollection {
+            public static function getType()
+            {
+                return \stdClass::class;
+            }
+        };
+        $sth = new testStatement();
+
+        $this->expectOutputString('style:' . \PDO::FETCH_CLASS . 'argument:stdClass' . 'ctor:[1,2,3]');
+        $res = $sth->fetchAllObjectsCollection(get_class($collection), null, 1, 2, 3);
+
+        $this->assertSame(get_class($collection), get_class($res));
+    }
+
+    public function testFetchAllObjectsCollectionNotEmpty()
+    {
+        $collection = new class extends TypedCollection {
+            public static function getType()
+            {
+                return Std::class;
+            }
+        };
+        $sth = new testStatement();
+
+        $this->expectOutputString('style:' . \PDO::FETCH_CLASS . 'argument:Runn\Core\Config' . 'ctor:[]');
+        $res = $sth->fetchAllObjectsCollection(get_class($collection), Config::class);
+
+        $this->assertSame(get_class($collection), get_class($res));
     }
 
 }
