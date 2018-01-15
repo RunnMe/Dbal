@@ -1,6 +1,6 @@
 <?php
 
-namespace Runn\Dbal\Drivers\Sqlite;
+namespace Runn\Dbal\Drivers\Pgsql;
 
 use Runn\Dbal\Column;
 use Runn\Dbal\Columns;
@@ -14,7 +14,7 @@ use Runn\Dbal\Query;
 
 /**
  * Class QueryBuilder
- * @package Runn\Dbal\Drivers\Sqlite
+ * @package Runn\Dbal\Drivers\Pgsql
  *
  * @implements \Runn\Dbal\DriverQueryBuilderInterface
  */
@@ -48,7 +48,7 @@ class QueryBuilder
                 ) &&
                 !preg_match($selectNoQouteTemplate, $part)
             ) {
-                $part = '`' . $part . '`';
+                $part = '"' . $part . '"';
             }
         }
         return implode('.', $parts);
@@ -60,6 +60,7 @@ class QueryBuilder
      */
     public function getColumnDDL(Column $column): string
     {
+        /*
         switch (get_class($column)) {
             case \Runn\Dbal\Columns\SerialColumn::class:
                 $ddl =  'INTEGER AUTOINCREMENT';
@@ -100,6 +101,7 @@ class QueryBuilder
         }
 
         return $ddl;
+        */
     }
 
     /**
@@ -108,7 +110,7 @@ class QueryBuilder
      */
     public function getIndexDDL(Index $index): string
     {
-        switch (get_class($index)) {
+/*        switch (get_class($index)) {
             case \Runn\Dbal\Indexes\UniqueIndex::class:
                 $ddl = 'UNIQUE INDEX ';
                 break;
@@ -136,6 +138,7 @@ class QueryBuilder
         $ddl .= ' (' . implode(', ', $columns) . ')';
 
         return $ddl;
+*/
     }
 
     /**
@@ -144,10 +147,10 @@ class QueryBuilder
      */
     public function getExistsTableQuery(string $tableName): Query
     {
-        return (new Query())->select('count(*)>0')->from('sqlite_master')->where('type=:type AND name=:name')->params([
+/*        return (new Query())->select('count(*)>0')->from('sqlite_master')->where('type=:type AND name=:name')->params([
             ':type' => 'table',
             ':name' => $tableName,
-        ]);
+        ]);*/
     }
 
     /**
@@ -160,7 +163,7 @@ class QueryBuilder
      */
     public function getCreateTableQuery(string $tableName, Columns $columns = null, Indexes $indexes = null, $extensions = []): ExecutableInterface
     {
-        if (empty($tableName)) {
+/*        if (empty($tableName)) {
             throw new Exception('Empty table name');
         }
 
@@ -184,7 +187,7 @@ class QueryBuilder
             "(\n" .
             implode(",\n", array_unique($columnsDDL)) .
             "\n)";
-        return new Query($sql);
+        return new Query($sql);*/
     }
 
     /**
@@ -195,7 +198,7 @@ class QueryBuilder
      */
     public function getRenameTableQuery(string $tableOldName, string $tableNewName): ExecutableInterface
     {
-        if (empty($tableOldName)) {
+/*        if (empty($tableOldName)) {
             throw new Exception('Empty old table name');
         }
 
@@ -203,7 +206,7 @@ class QueryBuilder
             throw new Exception('Empty new table name');
         }
 
-        return new Query('ALTER TABLE ' . $this->quoteName($tableOldName) . ' RENAME TO ' . $this->quoteName($tableNewName));
+        return new Query('ALTER TABLE ' . $this->quoteName($tableOldName) . ' RENAME TO ' . $this->quoteName($tableNewName));*/
     }
 
     /**
@@ -213,14 +216,14 @@ class QueryBuilder
      */
     public function getTruncateTableQuery(string $tableName): ExecutableInterface
     {
-        if (empty($tableName)) {
+/*        if (empty($tableName)) {
             throw new Exception('Empty table name');
         }
 
         return new Queries([
             (new Query)->delete()->from($tableName),
             (new Query)->update('SQLITE_SEQUENCE')->set('seq', 0)->where('name=:name')->param(':name', $tableName),
-        ]);
+        ]);*/
     }
 
     /**
@@ -230,11 +233,11 @@ class QueryBuilder
      */
     public function getDropTableQuery(string $tableName): ExecutableInterface
     {
-        if (empty($tableName)) {
+/*        if (empty($tableName)) {
             throw new Exception('Empty table name');
         }
 
-        return new Query('DROP TABLE ' . $this->quoteName($tableName));
+        return new Query('DROP TABLE ' . $this->quoteName($tableName));*/
     }
 
     /**
@@ -245,7 +248,7 @@ class QueryBuilder
      */
     public function getAddColumnQuery(string $tableName, Column $column): ExecutableInterface
     {
-        if (empty($tableName)) {
+/*        if (empty($tableName)) {
             throw new Exception('Empty table name');
         }
 
@@ -254,7 +257,7 @@ class QueryBuilder
         }
 
         $columnDDL = $this->quoteName($column->name) . ' ' . $this->getColumnDDL($column);
-        return new Query('ALTER TABLE ' . $this->quoteName($tableName) . ' ADD COLUMN ' . $columnDDL);
+        return new Query('ALTER TABLE ' . $this->quoteName($tableName) . ' ADD COLUMN ' . $columnDDL);*/
     }
 
     /**
@@ -265,7 +268,7 @@ class QueryBuilder
      */
     public function getAddColumnsQuery(string $tableName, Columns $columns): ExecutableInterface
     {
-        if (empty($tableName)) {
+/*        if (empty($tableName)) {
             throw new Exception('Empty table name');
         }
 
@@ -280,7 +283,7 @@ class QueryBuilder
             $ret[] = $this->getAddColumnQuery($tableName, $column);
         }
 
-        return $ret;
+        return $ret;*/
     }
 
     /**
@@ -291,7 +294,7 @@ class QueryBuilder
      */
     public function getRenameColumnQuery(string $tableName, string $oldColumnName, string $newColumnName): ExecutableInterface
     {
-        throw new \BadMethodCallException;
+/*        throw new \BadMethodCallException;*/
     }
 
     /**
@@ -302,7 +305,7 @@ class QueryBuilder
      */
     public function getDropColumnQuery(string $tableName, string $columnName): ExecutableInterface
     {
-        throw new \BadMethodCallException;
+/*        throw new \BadMethodCallException;*/
     }
 
     protected function getTableNameAlias($name, $type, $counter)
@@ -313,7 +316,7 @@ class QueryBuilder
 
     public function makeQueryString(Query $query) : string
     {
-        if (!empty($query->string)) {
+/*        if (!empty($query->string)) {
             return $query->string;
         }
         switch ($query->action) {
@@ -326,12 +329,12 @@ class QueryBuilder
             case 'delete':
                 return $this->makeQueryStringDelete($query);
         }
-        throw new Exception('Invalid query action');
+        throw new Exception('Invalid query action');*/
     }
 
     protected function makeQueryStringSelect(Query $query)
     {
-        if (empty($query->columns) || empty($query->tables)) {
+/*        if (empty($query->columns) || empty($query->tables)) {
             throw new Exception("SELECT statement must have both 'columns' and 'tables' parts");
         }
 
@@ -419,12 +422,12 @@ class QueryBuilder
         }
 
         $sql = preg_replace('~\n$~', '', $sql);
-        return $sql;
+        return $sql;*/
     }
 
     protected function makeQueryStringInsert(Query $query)
     {
-        if (empty($query->tables) || empty($query->values)) {
+/*        if (empty($query->tables) || empty($query->values)) {
             throw new Exception("INSERT statement must have both 'tables' and 'values' parts");
         }
 
@@ -445,12 +448,12 @@ class QueryBuilder
         $sql .= implode(', ', $query->values);
         $sql .= ')';
 
-        return $sql;
+        return $sql;*/
     }
 
     protected function makeQueryStringUpdate(Query $query)
     {
-        if (empty($query->tables) || empty($query->values)) {
+/*        if (empty($query->tables) || empty($query->values)) {
             throw new Exception("UPDATE statement must have both 'tables' and 'values' parts");
         }
 
@@ -490,12 +493,12 @@ class QueryBuilder
         }
 
         $sql = preg_replace('~\n$~', '', $sql);
-        return $sql;
+        return $sql;*/
     }
 
     protected function makeQueryStringDelete(Query $query)
     {
-        if (empty($query->tables)) {
+/*        if (empty($query->tables)) {
             throw new Exception("DELETE statement must have 'tables' part");
         }
 
@@ -534,7 +537,7 @@ class QueryBuilder
         }
 
         $sql = preg_replace('~\n$~', '', $sql);
-        return $sql;
+        return $sql;*/
     }
 
 }

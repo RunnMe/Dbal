@@ -1,6 +1,6 @@
 <?php
 
-namespace Runn\Dbal\Drivers\Sqlite;
+namespace Runn\Dbal\Drivers\Pgsql;
 
 use Runn\Dbal\Column;
 use Runn\Dbal\Columns;
@@ -14,10 +14,10 @@ use Runn\Dbal\Queries;
 use Runn\Dbal\Query;
 
 /**
- * DBAL sqlite driver
+ * DBAL Postgres driver
  *
  * Class Driver
- * @package Runn\Dbal\Drivers\Sqlite
+ * @package Runn\Dbal\Drivers\Pgsql
  */
 class Driver
     extends \Runn\Dbal\Driver
