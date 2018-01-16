@@ -14,5 +14,4 @@ use Runn\Dbal\Column;
 class FloatColumn
     extends Column
 {
-
 }

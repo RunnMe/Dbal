@@ -87,6 +87,7 @@ class QueryBuilder
             case \Runn\Dbal\Columns\TimeColumn::class:
             case \Runn\Dbal\Columns\DateColumn::class:
             case \Runn\Dbal\Columns\DateTimeColumn::class:
+            case \Runn\Dbal\Columns\UuidColumn::class:
                 $ddl = 'TEXT';
                 $default = isset($column->default) ? (null === $column->default ? 'NULL' : "'" . $column->default . "'") : null;
                 break;

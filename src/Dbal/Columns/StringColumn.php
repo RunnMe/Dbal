@@ -15,5 +15,4 @@ use Runn\Dbal\Column;
 class StringColumn
     extends Column
 {
-
 }

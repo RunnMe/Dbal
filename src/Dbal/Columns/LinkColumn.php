@@ -13,5 +13,4 @@ use Runn\Dbal\Column;
 class LinkColumn
     extends Column
 {
-
 }

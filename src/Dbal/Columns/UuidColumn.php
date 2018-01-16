@@ -5,13 +5,13 @@ namespace Runn\Dbal\Columns;
 use Runn\Dbal\Column;
 
 /**
- * Time value (without date) abstract type
+ * UUID value abstract type
  *
- * Class TimeColumn
+ * Class UuidColumn
  * @package App\Dbal\Columns
  *
  */
-class TimeColumn
+class UuidColumn
     extends Column
 {
 }

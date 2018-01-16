@@ -5,7 +5,7 @@ namespace Runn\Dbal\Columns;
 use Runn\Dbal\Column;
 
 /**
- * Boolean number abstract type
+ * Boolean column abstract type
  *
  * Class BooleanColumn
  * @package App\Dbal\Columns
@@ -14,5 +14,4 @@ use Runn\Dbal\Column;
 class BooleanColumn
     extends Column
 {
-
 }

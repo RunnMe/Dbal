@@ -14,5 +14,4 @@ use Runn\Dbal\Column;
 class DateColumn
     extends Column
 {
-
 }
