@@ -4,6 +4,12 @@ php:
   - '7.3'
   - '7.4snapshot'
 
+services:
+  - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE mysql_test_db;'
+
 install:
   - composer install
 

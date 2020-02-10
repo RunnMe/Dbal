@@ -32,6 +32,20 @@ $config = new Config([
 ]);
 ```
 
+**Пример для MySQL:**
+
+```php
+use Runn\Core\Config;
+
+$config = new Config([
+    'driver' => \Runn\Dbal\Drivers\Mysql\Driver::class,
+    'host' => '127.0.0.1',
+    'dbname' => 'mydb',
+    'user' => 'myusername',
+    'password' => 'mypassword',
+]);
+```
+
 Шаг 2. Подключение к базе данных
 --------------------------------
 
@@ -99,5 +113,4 @@ class Persons extends TypedCollection
 
 $sth = $connection->query($q3);
 $data = $sth->fetchAllObjectsCollection(Persons::class);
-
 ```
