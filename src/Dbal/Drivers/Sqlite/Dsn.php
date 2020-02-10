@@ -13,8 +13,8 @@ class Dsn
     extends \Runn\Dbal\Dsn
 {
 
-    /*protected */const REQUIRED = ['file'];
-    /*protected */const OPTIONAL = [];
+    protected const REQUIRED = ['file'];
+    protected const OPTIONAL = [];
 
     public function getDriverDsnName(): string
     {

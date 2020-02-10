@@ -18,9 +18,8 @@ abstract class Dsn
     implements ConfigAwareInterface, InstanceableByConfigInterface
 {
 
-    // @7.1
-    /*protected */const REQUIRED = ['host', 'dbname'];
-    /*protected */const OPTIONAL = [];
+    protected const REQUIRED = ['host', 'dbname'];
+    protected const OPTIONAL = [];
 
     use ConfigAwareTrait;
 
@@ -70,6 +69,7 @@ abstract class Dsn
             }
 
         } elseif
+        // @todo: fix, тут забыли проверку на то, что это вообще должен быть класс, наследующийся от данного
         (get_called_class() != self::class) {
 
             $className = get_called_class();
