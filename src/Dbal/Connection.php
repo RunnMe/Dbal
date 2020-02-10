@@ -94,7 +94,7 @@ class Connection implements ConfigAwareInterface
      * @param iterable $params
      * @return bool
      */
-    public function execute(ExecutableInterface $exec, /*iterable */$params = [])
+    public function execute(ExecutableInterface $exec, iterable $params = []): bool
     {
         if ($exec instanceof Query) {
             $exec = new Queries([$exec]);
@@ -117,7 +117,7 @@ class Connection implements ConfigAwareInterface
      * @param iterable $params
      * @return \Runn\Dbal\Statement
      */
-    public function query(Query $query, /*iterable */$params = [])
+    public function query(Query $query, iterable $params = []): Statement
     {
         $statement = $this->prepare($query)->bindQueryParams($query);
         foreach ($params as $name => $value) {

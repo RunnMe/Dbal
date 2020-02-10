@@ -6,6 +6,9 @@
    1. [DSN](./dsn.md)
    2. [Statement](./statement.md)
    3. [DBH](./dbh.md)
+3. Executable
+    1. Query
+    2. Queries
 
 ### Приложения
 
