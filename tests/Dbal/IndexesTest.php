@@ -2,13 +2,14 @@
 
 namespace Runn\tests\Dbal\Indexes;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\CollectionInterface;
 use Runn\Core\Std;
 use Runn\Core\TypedCollection;
 use Runn\Core\TypedCollectionInterface;
 use Runn\Dbal\Indexes;
 
-class IndexesTest extends \PHPUnit_Framework_TestCase
+class IndexesTest extends TestCase
 {
 
     public function testInstance()

@@ -2,12 +2,13 @@
 
 namespace Runn\tests\Dbal\Drivers\Mysql\Dsn;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Config;
 use Runn\Core\Exceptions;
 use Runn\Dbal\Exception;
 use Runn\Dbal\Dsn;
 
-class DsnTest extends \PHPUnit_Framework_TestCase
+class DsnTest extends TestCase
 {
 
     public function testWithNoRequired()
@@ -33,4 +34,5 @@ class DsnTest extends \PHPUnit_Framework_TestCase
         $dsn = Dsn::instance($config);
         $this->assertEquals('mysql:host=foo;port=1234;dbname=baz;charset=utf8', (string)$dsn);
     }
+
 }

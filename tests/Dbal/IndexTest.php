@@ -2,13 +2,14 @@
 
 namespace Runn\tests\Dbal\Index;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Exceptions;
 use Runn\Core\Std;
 use Runn\Dbal\Index;
 use Runn\Validation\Exceptions\EmptyValue;
 use Runn\Validation\Exceptions\InvalidArray;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends TestCase
 {
 
     public function testInstance()

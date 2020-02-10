@@ -2,19 +2,20 @@
 
 namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Column;
 use Runn\Dbal\DriverInterface;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 
-class CustomColumnTest extends \PHPUnit_Framework_TestCase
+class CustomColumnTest extends TestCase
 {
-    /**
-     * @expectedException \BadMethodCallException
-     */
+
     public function testUnoverridedMethod()
     {
         $driver = new Driver();
         $column = new class extends Column {};
+
+        $this->expectException(\BadMethodCallException::class);
         $driver->getQueryBuilder()->getColumnDDL($column);
     }
 

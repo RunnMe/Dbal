@@ -2,6 +2,7 @@
 
 namespace Runn\tests\Dbal\Dbh;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Config;
 use Runn\Dbal\Dbh;
 use Runn\Dbal\Exception;
@@ -9,7 +10,7 @@ use Runn\Dbal\Statement;
 
 class testStatement extends Statement {}
 
-class DbhTest extends \PHPUnit_Framework_TestCase
+class DbhTest extends TestCase
 {
 
     public function testInheritance()
@@ -20,21 +21,17 @@ class DbhTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\PDO::class, $dbh);
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Exception
-     * @expectedExceptionMessage Empty DBH config
-     */
     public function testInstanceByConfigNull()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty DBH config');
         $dbh = Dbh::instance();
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Exception
-     * @expectedExceptionMessage Can not suggest DSN class name
-     */
     public function testInstanceByConfigEmptyDsn()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Can not suggest DSN class name');
         $dbh = Dbh::instance(new Config(['withoutDsn' => true]));
     }
 
@@ -81,37 +78,31 @@ class DbhTest extends \PHPUnit_Framework_TestCase
         $this->fail();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBeginTransaction()
     {
         $reflector = new \ReflectionClass(Dbh::class);
         $dbh = $reflector->newInstanceWithoutConstructor();
+
+        $this->expectException(\BadMethodCallException::class);
         $dbh->beginTransaction();
-        $this->fail();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testCommit()
     {
         $reflector = new \ReflectionClass(Dbh::class);
         $dbh = $reflector->newInstanceWithoutConstructor();
+
+        $this->expectException(\BadMethodCallException::class);
         $dbh->commit();
-        $this->fail();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRollBack()
     {
         $reflector = new \ReflectionClass(Dbh::class);
         $dbh = $reflector->newInstanceWithoutConstructor();
+
+        $this->expectException(\BadMethodCallException::class);
         $dbh->rollBack();
-        $this->fail();
     }
 
 }

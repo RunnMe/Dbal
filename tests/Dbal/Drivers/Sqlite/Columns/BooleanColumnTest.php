@@ -2,10 +2,11 @@
 
 namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Columns\BooleanColumn;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 
-class BooleanColumnTest extends \PHPUnit_Framework_TestCase
+class BooleanColumnTest extends TestCase
 {
 
     public function testColumnDDL()

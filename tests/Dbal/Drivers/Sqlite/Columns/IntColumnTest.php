@@ -2,10 +2,11 @@
 
 namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Columns\IntColumn;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 
-class IntColumnTest extends \PHPUnit_Framework_TestCase
+class IntColumnTest extends TestCase
 {
 
     public function testColumnDDL()

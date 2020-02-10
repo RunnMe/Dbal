@@ -2,10 +2,11 @@
 
 namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Columns\UuidColumn;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 
-class UuidColumnTest extends \PHPUnit_Framework_TestCase
+class UuidColumnTest extends TestCase
 {
 
     public function testColumnDDL()

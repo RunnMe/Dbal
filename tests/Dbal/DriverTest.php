@@ -2,7 +2,9 @@
 
 namespace Runn\tests\Dbal\Driver;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Columns\IntColumn;
+use Runn\Dbal\Exception;
 
 require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
 class testDriver extends \Runn\tests\Dbal\Drivers\WithoutDsn\Driver {
@@ -11,7 +13,7 @@ class testDriver extends \Runn\tests\Dbal\Drivers\WithoutDsn\Driver {
     }
 }
 
-class DriverTest extends \PHPUnit_Framework_TestCase
+class DriverTest extends TestCase
 {
 
     public function testInstanceNull()
@@ -24,21 +26,17 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(testDriver::class, $driver);
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Exception
-     * @expectedExceptionMessage Driver class "Invalid\Class" does not exists
-     */
     public function testInstanceClassNotExists()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Driver class "Invalid\Class" does not exists');
         $driver = testDriver::instance('Invalid\Class');
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Exception
-     * @expectedExceptionMessage Class "stdClass" is not a DBAL driver
-     */
     public function testInstanceInvalidDriverClass()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Class "stdClass" is not a DBAL driver');
         $driver = testDriver::instance(\stdClass::class);
     }
 

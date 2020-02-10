@@ -2,9 +2,10 @@
 
 namespace Runn\tests\Dbal\Query;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Query;
 
-class QuerySelectTest extends \PHPUnit_Framework_TestCase
+class QuerySelectTest extends TestCase
 {
 
     protected function getExpectationsWithoutEmpty()

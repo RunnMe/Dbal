@@ -2,6 +2,7 @@
 
 namespace Runn\tests\Dbal\Connection;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Config;
 use Runn\Dbal\Connection;
 use Runn\Dbal\Dbh;
@@ -12,7 +13,7 @@ use Runn\Dbal\Statement;
 
 class testStatement extends Statement {}
 
-class ConnectionTest extends \PHPUnit_Framework_TestCase
+class ConnectionTest extends TestCase
 {
 
     public function testConstruct()
@@ -63,15 +64,13 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\'\'',      $conn->quote(null, Dbh::PARAM_NULL));
     }
 
-    /**
-     * @expectedException \Runn\Core\Exception
-     */
     public function testPrepareInvalidQuery()
     {
         $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
         $query = new Query('INVALIDQUERY');
 
+        $this->expectException(Exception::class);
         $sth = $conn->prepare($query);
     }
 

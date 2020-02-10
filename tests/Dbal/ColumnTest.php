@@ -2,6 +2,7 @@
 
 namespace Runn\tests\Dbal\Column;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Column;
 use Runn\Dbal\DriverInterface;
 
@@ -21,7 +22,7 @@ class testColumn2 extends Column {
 require_once __DIR__ . '/Drivers/WithoutDsn/Driver.php';
 class testDriver extends \Runn\tests\Dbal\Drivers\WithoutDsn\Driver {}
 
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends TestCase
 {
 
     public function testInstance()

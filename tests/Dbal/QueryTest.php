@@ -2,11 +2,12 @@
 
 namespace Runn\tests\Dbal\Query;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Std;
 use Runn\Dbal\Dbh;
 use Runn\Dbal\Query;
 
-class QueryTest extends \PHPUnit_Framework_TestCase
+class QueryTest extends TestCase
 {
 
     public function testTrimName()

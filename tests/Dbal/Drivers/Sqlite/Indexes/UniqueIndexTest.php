@@ -2,10 +2,11 @@
 
 namespace Dbal\Drivers\Sqlite\Indexes;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 use Runn\Dbal\Indexes\UniqueIndex;
 
-class UniqueIndexTest extends \PHPUnit_Framework_TestCase
+class UniqueIndexTest extends TestCase
 {
 
     public function testIndexDLL()

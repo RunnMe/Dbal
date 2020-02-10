@@ -3,10 +3,12 @@
 namespace Runn\tests\Dbal\Statement;
 
 use PDO;
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Config;
 use Runn\Core\Std;
 use Runn\Core\TypedCollection;
 use Runn\Dbal\Dbh;
+use Runn\Dbal\Exception;
 use Runn\Dbal\Query;
 use Runn\Dbal\Statement;
 
@@ -32,7 +34,7 @@ class testStatement extends Statement
     }
 }
 
-class StatementTest extends \PHPUnit_Framework_TestCase
+class StatementTest extends TestCase
 {
 
     public function testConstruct()
@@ -75,13 +77,12 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $sth->fetchAllObjects('Test', 1, 2, 3);
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Exception
-     * @expectedExceptionMessage Invalid collection class: stdClass
-     */
     public function testFetchAllObjectsCollectionInvalidCollectionClass()
     {
         $sth = new testStatement();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid collection class: stdClass');
         $sth->fetchAllObjectsCollection(\stdClass::class);
     }
 

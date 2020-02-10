@@ -2,13 +2,14 @@
 
 namespace Runn\tests\Dbal\Columns;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\CollectionInterface;
 use Runn\Core\Std;
 use Runn\Core\TypedCollection;
 use Runn\Core\TypedCollectionInterface;
 use Runn\Dbal\Columns;
 
-class ColumnsTest extends \PHPUnit_Framework_TestCase
+class ColumnsTest extends TestCase
 {
 
     public function testInstance()

@@ -2,10 +2,11 @@
 
 namespace Runn\tests\Dbal\Drivers\Sqlite\Columns;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Columns\DateColumn;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 
-class DateColumnTest extends \PHPUnit_Framework_TestCase
+class DateColumnTest extends TestCase
 {
 
     public function testColumnDDL()

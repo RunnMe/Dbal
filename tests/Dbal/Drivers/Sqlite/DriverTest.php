@@ -2,16 +2,18 @@
 
 namespace Runn\tests\Dbal\Drivers\Sqlite\Driver;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Dbal\Columns;
 use Runn\Dbal\Dbh;
 use Runn\Dbal\DriverQueryBuilderInterface;
+use Runn\Dbal\Drivers\Exception;
 use Runn\Dbal\Drivers\Sqlite\Driver;
 use Runn\Dbal\Drivers\Sqlite\QueryBuilder;
 use Runn\Dbal\ExecutableInterface;
 use Runn\Dbal\Queries;
 use Runn\Dbal\Query;
 
-class DriverTest extends \PHPUnit_Framework_TestCase
+class DriverTest extends TestCase
 {
 
     public function testGetQueryBuilder()
@@ -47,44 +49,40 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty table name
-     */
     public function testGetCreateTableQueryEmptyName()
     {
         $driver = new Driver();
         $builder = $driver->getQueryBuilder();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty table name');
         $builder->getCreateTableQuery('');
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty columns list
-     */
     public function testGetCreateTableQueryNullColumns()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty columns list');
         $driver->getQueryBuilder()->getCreateTableQuery('foo');
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty columns list
-     */
     public function testGetCreateTableQueryEmptyColumns()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty columns list');
         $driver->getQueryBuilder()->getCreateTableQuery('foo', new Columns());
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty column name
-     */
     public function testGetCreateTableQueryEmptyColumnName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty column name');
         $driver->getQueryBuilder()->getCreateTableQuery('foo', new Columns([
             new Columns\IntColumn,
         ]));
@@ -109,23 +107,21 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty old table name
-     */
     public function testGetRenameTableQueryEmptyOldName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty old table name');
         $driver->getQueryBuilder()->getRenameTableQuery('', 'foo');
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty new table name
-     */
     public function testGetRenameTableQueryEmptyNewName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty new table name');
         $driver->getQueryBuilder()->getRenameTableQuery('foo', '');
     }
 
@@ -144,13 +140,12 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty table name
-     */
     public function testGetTruncateTableQueryEmptyName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty table name');
         $driver->getQueryBuilder()->getTruncateTableQuery('');
     }
 
@@ -183,13 +178,12 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty table name
-     */
     public function testGetDropTableQueryEmptyName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty table name');
         $driver->getQueryBuilder()->getDropTableQuery('');
     }
 
@@ -208,23 +202,21 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty table name
-     */
     public function testGetAddColumnQueryEmptyTableName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty table name');
         $driver->getQueryBuilder()->getAddColumnQuery('', new Columns\IntColumn());
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty column name
-     */
     public function testGetAddColumnQueryEmptyColumnName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty column name');
         $driver->getQueryBuilder()->getAddColumnQuery('table', new Columns\IntColumn());
     }
 
@@ -243,23 +235,21 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty table name
-     */
     public function testGetAddColumnsQueryEmptyTableName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty table name');
         $driver->getQueryBuilder()->getAddColumnsQuery('', new Columns([new Columns\IntColumn()]));
     }
 
-    /**
-     * @expectedException \Runn\Dbal\Drivers\Exception
-     * @expectedExceptionMessage Empty column name
-     */
     public function testGetAddColumnsQueryEmptyColumnName()
     {
         $driver = new Driver();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Empty column name');
         $driver->getQueryBuilder()->getAddColumnsQuery('foo', new Columns([new Columns\IntColumn()]));
     }
 
@@ -289,21 +279,19 @@ class DriverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetDropColumnQuery()
     {
         $driver = new Driver();
+
+        $this->expectException(\BadMethodCallException::class);
         $driver->getQueryBuilder()->getDropColumnQuery('foo', 'bar');
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetRenameColumnQuery()
     {
         $driver = new Driver();
+
+        $this->expectException(\BadMethodCallException::class);
         $driver->getQueryBuilder()->getRenameColumnQuery('foo', 'bar', 'baz');
     }
 

@@ -2,11 +2,12 @@
 
 namespace Runn\tests\Dbal\Connection;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\Config;
 use Runn\Dbal\Connection;
 use Runn\Dbal\Query;
 
-class ConnectionExecuteTest extends \PHPUnit_Framework_TestCase
+class ConnectionExecuteTest extends TestCase
 {
 
     public function testParamsInQuery()

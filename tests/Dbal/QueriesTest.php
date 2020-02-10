@@ -2,6 +2,7 @@
 
 namespace Runn\tests\Dbal\Queries;
 
+use PHPUnit\Framework\TestCase;
 use Runn\Core\CollectionInterface;
 use Runn\Core\TypedCollection;
 use Runn\Core\TypedCollectionInterface;
@@ -9,7 +10,7 @@ use Runn\Dbal\ExecutableInterface;
 use Runn\Dbal\Queries;
 use Runn\Dbal\Query;
 
-class QueriesTest extends \PHPUnit_Framework_TestCase
+class QueriesTest extends TestCase
 {
 
     public function testInstance()
