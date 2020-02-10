@@ -21,14 +21,14 @@ class DbhTest extends TestCase
         $this->assertInstanceOf(\PDO::class, $dbh);
     }
 
-    public function testInstanceByConfigNull()
+    public function testInstanceWithoutConfig()
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Empty DBH config');
+        $this->expectExceptionMessage('Empty DSN config');
         $dbh = Dbh::instance();
     }
 
-    public function testInstanceByConfigEmptyDsn()
+    public function testInstanceByConfigWithEmptyDsn()
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Can not suggest DSN class name');
