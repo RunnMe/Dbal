@@ -11,8 +11,7 @@ use Runn\Core\InstanceableInterface;
  * Class Driver
  * @package Runn\Dbal
  */
-abstract class Driver
-    implements DriverInterface, InstanceableInterface
+abstract class Driver implements DriverInterface, InstanceableInterface
 {
 
     /**
@@ -34,6 +33,21 @@ abstract class Driver
             throw new Exception('Class "' . $class . '" is not a DBAL driver');
         }
         return new $class(...$args);
+    }
+
+    /**
+     * Returns DSN class name for this driver
+     *
+     * @return string
+     * @throws Exception
+     */
+    public static function getDsnClassName(): string
+    {
+        $className = '\\' . implode('\\', array_slice(explode('\\', get_called_class()), 0, -1)) . '\\Dsn';
+        if (!class_exists($className) || !is_subclass_of($className, Dsn::class)) {
+            throw new Exception('This driver has not DSN class');
+        }
+        return $className;
     }
 
     /**

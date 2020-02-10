@@ -20,7 +20,7 @@ class DsnTest extends TestCase
         } catch (Exceptions $errors) {
             $this->assertCount(1, $errors);
             $this->assertInstanceOf(Exception::class, $errors[0]);
-            $this->assertEquals('"file" is not set in config', $errors[0]->getMessage());
+            $this->assertEquals('Attribute "file" is not set in DSN config', $errors[0]->getMessage());
             return;
         }
         $this->fail();

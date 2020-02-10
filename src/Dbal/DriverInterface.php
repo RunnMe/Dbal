@@ -14,6 +14,13 @@ interface DriverInterface
 {
 
     /**
+     * Returns DSN class name for this driver
+     *
+     * @return string
+     */
+    public static function getDsnClassName(): string;
+
+    /**
      * @param \Runn\Dbal\Column $column
      * @param mixed $value
      * @return mixed

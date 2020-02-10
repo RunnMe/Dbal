@@ -14,11 +14,13 @@ use Runn\Core\InstanceableByConfigInterface;
  * Class Dsn
  * @package Runn\Dbal
  */
-abstract class Dsn
-    implements ConfigAwareInterface, InstanceableByConfigInterface
+abstract class Dsn implements ConfigAwareInterface, InstanceableByConfigInterface
 {
 
+    /** @var array Required DSN attributes */
     protected const REQUIRED = ['host', 'dbname'];
+
+    /** @var array Optional DSN attributes */
     protected const OPTIONAL = [];
 
     use ConfigAwareTrait;
@@ -32,10 +34,9 @@ abstract class Dsn
         $this->setConfig($config);
 
         $errors = new Exceptions();
-
         foreach ((array)static::REQUIRED as $required) {
             if (!isset($this->getConfig()->$required)) {
-                $errors[] = new Exception('"' . $required . '" is not set in config');
+                $errors[] = new Exception('Attribute "' . $required . '" is not set in DSN config');
             }
         }
 
@@ -55,25 +56,20 @@ abstract class Dsn
             throw new Exception('Empty DSN config');
         }
 
-        if
-        (!empty($config->class) && is_subclass_of($config->class, self::class)) {
-
-            $className = $config->class;
-
-        } elseif
-        (!empty($config->driver) && is_subclass_of($config->driver, DriverInterface::class)) {
-
-            $className = '\\' . implode('\\', array_slice(explode('\\', $config->driver), 0, -1)) . '\\Dsn';
-            if (!class_exists($className) || !is_subclass_of($className, self::class)) {
-                throw new Exception('This driver has not DSN class');
+        if (!empty($config->class)) {
+            if (is_subclass_of($config->class, self::class)) {
+                $className = $config->class;
+            } else {
+                throw new Exception('Invalid DSN config "class" attribute: "' . $config->class . '" is not a DSN class name');
             }
-
-        } elseif
-        // @todo: fix, тут забыли проверку на то, что это вообще должен быть класс, наследующийся от данного
-        (get_called_class() != self::class) {
-
-            $className = get_called_class();
-
+        } elseif (!empty($config->driver)) {
+            if (is_subclass_of($config->driver, DriverInterface::class)) {
+                $className = $config->driver::getDsnClassName();
+            } else {
+                throw new Exception('Invalid DSN config "driver" attribute: "' . $config->driver . '" is not a Driver class name');
+            }
+        } elseif (is_subclass_of($class = get_called_class(), self::class)) {
+            $className = $class;
         } else {
             throw new Exception('Can not suggest DSN class name');
         }
