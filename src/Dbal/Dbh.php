@@ -18,8 +18,7 @@ class Dbh
     implements InstanceableByConfigInterface
 {
 
-    // @7.1
-    /*public */const DEFAULT_PARAM_TYPE = self::PARAM_STR;
+    public const DEFAULT_PARAM_TYPE = self::PARAM_STR;
 
     /**
      * @param \Runn\Core\Config|null $config

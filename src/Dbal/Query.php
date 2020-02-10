@@ -37,6 +37,7 @@ class Query
 
     /**
      * Query constructor.
+     *
      * @param array|string $data
      */
     public function __construct($data = [])
@@ -154,6 +155,7 @@ class Query
 
     /**
      * Set all columns and set action to select
+     *
      * @param mixed $columns
      * @return $this
      */
@@ -166,6 +168,7 @@ class Query
 
     /**
      * Set all tables
+     *
      * @param mixed $tables
      * @return $this
      */
@@ -177,6 +180,7 @@ class Query
 
     /**
      * Set all query's WITH tables
+     *
      * @param array $tables
      * @return $this
      */
@@ -189,6 +193,7 @@ class Query
 
     /**
      * Set all tables and set action to insert
+     *
      * @param mixed $tables
      * @return $this
      */
@@ -203,6 +208,7 @@ class Query
 
     /**
      * Set all tables and set action to update
+     *
      * @param mixed $tables
      * @return $this
      */
@@ -217,6 +223,7 @@ class Query
 
     /**
      * Set all tables and set action to delete
+     *
      * @param mixed $tables
      * @return $this
      */
@@ -231,6 +238,7 @@ class Query
 
     /**
      * Add one or more table to query
+     *
      * @param mixed $table
      * @return $this
      */
@@ -243,6 +251,7 @@ class Query
 
     /**
      * Set all query's tables
+     *
      * @param mixed $table
      * @return $this
      */
@@ -255,6 +264,7 @@ class Query
 
     /**
      * Add one column name to query
+     *
      * @param mixed $column
      * @return $this
      */
@@ -274,6 +284,7 @@ class Query
 
     /**
      * Set all query's columns
+     *
      * @param mixed $columns
      * @return $this
      */
@@ -290,6 +301,7 @@ class Query
 
     /**
      * Add one join statement to query
+     *
      * @param string $table
      * @param string $on
      * @param string $type
@@ -315,6 +327,7 @@ class Query
 
     /**
      * Set all query's joins
+     *
      * @param array $joins
      * @return $this
      */
@@ -329,6 +342,7 @@ class Query
 
     /**
      * Sets WHERE condition
+     *
      * @param string $where
      * @return $this
      */
@@ -340,6 +354,7 @@ class Query
 
     /**
      * Sets group values
+     *
      * @param string $group
      * @return $this
      */
@@ -352,6 +367,7 @@ class Query
 
     /**
      * Sets HAVING condition
+     *
      * @param string $having
      * @return $this
      */
@@ -363,6 +379,7 @@ class Query
 
     /**
      * Sets order directions
+     *
      * @param string $order
      * @return $this
      */
@@ -375,6 +392,7 @@ class Query
 
     /**
      * Sets offset
+     *
      * @param int $offset
      * @return $this
      */
@@ -386,6 +404,7 @@ class Query
 
     /**
      * Sets limit
+     *
      * @param int $limit
      * @return $this
      */
@@ -397,6 +416,7 @@ class Query
 
     /**
      * Add one query's value for insert
+     *
      * @param string $key
      * @param mixed $value
      * @return $this
@@ -409,6 +429,7 @@ class Query
 
     /**
      * Add query's value (or all values) for update
+     *
      * @param string $key
      * @param mixed $value
      * @return $this
@@ -426,6 +447,7 @@ class Query
 
     /**
      * Sets all query's values for insert
+     *
      * @param array $values
      * @return $this
      */
@@ -439,6 +461,7 @@ class Query
 
     /**
      * Binds a value to a parameter
+     *
      * @param string $parameter
      * @param mixed $value
      * @return $this
@@ -451,12 +474,11 @@ class Query
 
     /**
      * Sets all query's bind parameters
+     *
      * @param iterable $params
      * @return $this
-     *
-     * @7.1
      */
-    public function params(/*iterable */$params = [])
+    public function params(iterable $params = [])
     {
         $this->params = [];
         foreach ($params as $name => $value) {
@@ -470,6 +492,11 @@ class Query
         return $this;
     }
 
+    /**
+     * Returns all query params
+     *
+     * @return array
+     */
     public function getParams()
     {
         return $this->__data['params'] ?? [];
