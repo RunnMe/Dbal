@@ -27,10 +27,6 @@ class Dbh
      */
     public static function instance(Config $config = null)
     {
-        if (null === $config) {
-            throw new Exception('Empty DBH config');
-        }
-
         $dsn = Dsn::instance($config);
 
         $options = [];
