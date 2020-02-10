@@ -46,6 +46,18 @@ $config = new Config([
 ]);
 ```
 
+Пример для Postgres:
+
+```php
+$config = new Config([
+    'driver' => \Runn\Dbal\Drivers\Pgsql\Driver::class,
+    'host' => '127.0.0.1',
+    'dbname' => 'mydb',
+    'user' => 'postgres',
+    'password' => 'postgres',
+]);
+```
+
 Шаг 2. Подключение к базе данных
 --------------------------------
 

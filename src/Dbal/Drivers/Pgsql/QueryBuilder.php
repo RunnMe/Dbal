@@ -316,7 +316,7 @@ class QueryBuilder
 
     public function makeQueryString(Query $query) : string
     {
-/*        if (!empty($query->string)) {
+        if (!empty($query->string)) {
             return $query->string;
         }
         switch ($query->action) {
@@ -329,7 +329,7 @@ class QueryBuilder
             case 'delete':
                 return $this->makeQueryStringDelete($query);
         }
-        throw new Exception('Invalid query action');*/
+        throw new Exception('Invalid query action');
     }
 
     protected function makeQueryStringSelect(Query $query)
