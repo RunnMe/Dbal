@@ -1,6 +1,9 @@
 DSN
 ===
 
+Общее описание
+--------------
+
 Библиотека Runn Me! DBAL содержит специальный класс для описания атрибутов подключения к базе данных
 в формате DSN (Data Source Name).
 
@@ -50,6 +53,9 @@ class Dsn extends \Runn\Dbal\Dsn
 ```
 Тут мы видим гораздо больше атрибутов.
 
+Создание объектов DSN
+---------------------
+
 Класс `Runn\Dbal\Sqlite` является инстанцируемым с помощью конфига (реализует интерфейс `InstanceableByConfigInterface`).
 Это означает, что нельзя напрямую создать объект такого класса с помощью оператора new, необходимо сначала
 определить конфиг.
@@ -80,4 +86,20 @@ $config = new \Runn\Core\Config([
     'file' => '/tmp/test.sqlite'
 ]);
 $dsn = \Runn\Dbal\Drivers\Sqlite\Dsn::instance($config);
+```
+
+Преобразование к строке 
+-----------------------
+
+Каждый объект класса `\Runn\Dbal\Dsn` содержит магический метод `__toString`, обеспечивающий
+корректное преобразование к строковому значению (например, для дальнейшего использования в PDO):
+
+```php
+$config = new \Runn\Core\Config([
+    'class' => \Runn\Dbal\Drivers\Sqlite\Dsn::class, 
+    'file' => '/tmp/test.sqlite' 
+]);
+$dsn = Dsn::instance($config);
+
+echo $dsn; // Результат: sqlite:/tmp/test.sqlite
 ```
