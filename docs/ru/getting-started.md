@@ -46,7 +46,7 @@ $config = new Config([
 ]);
 ```
 
-Пример для Postgres:
+**Пример для Postgres:**
 
 ```php
 $config = new Config([
