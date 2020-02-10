@@ -2,9 +2,10 @@
 ================================
 
 1. [Быстрый старт](./getting-started.md)
-2. [DSN](./dsn.md)
-3. [DBH](./dbh.md)
-4. [Statement](./statement.md)
+2. [Connection](./connection.md)
+   1. [DSN](./dsn.md)
+   2. [Statement](./statement.md)
+   3. [DBH](./dbh.md)
 
 ### Приложения
 

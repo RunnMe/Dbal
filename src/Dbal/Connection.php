@@ -7,11 +7,12 @@ use Runn\Core\ConfigAwareInterface;
 use Runn\Core\ConfigAwareTrait;
 
 /**
+ * Connection class - represents DB connection
+ *
  * Class Connection
  * @package Runn\Dbal
  */
-class Connection
-    implements ConfigAwareInterface
+class Connection implements ConfigAwareInterface
 {
 
     use ConfigAwareTrait;
@@ -39,6 +40,8 @@ class Connection
     }
 
     /**
+     * Returns database handler
+     *
      * @return \Runn\Dbal\Dbh
      */
     public function getDbh(): Dbh
@@ -47,6 +50,8 @@ class Connection
     }
 
     /**
+     * Returns database driver
+     *
      * @return \Runn\Dbal\DriverInterface
      */
     public function getDriver(): DriverInterface
@@ -55,21 +60,25 @@ class Connection
     }
 
     /**
+     * Quotes a string for use in a query
+     *
      * @param string|null $string
      * @param int $parameter_type
      * @return string
      */
-    public function quote(string $string = null, $parameter_type = Dbh::DEFAULT_PARAM_TYPE)
+    public function quote(string $string = null, $parameter_type = Dbh::DEFAULT_PARAM_TYPE): string
     {
         return $this->dbh->quote($string, $parameter_type);
     }
 
     /**
+     * Prepares a statement for execution and returns a statement object
+     *
      * @param \Runn\Dbal\Query $query
      * @return \Runn\Dbal\Statement
      * @throws \Runn\Dbal\Exception
      */
-    public function prepare(Query $query)
+    public function prepare(Query $query): Statement
     {
         $sql = $this->getDriver()->getQueryBuilder()->makeQueryString($query);
         try {
