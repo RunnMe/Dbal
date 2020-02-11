@@ -18,19 +18,18 @@ class Connection implements ConfigAwareInterface
     use ConfigAwareTrait;
 
     /**
-     * @var \Runn\Dbal\Dbh
+     * @var Dbh
      */
     protected $dbh;
 
     /**
-     * @var \Runn\Dbal\DriverInterface
+     * @var DriverInterface
      */
     protected $driver;
 
     /**
-     * @param \Runn\Core\Config $config
-     * @throws \Runn\Dbal\Exception
-     * @throws \Runn\Core\Exceptions
+     * @param Config $config
+     * @throws Exception
      */
     public function __construct(Config $config)
     {
@@ -42,7 +41,7 @@ class Connection implements ConfigAwareInterface
     /**
      * Returns database handler
      *
-     * @return \Runn\Dbal\Dbh
+     * @return Dbh
      */
     public function getDbh(): Dbh
     {
@@ -52,7 +51,7 @@ class Connection implements ConfigAwareInterface
     /**
      * Returns database driver
      *
-     * @return \Runn\Dbal\DriverInterface
+     * @return DriverInterface
      */
     public function getDriver(): DriverInterface
     {
@@ -74,56 +73,93 @@ class Connection implements ConfigAwareInterface
     /**
      * Prepares a statement for execution and returns a statement object
      *
-     * @param \Runn\Dbal\Query $query
-     * @return \Runn\Dbal\Statement
-     * @throws \Runn\Dbal\Exception
+     * @param Query $query
+     * @return Statement
+     * @throws Exception
      */
     public function prepare(Query $query): Statement
     {
         $sql = $this->getDriver()->getQueryBuilder()->makeQueryString($query);
+
         try {
             $statement = $this->dbh->prepare($sql);
-            return $statement;
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), 0, $e);
         }
+
+        if (false === $statement) {
+            // @todo: what the statement? do we need $sql in this exception?
+            throw new Exception('Database server cannot successfully prepare the statement');
+        }
+
+        return $statement;
     }
 
     /**
+     * Executes the statement wothout the result returning
+     *
      * @param \Runn\Dbal\ExecutableInterface $exec
      * @param iterable $params
      * @return bool
+     * @throws Exception
      */
     public function execute(ExecutableInterface $exec, iterable $params = []): bool
     {
         if ($exec instanceof Query) {
             $exec = new Queries([$exec]);
         }
+
         foreach ($exec as $query) {
-            $statement = $this->prepare($query)->bindQueryParams($query);
+
+            $statement = $this->prepare($query);
+
+            $statement->bindQueryParams($query);
             foreach ($params as $name => $value) {
                 $statement->bindValue($name, $value);
             }
-            $res = $statement->execute();
-            if (false === $res) {
-                return false;
+
+            try {
+                $result = $statement->execute();
+            } catch (\Throwable $e) {
+                throw new Exception($e->getMessage(), 0, $e);
+            }
+            if (false === $result) {
+                // @todo: what the statement? do we need $sql in this exception?
+                throw new Exception('Database server cannot successfully execute the prepared statement');
             }
         }
+
         return true;
     }
 
     /**
-     * @param \Runn\Dbal\Query $query
+     * Executes the statement and returns result data
+     *
+     * @param Query $query
      * @param iterable $params
-     * @return \Runn\Dbal\Statement
+     * @return Statement
+     * @throws Exception
      */
     public function query(Query $query, iterable $params = []): Statement
     {
-        $statement = $this->prepare($query)->bindQueryParams($query);
+        $statement = $this->prepare($query);
+
+        $statement->bindQueryParams($query);
         foreach ($params as $name => $value) {
             $statement->bindValue($name, $value);
         }
-        $statement->execute();
+
+        try {
+            $result = $statement->execute();
+        } catch (\Throwable $e) {
+            throw new Exception($e->getMessage(), 0, $e);
+        }
+
+        if (false === $result) {
+            // @todo: what the statement? do we need $sql in this exception?
+            throw new Exception('Database server cannot successfully execute the prepared statement');
+        }
+
         return $statement;
     }
 

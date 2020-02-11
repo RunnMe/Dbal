@@ -10,11 +10,30 @@ use Runn\Dbal\DriverInterface;
 use Runn\Dbal\Exception;
 use Runn\Dbal\Query;
 use Runn\Dbal\Statement;
+use Runn\tests\Dbal\Drivers\WithoutDsn\Driver;
 
 class testStatement extends Statement {}
 
 class ConnectionTest extends TestCase
 {
+
+    public function testConstructInvalidConfig()
+    {
+        $config = new Config(['foo' => 'bar']);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Can not suggest DSN class name');
+        $conn = new Connection($config);
+    }
+
+    public function testConstructInvalidDriver()
+    {
+        $config = new Config(['driver' => Driver::class]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('This driver has not DSN class');
+        $conn = new Connection($config);
+    }
 
     public function testConstruct()
     {
@@ -64,13 +83,24 @@ class ConnectionTest extends TestCase
         $this->assertEquals('\'\'',      $conn->quote(null, Dbh::PARAM_NULL));
     }
 
-    public function testPrepareInvalidQuery()
+    public function testPrepareInvalidQueryByDefault()
     {
         $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:']);
         $conn = new Connection($config);
         $query = new Query('INVALIDQUERY');
 
         $this->expectException(Exception::class);
+        $sth = $conn->prepare($query);
+    }
+
+    public function testPrepareInvalidQueryByErrmodeSilent()
+    {
+        $config = new Config(['driver' => \Runn\Dbal\Drivers\Sqlite\Driver::class, 'file' => ':memory:', 'errmode' => Dbh::ERRMODE_SILENT]);
+        $conn = new Connection($config);
+        $query = new Query('INVALIDQUERY');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Database server cannot successfully prepare the statement');
         $sth = $conn->prepare($query);
     }
 

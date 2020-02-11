@@ -9,16 +9,14 @@ services:
   - postgresql
 
 addons:
-  postgresql: "12"
+  postgresql: "11"
 
 before_install:
   - mysql -e 'CREATE DATABASE mysql_test_db;'
+  - psql -c 'create database pgsql_test_db;' -U postgres
 
 install:
   - composer install
-
-before_script:
-  - psql -c 'create database pgsql_test_db;' -U postgres
 
 script: ./vendor/bin/phpunit --configuration ./tests/phpunit.xml
 
