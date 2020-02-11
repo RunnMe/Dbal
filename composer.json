@@ -17,8 +17,8 @@
   "prefer-stable": true,
   "require": {
     "php": ">=7.2",
-    "runn/core": "dev-master",
-    "runn/validation": "dev-master",
+    "runn/core": "*",
+    "runn/validation": "*",
     "ext-pdo": "*"
   },
   "require-dev": {
