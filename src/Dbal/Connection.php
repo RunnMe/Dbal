@@ -115,7 +115,15 @@ class Connection implements ConfigAwareInterface
 
             $statement->bindQueryParams($query);
             foreach ($params as $name => $value) {
-                $statement->bindValue($name, $value);
+                if (null === $value) {
+                    $statement->bindValue($name, $value, Dbh::PARAM_NULL);
+                } elseif (is_int($value)) {
+                    $statement->bindValue($name, $value, Dbh::PARAM_INT);
+                } elseif (is_bool($value)) {
+                    $statement->bindValue($name, $value, Dbh::PARAM_BOOL);
+                } else {
+                    $statement->bindValue($name, $value);
+                }
             }
 
             try {
@@ -146,7 +154,15 @@ class Connection implements ConfigAwareInterface
 
         $statement->bindQueryParams($query);
         foreach ($params as $name => $value) {
-            $statement->bindValue($name, $value);
+            if (null === $value) {
+                $statement->bindValue($name, $value, Dbh::PARAM_NULL);
+            } elseif (is_int($value)) {
+                $statement->bindValue($name, $value, Dbh::PARAM_INT);
+            } elseif (is_bool($value)) {
+                $statement->bindValue($name, $value, Dbh::PARAM_BOOL);
+            } else {
+                $statement->bindValue($name, $value);
+            }
         }
 
         try {

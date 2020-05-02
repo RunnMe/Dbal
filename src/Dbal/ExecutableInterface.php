@@ -9,4 +9,5 @@ namespace Runn\Dbal;
  * @package Dbal
  */
 interface ExecutableInterface
-{}
+{
+}

@@ -12,9 +12,7 @@ use Runn\Core\TypedCollection;
  * Class Queries
  * @package Dbal
  */
-class Queries
-    extends TypedCollection
-    implements ExecutableInterface
+class Queries extends TypedCollection implements ExecutableInterface
 {
 
     public static function getType()

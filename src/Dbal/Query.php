@@ -30,9 +30,7 @@ use Runn\Core\Std;
  * @property array $values
  * @property array $params Bound parameters {"name", "value", "type"}
  */
-class Query
-    extends Std
-    implements ExecutableInterface
+class Query extends Std implements ExecutableInterface
 {
 
     /**
