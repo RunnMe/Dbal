@@ -10,8 +10,7 @@ use Runn\Core\TypedCollectionInterface;
  * Class Statement
  * @package Runn\Dbal
  */
-class Statement
-    extends \PDOStatement
+class Statement extends \PDOStatement
 {
 
     /**
@@ -22,7 +21,20 @@ class Statement
     {
         foreach ($query->getParams() as $param) {
             if (isset($param['name'], $param['value'])) {
-                $this->bindValue($param['name'], $param['value'], $param['type'] ?? Dbh::DEFAULT_PARAM_TYPE);
+                if (isset($param['type'])) {
+                    $type = $param['type'];
+                } else {
+                    if (is_null($param['value'])) {
+                        $type = Dbh::PARAM_NULL;
+                    } elseif (is_int($param['value'])) {
+                        $type = Dbh::PARAM_INT;
+                    } elseif (is_bool($param['value'])) {
+                        $type = Dbh::PARAM_BOOL;
+                    } else {
+                        $type = Dbh::DEFAULT_PARAM_TYPE;
+                    }
+                }
+                $this->bindValue($param['name'], $param['value'], $type);
             }
         }
         return $this;

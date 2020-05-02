@@ -482,8 +482,12 @@ class Query extends Std implements ExecutableInterface
         foreach ($params as $name => $value) {
             if (is_array($value)) {
                 $this->params = array_merge($this->params ?? [], [$value]);
+            } elseif (is_null($value)) { // TODO: Validation required for databases other than PostgreSQL
+                $this->param($name, $value, Dbh::PARAM_NULL);
+            } elseif (is_int($value)) { // TODO: Validation required for databases other than PostgreSQL
+                $this->param($name, $value, Dbh::PARAM_INT);
             } elseif (is_bool($value)) { // TODO: Validation required for databases other than PostgreSQL
-                $this->param($name, $value, \PDO::PARAM_BOOL);
+                $this->param($name, $value, Dbh::PARAM_BOOL);
             } else {
                 $this->param($name, $value);
             }
