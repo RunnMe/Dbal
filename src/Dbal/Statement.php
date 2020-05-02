@@ -20,7 +20,7 @@ class Statement extends \PDOStatement
     public function bindQueryParams(Query $query)
     {
         foreach ($query->getParams() as $param) {
-            if (isset($param['name'], $param['value'])) {
+            if (isset($param['name']) && array_key_exists('value', $param)) {
                 if (isset($param['type'])) {
                     $type = $param['type'];
                 } else {
