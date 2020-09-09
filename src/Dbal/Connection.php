@@ -76,6 +76,17 @@ class Connection implements ConfigAwareInterface
     }
 
     /**
+     * Executes the statement directly
+     *
+     * @param string $sql
+     * @return false|int
+     */
+    public function exec(string $sql)
+    {
+        return $this->getDbh()->exec($sql);
+    }
+
+    /**
      * Prepares a statement for execution and returns a statement object
      *
      * @param Query $query
