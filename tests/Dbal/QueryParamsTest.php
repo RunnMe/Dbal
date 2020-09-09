@@ -68,7 +68,7 @@ class QueryParamsTest extends TestCase
         $this->assertEquals(['foo'], $query->tables);
         $this->assertEquals('id=:id', $query->where);
         $this->assertEquals([
-            ['name' => ':id', 'value' => 1, 'type' => Dbh::DEFAULT_PARAM_TYPE],
+            ['name' => ':id', 'value' => 1, 'type' => Dbh::PARAM_INT],
             ['name' => ':bar', 'value' => 'baz', 'type' => Dbh::DEFAULT_PARAM_TYPE],
         ], $query->params);
 

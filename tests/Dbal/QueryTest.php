@@ -236,7 +236,7 @@ class QueryTest extends TestCase
         $this->assertEquals(10, $query->limit);
         $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
         $this->assertEquals([
-            ['name' => ':id', 'value' => 11, 'type' => Dbh::DEFAULT_PARAM_TYPE],
+            ['name' => ':id', 'value' => 11, 'type' => Dbh::PARAM_INT],
             ['name' => ':name', 'value' => 'Test1', 'type' => Dbh::DEFAULT_PARAM_TYPE],
         ], $query->params);
         $this->assertEquals('val1', $query->attr1);
@@ -318,7 +318,7 @@ class QueryTest extends TestCase
         $this->assertEquals(10, $query->limit);
         $this->assertEquals(['id' => 1, 'name' => 'Test'], $query->values);
         $this->assertEquals([
-            ['name' => ':id', 'value' => 11, 'type' => Dbh::DEFAULT_PARAM_TYPE],
+            ['name' => ':id', 'value' => 11, 'type' => Dbh::PARAM_INT],
             ['name' => ':name', 'value' => 'Test1', 'type' => Dbh::DEFAULT_PARAM_TYPE],
         ], $query->params);
         $this->assertEquals('val1', $query->attr1);

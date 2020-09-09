@@ -18,9 +18,9 @@ class Connection implements ConfigAwareInterface
     use ConfigAwareTrait;
 
     /**
-     * @var Dbh
+     * @var Dbh|null
      */
-    protected $dbh;
+    protected /* @7.4 ?Dbh */$dbh = null;
 
     /**
      * @var DriverInterface
@@ -34,7 +34,9 @@ class Connection implements ConfigAwareInterface
     public function __construct(Config $config)
     {
         $this->setConfig($config);
-        $this->dbh    = Dbh::instance($this->getConfig());
+        if (!isset($this->getConfig()->driver)) {
+            throw new Exception('Invalid config: missing driver');
+        }
         $this->driver = Driver::instance($this->getConfig()->driver);
     }
 
@@ -45,6 +47,9 @@ class Connection implements ConfigAwareInterface
      */
     public function getDbh(): Dbh
     {
+        if (null === $this->dbh) {
+            $this->dbh = Dbh::instance($this->getConfig());
+        }
         return $this->dbh;
     }
 
@@ -67,7 +72,7 @@ class Connection implements ConfigAwareInterface
      */
     public function quote(string $string = null, $parameter_type = Dbh::DEFAULT_PARAM_TYPE): string
     {
-        return $this->dbh->quote($string, $parameter_type);
+        return $this->getDbh()->quote($string, $parameter_type);
     }
 
     /**
@@ -82,7 +87,7 @@ class Connection implements ConfigAwareInterface
         $sql = $this->getDriver()->getQueryBuilder()->makeQueryString($query);
 
         try {
-            $statement = $this->dbh->prepare($sql);
+            $statement = $this->getDbh()->prepare($sql);
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), 0, $e);
         }
@@ -185,7 +190,7 @@ class Connection implements ConfigAwareInterface
      */
     public function lastInsertId($name = null)
     {
-        return $this->dbh->lastInsertId($name);
+        return $this->getDbh()->lastInsertId($name);
     }
 
     /**
@@ -193,7 +198,7 @@ class Connection implements ConfigAwareInterface
      */
     public function getErrorInfo()
     {
-        return $this->dbh->errorInfo();
+        return $this->getDbh()->errorInfo();
     }
 
     public function __sleep()
@@ -212,7 +217,7 @@ class Connection implements ConfigAwareInterface
      */
     public function transactionBegin()
     {
-        return $this->dbh->transactionBegin();
+        return $this->getDbh()->transactionBegin();
     }
 
     /**
@@ -220,7 +225,7 @@ class Connection implements ConfigAwareInterface
      */
     public function transactionRollback()
     {
-        return $this->dbh->transactionRollback();
+        return $this->getDbh()->transactionRollback();
     }
 
     /**
@@ -228,7 +233,7 @@ class Connection implements ConfigAwareInterface
      */
     public function transactionCommit()
     {
-        return $this->dbh->transactionCommit();
+        return $this->getDbh()->transactionCommit();
     }
 
 }

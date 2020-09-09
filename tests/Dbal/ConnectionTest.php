@@ -22,7 +22,7 @@ class ConnectionTest extends TestCase
         $config = new Config(['foo' => 'bar']);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Can not suggest DSN class name');
+        $this->expectExceptionMessage('Invalid config: missing driver');
         $conn = new Connection($config);
     }
 
@@ -33,6 +33,7 @@ class ConnectionTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('This driver has not DSN class');
         $conn = new Connection($config);
+        $conn->getDbh();
     }
 
     public function testConstruct()
@@ -50,8 +51,12 @@ class ConnectionTest extends TestCase
         $reflectDriver->setAccessible(true);
 
         $this->assertEquals($config, $reflectConfig->getValue($conn));
-        $this->assertEquals(new Dbh('sqlite::memory:'), $reflectDbh->getValue($conn));
+        $this->assertNull($reflectDbh->getValue($conn));
         $this->assertEquals(new \Runn\Dbal\Drivers\Sqlite\Driver(), $reflectDriver->getValue($conn));
+
+        $dbh = $conn->getDbh();
+        $this->assertEquals(new Dbh('sqlite::memory:'), $reflectDbh->getValue($conn));
+        $this->assertSame($dbh, $reflectDbh->getValue($conn));
     }
 
     public function testGetDbh()
